@@ -1,6 +1,5 @@
 package config
 
-type OrbisConfig struct {
-	ApiUrl string
-	WSHost string
+type Config struct {
+	AuthHost string
 }

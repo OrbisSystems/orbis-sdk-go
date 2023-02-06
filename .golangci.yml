@@ -1,0 +1,76 @@
+linters-settings:
+  govet:
+    check-shadowing: true
+  gocyclo:
+    min-complexity: 20
+  maligned:
+    suggest-new: true
+  dupl:
+    threshold: 100
+  goconst:
+    min-len: 2
+    min-occurrences: 2
+  gocognit:
+    min-complexity: 35
+  misspell:
+    locale: US
+  nestif:
+    min-complexity: 10
+  lll:
+    line-length: 60
+  funlen:
+    lines: 80
+  gocritic:
+    enabled-tags:
+      - performance
+      - style
+      - experimental
+    disabled-checks:
+      - hugeParam
+      - wrapperFunc
+      - dupImport # https://github.com/go-critic/go-critic/issues/845
+      - whyNoLint
+
+linters:
+  #  enable-all: false
+  disable-all: true
+  enable:
+    - gocognit
+    - gocritic
+    - gocyclo
+    - gofmt
+    - gosec
+    - prealloc
+    - whitespace
+    - unused
+
+run:
+  go: '1.18'
+  skip-dirs:
+    - common
+
+issues:
+  exclude-rules:
+    - text: "weak cryptographic primitive"
+      linters:
+        - gosec
+    - path: _test\.go
+      linters:
+        - maligned
+        - gochecknoinits
+        - gochecknoglobals
+        - goimports
+        - gomnd
+        - wsl
+        - testpackage
+        - godot
+        - errcheck
+        - gocyclo
+        - unparam
+        - godox
+        - funlen
+        - ineffassign
+        - gocognit
+        - dupl
+        - nestif
+        - gofmt

@@ -1,17 +1,23 @@
 package auth
 
-import "github.com/OrbisSystems/orbis-sdk-go/storage"
+import (
+	"context"
 
-const (
-	AccessTokenHeader = "Authorization"
-	BearerSchema      = "Bearer"
+	"github.com/OrbisSystems/orbis-sdk-go/model"
 )
 
 type Auth struct {
-	storage storage.Storage
-	key     string
+	storage Storage
 }
 
-func NewAuth(storage storage.Storage, key string) API {
-	return &Auth{storage: storage, key: key}
+func New(storage Storage) *Auth {
+	return &Auth{storage: storage}
+}
+
+func (a *Auth) SetToken(ctx context.Context, token model.Token) error {
+	return a.storage.Store(ctx, token)
+}
+
+func (a *Auth) GetToken(ctx context.Context) (model.Token, error) {
+	return a.storage.Get(ctx)
 }
