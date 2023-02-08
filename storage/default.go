@@ -3,30 +3,30 @@ package storage
 import (
 	"context"
 	"sync"
-
-	"github.com/OrbisSystems/orbis-sdk-go/model"
 )
 
-type DefaultStorage struct {
-	mx    sync.RWMutex
-	token model.Token
+// InMemoryStorage is just a simple in-memory storage.
+// It implements interface Storage.
+type InMemoryStorage struct {
+	mx   sync.RWMutex
+	data []byte
 }
 
-func NewDefaultStorage() *DefaultStorage {
-	return &DefaultStorage{}
+func NewInMemoryStorage() *InMemoryStorage {
+	return &InMemoryStorage{}
 }
 
-func (s *DefaultStorage) Store(_ context.Context, token model.Token) error {
+func (s *InMemoryStorage) Store(_ context.Context, data []byte) error {
 	s.mx.Lock()
 	defer s.mx.Unlock()
-	s.token = token
+	s.data = data
 
 	return nil
 }
 
-func (s *DefaultStorage) Get(ctx context.Context) (model.Token, error) {
+func (s *InMemoryStorage) Get(_ context.Context) ([]byte, error) {
 	s.mx.RLock()
 	defer s.mx.RUnlock()
 
-	return s.token, nil
+	return s.data, nil
 }

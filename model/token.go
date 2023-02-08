@@ -1,11 +1,6 @@
 package model
 
 type Token struct {
-	AccessToken  string
-	RefreshToken string
-}
-
-type LoginRequest struct {
-	Email    string
-	Password string
+	AccessToken  string `json:"access_token"`
+	RefreshToken string `json:"refresh_token"`
 }

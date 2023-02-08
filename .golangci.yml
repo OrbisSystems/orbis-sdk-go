@@ -47,7 +47,7 @@ linters:
 run:
   go: '1.18'
   skip-dirs:
-    - common
+    - bin
 
 issues:
   exclude-rules:
