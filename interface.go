@@ -16,22 +16,13 @@ type Storage interface {
 type HTTPClient interface {
 	Get(ctx context.Context, url string, headers http.Header) (*http.Response, error)
 	Post(ctx context.Context, url string, body io.Reader, headers http.Header) (*http.Response, error)
-	Put(ctx context.Context, url string, body io.Reader, headers http.Header) (*http.Response, error)
-	Patch(ctx context.Context, url string, body io.Reader, headers http.Header) (*http.Response, error)
-	Delete(ctx context.Context, url string, headers http.Header) (*http.Response, error)
-	Do(ctx context.Context, request *http.Request) (*http.Response, error)
 
 	Wrapper
 }
 
 type Wrapper interface {
-	GetBodyAndCheckStatus(r *http.Response, expectedStatus []int) (io.ReadCloser, error)
 	GetBodyAndCheckOK(r *http.Response) (io.ReadCloser, error)
 	UnmarshalAndCheckOk(v interface{}, r *http.Response) error
-	MarshallAndSendPost(ctx context.Context, body interface{}, url string) (io.ReadCloser, error)
-	GetFormCodeRequest(data map[string]string, url string) (*http.Request, error)
-	DoPostAndReturnBody(ctx context.Context, req interface{}, url string) (io.ReadCloser, error)
-	DoPostAndUnmarshall(ctx context.Context, req, v interface{}, url string) error
 }
 
 type Auth interface {
@@ -74,4 +65,18 @@ type LogosService interface {
 	ConvertedSymbolLogo(ctx context.Context, req model.SymbolLogoConvertedRequest) (io.ReadCloser, error)
 	MultipleCryptoSymbolLogo(ctx context.Context, req model.MultipleCryptoLogosRequest) ([]model.SymbolLogosResponse, error)
 	ConvertedCryptoSymbolLogo(ctx context.Context, req model.SymbolLogoConvertedRequest) (io.ReadCloser, error)
+}
+
+type PassportService interface {
+	Articles(ctx context.Context, req model.ArticlesRequest) ([]model.Article, error)
+	Newsfeed(ctx context.Context, req model.NewsfeedRequest) ([]model.Newsfeed, error)
+	ArticleByID(ctx context.Context, req model.ArticleByIDRequest) (model.Article, error)
+	SearchArticle(ctx context.Context, req model.SearchArticleRequest) ([]model.Article, error)
+	AuthorProfile(ctx context.Context, req model.AuthorProfileRequest) ([]model.AuthorProfileResponse, error)
+	MostPopularTags(ctx context.Context, req model.MostPopularTagsRequest) ([]model.TagShortInfo, error)
+}
+
+type TipRankService interface {
+	AnalystConsensus(ctx context.Context, req model.AnalystConsensusRequest) ([]model.AnalystConsensusResponse, error)
+	LatestAnalystRatingsOnStock(ctx context.Context, req model.LatestAnalystRatingsOnStockRequest) ([]model.LatestAnalystRatingsOnStockResponse, error)
 }

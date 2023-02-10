@@ -14,6 +14,10 @@ import (
 const (
 	accessTokenHeader = "Authorization"
 
+	contentTypeHeaderKey = "Content-Type"
+
+	applicationJson = "application/json"
+
 	defaultTimeout = time.Minute
 )
 
@@ -58,7 +62,7 @@ func (c *OrbisClient) Get(ctx context.Context, url string, headers http.Header) 
 
 	request.Header = headers
 
-	return c.Do(ctx, request)
+	return c.do(ctx, request)
 }
 
 // Post makes an HTTP POST request to provided URL and requestBody
@@ -71,53 +75,14 @@ func (c *OrbisClient) Post(ctx context.Context, url string, body io.Reader, head
 
 	request.Header = headers
 
-	return c.Do(ctx, request)
+	return c.do(ctx, request)
 }
 
-// Put makes an HTTP PUT request to provided URL and requestBody
-func (c *OrbisClient) Put(ctx context.Context, url string, body io.Reader, headers http.Header) (*http.Response, error) {
-	var response *http.Response
-	request, err := http.NewRequestWithContext(ctx, http.MethodPut, url, body)
-	if err != nil {
-		return response, errors.Wrap(err, "PUT - request creation failed")
-	}
-
-	request.Header = headers
-
-	return c.Do(ctx, request)
-}
-
-// Patch makes an HTTP PATCH request to provided URL and requestBody
-func (c *OrbisClient) Patch(ctx context.Context, url string, body io.Reader, headers http.Header) (*http.Response, error) {
-	var response *http.Response
-	request, err := http.NewRequestWithContext(ctx, http.MethodPatch, url, body)
-	if err != nil {
-		return response, errors.Wrap(err, "PATCH - request creation failed")
-	}
-
-	request.Header = headers
-
-	return c.Do(ctx, request)
-}
-
-// Delete makes an HTTP DELETE request with provided URL
-func (c *OrbisClient) Delete(ctx context.Context, url string, headers http.Header) (*http.Response, error) {
-	var response *http.Response
-	request, err := http.NewRequestWithContext(ctx, http.MethodDelete, url, http.NoBody)
-	if err != nil {
-		return response, errors.Wrap(err, "DELETE - request creation failed")
-	}
-
-	request.Header = headers
-
-	return c.Do(ctx, request)
-}
-
-// Do makes an HTTP request with the native `http.Do` interface
-func (c *OrbisClient) Do(ctx context.Context, request *http.Request) (*http.Response, error) {
+// do makes an HTTP request with the native `http.do` interface
+func (c *OrbisClient) do(ctx context.Context, request *http.Request) (*http.Response, error) {
 	request.Header = c.getTokenHeader(ctx, request.Header)
-	if request.Header.Get("Content-Type") == "" {
-		request.Header.Add("Content-Type", "application/json")
+	if request.Header.Get(contentTypeHeaderKey) == "" {
+		request.Header.Add(contentTypeHeaderKey, applicationJson)
 	}
 
 	response, err := c.Client.Do(request)

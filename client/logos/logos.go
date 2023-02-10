@@ -32,6 +32,8 @@ func New(cfg config.Config, auth sdk.Auth, cli sdk.HTTPClient, validator sdk.Val
 	}
 }
 
+// TODO add validator
+
 // SymbolLogos returns logos info for symbol.
 func (l *Logos) SymbolLogos(ctx context.Context, symbol string) (model.SymbolLogosResponse, error) {
 	r, err := l.cli.Get(ctx, fmt.Sprintf("%s?symbol=%s", l.cfg.AuthHost+model.URLInsightBase+model.URLInsightLogosSymbolLogos, symbol), nil)

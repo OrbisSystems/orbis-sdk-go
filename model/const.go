@@ -48,4 +48,22 @@ const (
 	URLInsightLogosConvertedSymbolLogos      = "/converted-symbol-logo"
 	URLInsightLogosMultipleCryptoSymbolLogo  = "/multiple-crypto-symbol-logo"
 	URLInsightLogosConvertedCryptoSymbolLogo = "/converted-crypto-symbol-logo"
+
+	// *******************************************
+	// 		PASSPORT
+	// *******************************************
+
+	URLInsightPassportArticles        = "/passport/articles"
+	URLInsightPassportNewsFeed        = "/passport/newsfeed"
+	URLInsightPassportArticleByID     = "/passport/article-by-id"
+	URLInsightPassportSearchArticle   = "/passport/search-article"
+	URLInsightPassportAuthorProfile   = "/passport/author-profile"
+	URLInsightPassportMostPopularTags = "/passport/most-popular-tags"
+
+	// *******************************************
+	// 		TipRank
+	// *******************************************
+
+	URLInsightTipRankAnalystConsensus = "/tipranks/analyst-consensus"
+	URLInsightTipRankAnalystMulti     = "/tipranks/analyst-multi"
 )

@@ -5,12 +5,12 @@ import (
 	"context"
 	"encoding/json"
 
+	"github.com/google/uuid"
 	"github.com/pkg/errors"
 
 	sdk "github.com/OrbisSystems/orbis-sdk-go"
 	"github.com/OrbisSystems/orbis-sdk-go/config"
 	"github.com/OrbisSystems/orbis-sdk-go/model"
-	"github.com/OrbisSystems/orbis-sdk-go/utils"
 )
 
 // Account service provides all API for account managing.
@@ -40,7 +40,7 @@ func (c *Account) LoginByEmail(ctx context.Context, req model.LoginByEmailReques
 	}
 
 	if req.DeviceID == "" {
-		req.DeviceID = utils.GenerateRandomString(10)
+		req.DeviceID = uuid.New().String()
 	}
 
 	body, err := json.Marshal(req)
