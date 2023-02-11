@@ -17,17 +17,15 @@ import (
 type Account struct {
 	sdk.Auth
 
-	cfg       config.Config
-	cli       sdk.HTTPClient
-	validator sdk.Validator
+	cfg config.Config
+	cli sdk.HTTPClient
 }
 
-func New(cfg config.Config, auth sdk.Auth, cli sdk.HTTPClient, validator sdk.Validator) *Account {
+func New(cfg config.Config, auth sdk.Auth, cli sdk.HTTPClient) *Account {
 	return &Account{
-		Auth:      auth,
-		cfg:       cfg,
-		cli:       cli,
-		validator: validator,
+		Auth: auth,
+		cfg:  cfg,
+		cli:  cli,
 	}
 }
 
@@ -35,10 +33,6 @@ func New(cfg config.Config, auth sdk.Auth, cli sdk.HTTPClient, validator sdk.Val
 // After log in, you can create api keys with limited access for you users using CreateAPIKey method.
 // With these api keys your users can log in via SDK using LoginByAPIKey method.
 func (c *Account) LoginByEmail(ctx context.Context, req model.LoginByEmailRequest) error {
-	if err := c.validator.ValidateLoginByEmailRequest(req); err != nil {
-		return err
-	}
-
 	if req.DeviceID == "" {
 		req.DeviceID = uuid.New().String()
 	}
@@ -68,10 +62,6 @@ func (c *Account) LoginByEmail(ctx context.Context, req model.LoginByEmailReques
 // LoginByAPIKey allows lo log in into the system for users with limited access.
 // See LoginByEmail and CreateAPIKey for more information.
 func (c *Account) LoginByAPIKey(ctx context.Context, req model.LoginByAPIKeyRequest) error {
-	if err := c.validator.ValidateLoginByAPIKeyRequest(req); err != nil {
-		return err
-	}
-
 	body, err := json.Marshal(req)
 	if err != nil {
 		return errors.Wrap(err, "couldn't marshal input parameters")

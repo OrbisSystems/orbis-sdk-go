@@ -18,21 +18,17 @@ import (
 type Logos struct {
 	sdk.Auth
 
-	cfg       config.Config
-	cli       sdk.HTTPClient
-	validator sdk.Validator
+	cfg config.Config
+	cli sdk.HTTPClient
 }
 
-func New(cfg config.Config, auth sdk.Auth, cli sdk.HTTPClient, validator sdk.Validator) *Logos {
+func New(cfg config.Config, auth sdk.Auth, cli sdk.HTTPClient) *Logos {
 	return &Logos{
-		Auth:      auth,
-		cfg:       cfg,
-		cli:       cli,
-		validator: validator,
+		Auth: auth,
+		cfg:  cfg,
+		cli:  cli,
 	}
 }
-
-// TODO add validator
 
 // SymbolLogos returns logos info for symbol.
 func (l *Logos) SymbolLogos(ctx context.Context, symbol string) (model.SymbolLogosResponse, error) {

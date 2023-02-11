@@ -19,12 +19,12 @@ type Client struct {
 	TipRankService  sdk.TipRankService
 }
 
-func New(cfg config.Config, cli sdk.HTTPClient, auth sdk.Auth, validator sdk.Validator) *Client {
+func New(cfg config.Config, cli sdk.HTTPClient, auth sdk.Auth) *Client {
 	return &Client{
-		AccountService:  account.New(cfg, auth, cli, validator),
-		NewsService:     news.New(cfg, auth, cli, validator),
-		LogosService:    logos.New(cfg, auth, cli, validator),
-		PassportService: passport.New(cfg, auth, cli, validator),
-		TipRankService:  tiprank.New(cfg, auth, cli, validator),
+		AccountService:  account.New(cfg, auth, cli),
+		NewsService:     news.New(cfg, auth, cli),
+		LogosService:    logos.New(cfg, auth, cli),
+		PassportService: passport.New(cfg, auth, cli),
+		TipRankService:  tiprank.New(cfg, auth, cli),
 	}
 }

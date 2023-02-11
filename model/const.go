@@ -64,6 +64,14 @@ const (
 	// 		TipRank
 	// *******************************************
 
-	URLInsightTipRankAnalystConsensus = "/tipranks/analyst-consensus"
-	URLInsightTipRankAnalystMulti     = "/tipranks/analyst-multi"
+	URLInsightTipRankAnalystConsensus           = "/tipranks/analyst-consensus"
+	URLInsightTipRankAnalystMulti               = "/tipranks/analyst-multi"
+	URLInsightTipRankLiveFeed                   = "/tipranks/live-feed"
+	URLInsightTipRankTrendingStocks             = "/tipranks/trending-stocks"
+	URLInsightTipRankAnalystPortfolio           = "/tipranks/analyst-portfolio"
+	URLInsightTipRankAnalystProfile             = "/tipranks/analyst-profile"
+	URLInsightTipRankSectorConsensus            = "/tipranks/sector-consensus"
+	URLInsightTipRankBestPerformingExperts      = "/tipranks/best-performing-experts"
+	URLInsightTipRankStocksSimilarStocks        = "/tipranks/stocks-similar-stocks"
+	URLInsightTipRankAnalystsExpertPictureStore = "/tipranks/analysts-expert-picture-store"
 )

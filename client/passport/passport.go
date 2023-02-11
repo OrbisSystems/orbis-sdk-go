@@ -15,21 +15,17 @@ import (
 type Passport struct {
 	sdk.Auth
 
-	cfg       config.Config
-	cli       sdk.HTTPClient
-	validator sdk.Validator
+	cfg config.Config
+	cli sdk.HTTPClient
 }
 
-func New(cfg config.Config, auth sdk.Auth, cli sdk.HTTPClient, validator sdk.Validator) *Passport {
+func New(cfg config.Config, auth sdk.Auth, cli sdk.HTTPClient) *Passport {
 	return &Passport{
-		Auth:      auth,
-		cfg:       cfg,
-		cli:       cli,
-		validator: validator,
+		Auth: auth,
+		cfg:  cfg,
+		cli:  cli,
 	}
 }
-
-// TODO add validator
 
 func (p *Passport) Articles(ctx context.Context, req model.ArticlesRequest) ([]model.Article, error) {
 	body, err := json.Marshal(req)

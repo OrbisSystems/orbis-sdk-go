@@ -30,14 +30,6 @@ type Auth interface {
 	GetToken(ctx context.Context) (model.Token, error)
 }
 
-type Validator interface {
-	ValidateLoginByEmailRequest(input model.LoginByEmailRequest) error
-	ValidateLoginByAPIKeyRequest(input model.LoginByAPIKeyRequest) error
-	ValidateNewsFilterRequest(filter model.NewsFilterRequest) error
-	IsUUID(id string) error
-	NotEmptyString(value string) error
-}
-
 type AccountService interface {
 	LoginByEmail(ctx context.Context, req model.LoginByEmailRequest) error
 	LoginByAPIKey(ctx context.Context, req model.LoginByAPIKeyRequest) error
@@ -79,4 +71,12 @@ type PassportService interface {
 type TipRankService interface {
 	AnalystConsensus(ctx context.Context, req model.AnalystConsensusRequest) ([]model.AnalystConsensusResponse, error)
 	LatestAnalystRatingsOnStock(ctx context.Context, req model.LatestAnalystRatingsOnStockRequest) ([]model.LatestAnalystRatingsOnStockResponse, error)
+	LiveFeed(ctx context.Context, req model.LiveFeedRequest) ([]model.LiveFeedResponse, error)
+	TrendingStocks(ctx context.Context, req model.TrendingStocksRequest) ([]model.TrendingStocksResponse, error)
+	AnalystPortfolios(ctx context.Context, req model.PortfoliosRequest) ([]model.PortfoliosResponse, error)
+	AnalystProfile(ctx context.Context, id string) (model.AnalystProfileResponse, error)
+	SectorConsensus(ctx context.Context) (model.SectorConsensusResponse, error)
+	BestPerformingExperts(ctx context.Context, num int) ([]model.BestPerformingExpertsResponse, error)
+	StocksSimilarStocks(ctx context.Context, ticker string) ([]string, error)
+	AnalystsExpertPictureStore(ctx context.Context) (model.AnalystsExpertPictureStoreResponse, error)
 }

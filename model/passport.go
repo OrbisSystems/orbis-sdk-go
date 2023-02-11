@@ -1,7 +1,7 @@
 package model
 
 type ArticlesRequest struct {
-	Language       string              `json:"language"` // (REQUIRE)
+	Language       string              `json:"language"` //
 	Type           ArticlesRequestType `json:"type" enums:"education,non-education"`
 	Symbol         string              `json:"symbol"`
 	ReleasedBefore int64               `json:"released_before"`
@@ -70,7 +70,7 @@ type ArticleFeaturedImage struct {
 }
 
 type NewsfeedRequest struct {
-	Language       string              `json:"language"` // (REQUIRE)
+	Language       string              `json:"language"` //
 	Type           ArticlesRequestType `json:"type" enums:"education,non-education"`
 	Symbol         string              `json:"symbol"`
 	ReleasedBefore int64               `json:"released_before"`
@@ -97,13 +97,13 @@ type Newsfeed struct {
 }
 
 type ArticleByIDRequest struct {
-	Language string `json:"language"` // (REQUIRE)
-	ID       int    `json:"ID"`       // (REQUIRE)
+	Language string `json:"language"` //
+	ID       int    `json:"ID"`       //
 }
 
 type SearchArticleRequest struct {
-	Language string            `json:"language"` // (REQUIRE)
-	S        string            `json:"s"`        // (REQUIRE)
+	Language string            `json:"language"` //
+	S        string            `json:"s"`        //
 	Type     ArticleSearchType `json:"type" enums:"all,tag,primary,symbol"`
 }
 
@@ -117,8 +117,8 @@ const (
 )
 
 type AuthorProfileRequest struct {
-	Language string `json:"language"` // (REQUIRE)
-	ID       string `json:"id"`       // (REQUIRE)
+	Language string `json:"language"` //
+	ID       string `json:"id"`       //
 }
 
 type AuthorProfileResponse struct {
@@ -134,9 +134,9 @@ type AuthorInfo struct {
 }
 
 type MostPopularTagsRequest struct {
-	Language string                   `json:"language"` // (REQUIRE)
+	Language string                   `json:"language"` //
 	Time     MostPopularTagsTimeType  `json:"time" enums:"week,month,year"`
-	Type     MostPopularTagsTypesType `json:"type" enums:"symbol,primary,tags"` // (REQUIRE)
+	Type     MostPopularTagsTypesType `json:"type" enums:"symbol,primary,tags"` //
 }
 
 type MostPopularTagsTimeType string

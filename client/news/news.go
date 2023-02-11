@@ -16,26 +16,20 @@ import (
 type News struct {
 	sdk.Auth
 
-	cfg       config.Config
-	cli       sdk.HTTPClient
-	validator sdk.Validator
+	cfg config.Config
+	cli sdk.HTTPClient
 }
 
-func New(cfg config.Config, auth sdk.Auth, cli sdk.HTTPClient, validator sdk.Validator) *News {
+func New(cfg config.Config, auth sdk.Auth, cli sdk.HTTPClient) *News {
 	return &News{
-		Auth:      auth,
-		cfg:       cfg,
-		cli:       cli,
-		validator: validator,
+		Auth: auth,
+		cfg:  cfg,
+		cli:  cli,
 	}
 }
 
 // GetByFilter returns news by filters.
 func (c *News) GetByFilter(ctx context.Context, req model.NewsFilterRequest) ([]model.NewsResponse, error) {
-	if err := c.validator.ValidateNewsFilterRequest(req); err != nil {
-		return nil, err
-	}
-
 	body, err := json.Marshal(req)
 	if err != nil {
 		return nil, errors.Wrap(err, "couldn't marshal input parameters")
@@ -57,10 +51,6 @@ func (c *News) GetByFilter(ctx context.Context, req model.NewsFilterRequest) ([]
 
 // GetByID returns news by ID.
 func (c *News) GetByID(ctx context.Context, req model.NewsByIDRequest) (model.NewsResponse, error) {
-	if err := c.validator.IsUUID(req.ID); err != nil {
-		return model.NewsResponse{}, err
-	}
-
 	body, err := json.Marshal(req)
 	if err != nil {
 		return model.NewsResponse{}, errors.Wrap(err, "couldn't marshal input parameters")
@@ -82,10 +72,6 @@ func (c *News) GetByID(ctx context.Context, req model.NewsByIDRequest) (model.Ne
 
 // GetSymbolSubjects returns available subjects for symbol.
 func (c *News) GetSymbolSubjects(ctx context.Context, req model.SymbolSubjectsRequest) ([]model.SymbolSubjectsResponse, error) {
-	if err := c.validator.NotEmptyString(req.Symbol); err != nil {
-		return nil, err
-	}
-
 	body, err := json.Marshal(req)
 	if err != nil {
 		return nil, errors.Wrap(err, "couldn't marshal input parameters")
