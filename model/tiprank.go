@@ -305,3 +305,134 @@ type PerformingExpertsRatings struct {
 type AnalystsExpertPictureStoreResponse struct {
 	URL string `json:"url"`
 }
+
+type SupportedTickersResponse struct {
+	Tickers []string `json:"tickers"`
+}
+
+type GeneralStockUpdatesResponse struct {
+	ResultsSinceUtcTimeStamp string                `json:"results_since_utc_time_stamp"`
+	CurrentUtcTimeStamp      string                `json:"current_utc_time_stamp"`
+	Stocks                   []string              `json:"stocks,omitempty"`
+	Updates                  []GeneralStockUpdates `json:"updates,omitempty"`
+}
+
+type GeneralStockUpdates struct {
+	Ticker     string `json:"ticker"`
+	LastUpdate string `json:"last_update"`
+}
+
+type InsidersOverviewResponse struct {
+	Name                 string            `json:"name"`
+	Picture              string            `json:"picture"`
+	Stars                float32           `json:"stars"`
+	CompanyName          string            `json:"company_name"`
+	Ticker               string            `json:"ticker"`
+	Position             string            `json:"position"`
+	PositiveTransactions int               `json:"positive_transactions"`
+	TotalTransactions    int               `json:"total_transactions"`
+	SuccessRate          float64           `json:"success_rate"`
+	AverageReturn        float64           `json:"average_return"`
+	CompaniesReview      []CompaniesReview `json:"companies_review"`
+	Rank                 float32           `json:"rank"`
+}
+
+type CompaniesReview struct {
+	Company                   string  `json:"company"`
+	Ticker                    string  `json:"ticker"`
+	NumOfShares               int     `json:"num_of_shares"`
+	Value                     float32 `json:"value"`
+	SharesPercentage          string  `json:"shares_percentage"`
+	DiscretionaryTransactions int     `json:"discretionary_transactions"`
+	UninformativeTransactions int     `json:"uninformative_transactions"`
+	AverageReturn             float64 `json:"average_return"`
+	SuccessRate               float64 `json:"success_rate"`
+}
+
+type InsidersBestPerformingExpertsResponse struct {
+	Name                   string                                    `json:"name"`
+	Rank                   int                                       `json:"rank"`
+	ExpertUID              string                                    `json:"expert_uid"`
+	ExpertPictureURL       string                                    `json:"expert_picture_url"`
+	NumberOfRankedInsiders int                                       `json:"number_of_ranked_insiders"`
+	ExcessReturn           float64                                   `json:"excess_return"`
+	Distribution           InsidersBestPerformingExpertDistribution  `json:"distribution"`
+	NumOfStars             float32                                   `json:"num_of_stars"`
+	FirmName               string                                    `json:"firm_name"`
+	SuccessRate            float64                                   `json:"success_rate"`
+	GoodTransactions       int                                       `json:"good_transactions"`
+	TotalTransactions      int                                       `json:"total_transactions"`
+	Transactions           []InsidersBestPerformingExpertTransaction `json:"transactions"`
+}
+
+type InsidersBestPerformingExpertDistribution struct {
+	Buy  float32 `json:"buy"`
+	Sell float32 `json:"sell"`
+	Hold float32 `json:"hold"`
+}
+
+type InsidersBestPerformingExpertTransaction struct {
+	CompanyName string `json:"company_name"`
+	Date        string `json:"date"`
+	Ticker      string `json:"ticker"`
+	Transaction string `json:"transaction"`
+}
+
+type InsidersLiveFeedResponse struct {
+	StockTicker               string  `json:"stock_ticker"`
+	CompanyName               string  `json:"company_name"`
+	Name                      string  `json:"name"`
+	UID                       string  `json:"uid"`
+	Rank                      int     `json:"rank"`
+	Img                       string  `json:"img"`
+	AverageReturn             float64 `json:"average_return"`
+	RecSuccess                int     `json:"rec_success"`
+	Transaction               string  `json:"transaction"`
+	TransactionID             int     `json:"transaction_id"`
+	TransactionDate           string  `json:"transaction_date"`
+	Form4                     string  `json:"form_4"`
+	ExpertOperationID         int     `json:"expert_operation_id"`
+	TimeAgo                   string  `json:"time_ago"`
+	IsTenPercentOwner         bool    `json:"is_ten_percent_owner"`
+	NumOfStars                float64 `json:"num_of_stars"`
+	MarketCap                 int64   `json:"market_cap"`
+	InsiderOperationTypeID    int     `json:"insider_operation_type_id"`
+	IsDirector                bool    `json:"is_director"`
+	IsOfficer                 bool    `json:"is_officer"`
+	IsOther                   bool    `json:"is_other"`
+	OfficerTitle              string  `json:"officer_title"`
+	TransAmount               float64 `json:"trans_amount"`
+	Position                  string  `json:"position"`
+	OperationAddedOnTimestamp string  `json:"operation_added_on_timestamp"`
+	StockID                   int     `json:"stock_id"`
+	Sector                    int     `json:"sector"`
+	RecTotal                  int     `json:"rec_total"`
+	AddedOnTimestamp          string  `json:"added_on_timestamp"`
+}
+
+type HedgeFundsBestPerformingExpertsResponse struct {
+	Name                       string                                      `json:"name"`
+	Rank                       int                                         `json:"rank"`
+	ExpertUID                  string                                      `json:"expert_uid"`
+	ExpertPictureURL           string                                      `json:"expert_picture_url"`
+	NumberOfRankedExperts      int                                         `json:"number_of_ranked_experts"`
+	Distribution               HedgeFundsBestPerformingExpertsDistribution `json:"distribution"`
+	NumOfStars                 float64                                     `json:"num_of_stars"`
+	Ratings                    []HedgeFundsBestPerformingExpertsRatings    `json:"ratings"`
+	HedgeFundName              string                                      `json:"hedge_fund_name"`
+	ThreeYearsAnnualizedReturn float64                                     `json:"three_years_annualized_return"`
+	PortfolioGain              float64                                     `json:"portfolio_gain"`
+}
+
+type HedgeFundsBestPerformingExpertsDistribution struct {
+	Buy  float32 `json:"buy"`
+	Hold float32 `json:"hold"`
+	Sell float32 `json:"sell"`
+}
+
+type HedgeFundsBestPerformingExpertsRatings struct {
+	CompanyName string `json:"company_name"`
+	Date        string `json:"date"`
+	Ticker      string `json:"ticker"`
+	Rating      string `json:"rating"`
+}

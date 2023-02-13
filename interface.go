@@ -79,4 +79,10 @@ type TipRankService interface {
 	BestPerformingExperts(ctx context.Context, num int) ([]model.BestPerformingExpertsResponse, error)
 	StocksSimilarStocks(ctx context.Context, ticker string) ([]string, error)
 	AnalystsExpertPictureStore(ctx context.Context) (model.AnalystsExpertPictureStoreResponse, error)
+	SupportedTickers(ctx context.Context) (model.SupportedTickersResponse, error)
+	GeneralStockUpdates(ctx context.Context, utcTime, details string) (model.GeneralStockUpdatesResponse, error)
+	InsidersOverview(ctx context.Context, expertUID string) (model.InsidersOverviewResponse, error)
+	InsidersBestPerformingExperts(ctx context.Context, num int) ([]model.InsidersBestPerformingExpertsResponse, error)
+	InsidersLiveFeed(ctx context.Context, num int, sort string) ([]model.InsidersLiveFeedResponse, error)
+	HedgeFundsBestPerformingExperts(ctx context.Context, num int) ([]model.HedgeFundsBestPerformingExpertsResponse, error)
 }

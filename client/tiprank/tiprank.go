@@ -202,3 +202,93 @@ func (t *TipRank) AnalystsExpertPictureStore(ctx context.Context) (model.Analyst
 
 	return resp, err
 }
+
+func (t *TipRank) SupportedTickers(ctx context.Context) (model.SupportedTickersResponse, error) {
+	r, err := t.cli.Get(ctx, t.cfg.AuthHost+model.URLInsightBase+model.URLInsightTipRankSupportedTickers, nil)
+	if err != nil {
+		return model.SupportedTickersResponse{}, errors.Wrap(err, "couldn't get supported tickers")
+	}
+
+	var resp model.SupportedTickersResponse
+	err = t.cli.UnmarshalAndCheckOk(&resp, r)
+	if err != nil {
+		return model.SupportedTickersResponse{}, err
+	}
+
+	return resp, err
+}
+
+func (t *TipRank) GeneralStockUpdates(ctx context.Context, utcTime, details string) (model.GeneralStockUpdatesResponse, error) {
+	r, err := t.cli.Get(ctx, fmt.Sprintf("%s?utc_time=%s&details=%s", t.cfg.AuthHost+model.URLInsightBase+model.URLInsightTipRankGeneralStockUpdates, utcTime, details), nil)
+	if err != nil {
+		return model.GeneralStockUpdatesResponse{}, errors.Wrap(err, "couldn't get general stock updates")
+	}
+
+	var resp model.GeneralStockUpdatesResponse
+	err = t.cli.UnmarshalAndCheckOk(&resp, r)
+	if err != nil {
+		return model.GeneralStockUpdatesResponse{}, err
+	}
+
+	return resp, err
+}
+
+func (t *TipRank) InsidersOverview(ctx context.Context, expertUID string) (model.InsidersOverviewResponse, error) {
+	r, err := t.cli.Get(ctx, fmt.Sprintf("%s?expert_uid=%s", t.cfg.AuthHost+model.URLInsightBase+model.URLInsightTipRankInsidersOverview, expertUID), nil)
+	if err != nil {
+		return model.InsidersOverviewResponse{}, errors.Wrap(err, "couldn't get insiders overview")
+	}
+
+	var resp model.InsidersOverviewResponse
+	err = t.cli.UnmarshalAndCheckOk(&resp, r)
+	if err != nil {
+		return model.InsidersOverviewResponse{}, err
+	}
+
+	return resp, err
+}
+
+func (t *TipRank) InsidersBestPerformingExperts(ctx context.Context, num int) ([]model.InsidersBestPerformingExpertsResponse, error) {
+	r, err := t.cli.Get(ctx, fmt.Sprintf("%s?num=%d", t.cfg.AuthHost+model.URLInsightBase+model.URLInsightTipRankInsidersBestPerformingExperts, num), nil)
+	if err != nil {
+		return nil, errors.Wrap(err, "couldn't get insiders best performing experts")
+	}
+
+	var resp []model.InsidersBestPerformingExpertsResponse
+	err = t.cli.UnmarshalAndCheckOk(&resp, r)
+	if err != nil {
+		return nil, err
+	}
+
+	return resp, err
+}
+
+func (t *TipRank) InsidersLiveFeed(ctx context.Context, num int, sort string) ([]model.InsidersLiveFeedResponse, error) {
+	r, err := t.cli.Get(ctx, fmt.Sprintf("%s?num=%d&sort=%s", t.cfg.AuthHost+model.URLInsightBase+model.URLInsightTipRankInsidersLiveFeed, num, sort), nil)
+	if err != nil {
+		return nil, errors.Wrap(err, "couldn't get insiders live feed")
+	}
+
+	var resp []model.InsidersLiveFeedResponse
+	err = t.cli.UnmarshalAndCheckOk(&resp, r)
+	if err != nil {
+		return nil, err
+	}
+
+	return resp, err
+}
+
+func (t *TipRank) HedgeFundsBestPerformingExperts(ctx context.Context, num int) ([]model.HedgeFundsBestPerformingExpertsResponse, error) {
+	r, err := t.cli.Get(ctx, fmt.Sprintf("%s?num=%d", t.cfg.AuthHost+model.URLInsightBase+model.URLInsightTipRankHedgefundsBestPerformingExperts, num), nil)
+	if err != nil {
+		return nil, errors.Wrap(err, "couldn't get hedgefunds best performing experts")
+	}
+
+	var resp []model.HedgeFundsBestPerformingExpertsResponse
+	err = t.cli.UnmarshalAndCheckOk(&resp, r)
+	if err != nil {
+		return nil, err
+	}
+
+	return resp, err
+}
