@@ -3,11 +3,11 @@ package client
 import (
 	sdk "github.com/OrbisSystems/orbis-sdk-go"
 	"github.com/OrbisSystems/orbis-sdk-go/client/account"
-	"github.com/OrbisSystems/orbis-sdk-go/client/equity"
 	"github.com/OrbisSystems/orbis-sdk-go/client/funds"
 	"github.com/OrbisSystems/orbis-sdk-go/client/logos"
 	"github.com/OrbisSystems/orbis-sdk-go/client/news"
 	"github.com/OrbisSystems/orbis-sdk-go/client/passport"
+	"github.com/OrbisSystems/orbis-sdk-go/client/quotes"
 	"github.com/OrbisSystems/orbis-sdk-go/client/tiprank"
 	"github.com/OrbisSystems/orbis-sdk-go/config"
 )
@@ -19,7 +19,7 @@ type Client struct {
 	Logos    sdk.LogosService
 	Passport sdk.PassportService
 	TipRank  sdk.TipRankService
-	Equity   sdk.EquityService
+	Quote    sdk.QuoteService
 	Funds    sdk.FundsService
 }
 
@@ -67,8 +67,8 @@ func (b *SDKBuilder) SetTipRankService(srv sdk.TipRankService) *SDKBuilder {
 	return b
 }
 
-func (b *SDKBuilder) SetEquityService(srv sdk.EquityService) *SDKBuilder {
-	b.cli.Equity = srv
+func (b *SDKBuilder) SetQuoteService(srv sdk.QuoteService) *SDKBuilder {
+	b.cli.Quote = srv
 	return b
 }
 
@@ -97,8 +97,8 @@ func (b *SDKBuilder) Build() *Client {
 		b.cli.TipRank = tiprank.New(b.cfg, b.auth, b.httpClient) // default
 	}
 
-	if b.cli.Equity == nil {
-		b.cli.Equity = equity.New(b.cfg, b.auth, b.httpClient) // default
+	if b.cli.Quote == nil {
+		b.cli.Quote = quotes.New(b.cfg, b.auth, b.httpClient) // default
 	}
 
 	if b.cli.Funds == nil {

@@ -1,0 +1,85 @@
+package quotes
+
+import (
+	"bytes"
+	"context"
+	"encoding/json"
+	"fmt"
+
+	"github.com/pkg/errors"
+
+	sdk "github.com/OrbisSystems/orbis-sdk-go"
+	"github.com/OrbisSystems/orbis-sdk-go/config"
+	"github.com/OrbisSystems/orbis-sdk-go/model"
+)
+
+// Quotes service returns quotes data.
+type Quotes struct {
+	sdk.Auth
+
+	cfg config.Config
+	cli sdk.HTTPClient
+}
+
+func New(cfg config.Config, auth sdk.Auth, cli sdk.HTTPClient) *Quotes {
+	return &Quotes{
+		Auth: auth,
+		cfg:  cfg,
+		cli:  cli,
+	}
+}
+
+func (q *Quotes) GetQuotesEquityData(ctx context.Context, symbols, quoteType string) ([]model.QuoteEquityDataResponse, error) {
+	r, err := q.cli.Get(ctx, fmt.Sprintf("%s?symbols=%s&quote_type=%s", q.cfg.AuthHost+model.URLInsightBase+model.URLInsightQuotesEquity, symbols, quoteType), nil)
+	if err != nil {
+		return nil, errors.Wrap(err, "couldn't get quotes equity")
+	}
+
+	var resp []model.QuoteEquityDataResponse
+	err = q.cli.UnmarshalAndCheckOk(&resp, r)
+	if err != nil {
+		return nil, err
+	}
+
+	return resp, err
+}
+
+func (q *Quotes) GetQuoteHistory(ctx context.Context, req model.QuoteHistoryRequest) (model.QuoteHistoryResponse, error) {
+	body, err := json.Marshal(req)
+	if err != nil {
+		return model.QuoteHistoryResponse{}, errors.Wrap(err, "couldn't marshal input parameters")
+	}
+
+	r, err := q.cli.Post(ctx, q.cfg.AuthHost+model.URLInsightBase+model.URLInsightQuoteHistory, bytes.NewBuffer(body), nil)
+	if err != nil {
+		return model.QuoteHistoryResponse{}, errors.Wrap(err, "couldn't get quote history")
+	}
+
+	var resp model.QuoteHistoryResponse
+	err = q.cli.UnmarshalAndCheckOk(&resp, r)
+	if err != nil {
+		return model.QuoteHistoryResponse{}, err
+	}
+
+	return resp, err
+}
+
+func (q *Quotes) GetIntradayQuotes(ctx context.Context, req model.IntradayRequest) ([]model.IntradayResponse, error) {
+	body, err := json.Marshal(req)
+	if err != nil {
+		return nil, errors.Wrap(err, "couldn't marshal input parameters")
+	}
+
+	r, err := q.cli.Post(ctx, q.cfg.AuthHost+model.URLInsightBase+model.URLInsightIntradayQuotes, bytes.NewBuffer(body), nil)
+	if err != nil {
+		return nil, errors.Wrap(err, "couldn't get intraday quotes")
+	}
+
+	var resp []model.IntradayResponse
+	err = q.cli.UnmarshalAndCheckOk(&resp, r)
+	if err != nil {
+		return nil, err
+	}
+
+	return resp, err
+}

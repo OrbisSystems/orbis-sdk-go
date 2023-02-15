@@ -82,10 +82,12 @@ const (
 	URLInsightTipRankHedgefundsBestPerformingExperts = "/tipranks/hedgefunds-best-performing-experts"
 
 	// *******************************************
-	// 		Equity
+	// 		Quotes
 	// *******************************************
 
-	URLInsightQuotesEquity = "/quotes/equity"
+	URLInsightQuotesEquity   = "/quotes/equity"
+	URLInsightQuoteHistory   = "/quote-history"
+	URLInsightIntradayQuotes = "/intraday/quotes"
 
 	// *******************************************
 	// 		Funds

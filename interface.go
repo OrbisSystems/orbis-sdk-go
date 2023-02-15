@@ -87,8 +87,10 @@ type TipRankService interface {
 	HedgeFundsBestPerformingExperts(ctx context.Context, num int) ([]model.HedgeFundsBestPerformingExpertsResponse, error)
 }
 
-type EquityService interface {
-	GetQuotesEquityData(ctx context.Context, symbols, quoteType string) ([]model.EquityDataResponse, error)
+type QuoteService interface {
+	GetQuotesEquityData(ctx context.Context, symbols, quoteType string) ([]model.QuoteEquityDataResponse, error)
+	GetQuoteHistory(ctx context.Context, req model.QuoteHistoryRequest) (model.QuoteHistoryResponse, error)
+	GetIntradayQuotes(ctx context.Context, req model.IntradayRequest) ([]model.IntradayResponse, error)
 }
 
 type FundsService interface {
