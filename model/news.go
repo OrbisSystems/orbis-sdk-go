@@ -7,19 +7,14 @@ import (
 )
 
 type NewsFilterRequest struct {
-	Symbol         *string     `json:"symbol"`          // Symbol. See available values by using endpoint /symbols
-	NewsSource     []string    `json:"news_source"`     // News source. See available values by using endpoint /sources
-	StartDate      *string     `json:"start_date"`      // Start date for searching news
-	EndDate        *string     `json:"end_date"`        // End date for searching news
-	Language       *string     `json:"language"`        // Which news language. See available values by using endpoint /lang
-	RelevanceLevel *string     `json:"relevance_level"` // Relevance level. Required with subject				Enums(week, moderate, relevant, strongly)
-	Subject        []string    `json:"subject"`         // News subjects. Required with relevance_level 		Enums(IS/biz, IS/culture, IS/fin etc. See available values by using endpoint /taxonomy)
-	Paging         *Pagination `json:"paging"`          // Response paging
-}
-
-type Pagination struct {
-	Limit  *int `json:"limit"`
-	Offset *int `json:"offset"`
+	Symbol         *string  `json:"symbol"`          // Symbol. See available values by using endpoint /symbols
+	NewsSource     []string `json:"news_source"`     // News source. See available values by using endpoint /sources
+	StartDate      *string  `json:"start_date"`      // Start date for searching news
+	EndDate        *string  `json:"end_date"`        // End date for searching news
+	Language       *string  `json:"language"`        // Which news language. See available values by using endpoint /lang
+	RelevanceLevel *string  `json:"relevance_level"` // Relevance level. Required with subject				Enums(week, moderate, relevant, strongly)
+	Subject        []string `json:"subject"`         // News subjects. Required with relevance_level 		Enums(IS/biz, IS/culture, IS/fin etc. See available values by using endpoint /taxonomy)
+	Paging         *Paging  `json:"paging"`          // Response paging
 }
 
 // NewsResponse is created just for swagger, it's not uses in real (we just proxying requests/responses)

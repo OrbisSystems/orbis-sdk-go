@@ -80,4 +80,20 @@ const (
 	URLInsightTipRankInsidersBestPerformingExperts   = "/tipranks/insiders-best-performing-experts"
 	URLInsightTipRankInsidersLiveFeed                = "/tipranks/insiders-live-feed"
 	URLInsightTipRankHedgefundsBestPerformingExperts = "/tipranks/hedgefunds-best-performing-experts"
+
+	// *******************************************
+	// 		Equity
+	// *******************************************
+
+	URLInsightQuotesEquity = "/quotes/equity"
+
+	// *******************************************
+	// 		Funds
+	// *******************************************
+
+	URLInsightFundsDetails         = "/funds/details"
+	URLInsightFundsScreenerFilters = "/funds/screener/filters"
+	URLInsightFundsScreener        = "/funds/screener"
+	URLInsightFundsSectorScreener  = "/funds/sector-screener"
+	URLInsightFundsTop             = "/funds/top"
 )

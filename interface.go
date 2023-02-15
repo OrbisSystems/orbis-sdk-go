@@ -86,3 +86,15 @@ type TipRankService interface {
 	InsidersLiveFeed(ctx context.Context, num int, sort string) ([]model.InsidersLiveFeedResponse, error)
 	HedgeFundsBestPerformingExperts(ctx context.Context, num int) ([]model.HedgeFundsBestPerformingExpertsResponse, error)
 }
+
+type EquityService interface {
+	GetQuotesEquityData(ctx context.Context, symbols, quoteType string) ([]model.EquityDataResponse, error)
+}
+
+type FundsService interface {
+	GetFundDetails(ctx context.Context, symbol string) (model.GetFundDetailsResponse, error)
+	GetFundScreenerFilters(ctx context.Context) (model.GetFundScreenerFiltersResponse, error)
+	ScreenFunds(ctx context.Context, req model.FundScreenerRequest) (model.FundScreenerResponse, error)
+	ScreenSectorFunds(ctx context.Context, req model.FundSectorScreenerRequest) (model.FundScreenerResponse, error)
+	GetTopFunds(ctx context.Context, req model.GetTopFundsRequest) ([]string, error)
+}

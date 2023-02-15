@@ -3,6 +3,8 @@ package client
 import (
 	sdk "github.com/OrbisSystems/orbis-sdk-go"
 	"github.com/OrbisSystems/orbis-sdk-go/client/account"
+	"github.com/OrbisSystems/orbis-sdk-go/client/equity"
+	"github.com/OrbisSystems/orbis-sdk-go/client/funds"
 	"github.com/OrbisSystems/orbis-sdk-go/client/logos"
 	"github.com/OrbisSystems/orbis-sdk-go/client/news"
 	"github.com/OrbisSystems/orbis-sdk-go/client/passport"
@@ -12,11 +14,13 @@ import (
 
 // Client top-level client for this SDK. Use it for calling all available API we provide for you.
 type Client struct {
-	AccountService  sdk.AccountService
-	NewsService     sdk.NewsService
-	LogosService    sdk.LogosService
-	PassportService sdk.PassportService
-	TipRankService  sdk.TipRankService
+	Account  sdk.AccountService
+	News     sdk.NewsService
+	Logos    sdk.LogosService
+	Passport sdk.PassportService
+	TipRank  sdk.TipRankService
+	Equity   sdk.EquityService
+	Funds    sdk.FundsService
 }
 
 // SDKBuilder provides building Orbis Client with custom parts.
@@ -39,48 +43,66 @@ func NewSDKBuilder(cfg config.Config, httpClient sdk.HTTPClient, auth sdk.Auth) 
 }
 
 func (b *SDKBuilder) SetAccountService(srv sdk.AccountService) *SDKBuilder {
-	b.cli.AccountService = srv
+	b.cli.Account = srv
 	return b
 }
 
 func (b *SDKBuilder) SetNewsService(srv sdk.NewsService) *SDKBuilder {
-	b.cli.NewsService = srv
+	b.cli.News = srv
 	return b
 }
 
 func (b *SDKBuilder) SetLogosService(srv sdk.LogosService) *SDKBuilder {
-	b.cli.LogosService = srv
+	b.cli.Logos = srv
 	return b
 }
 
 func (b *SDKBuilder) SetPassportService(srv sdk.PassportService) *SDKBuilder {
-	b.cli.PassportService = srv
+	b.cli.Passport = srv
 	return b
 }
 
 func (b *SDKBuilder) SetTipRankService(srv sdk.TipRankService) *SDKBuilder {
-	b.cli.TipRankService = srv
+	b.cli.TipRank = srv
+	return b
+}
+
+func (b *SDKBuilder) SetEquityService(srv sdk.EquityService) *SDKBuilder {
+	b.cli.Equity = srv
+	return b
+}
+
+func (b *SDKBuilder) SetFundsService(srv sdk.FundsService) *SDKBuilder {
+	b.cli.Funds = srv
 	return b
 }
 
 func (b *SDKBuilder) Build() *Client {
-	if b.cli.AccountService == nil {
-		b.cli.AccountService = account.New(b.cfg, b.auth, b.httpClient) // default
+	if b.cli.Account == nil {
+		b.cli.Account = account.New(b.cfg, b.auth, b.httpClient) // default
 	}
-	if b.cli.NewsService == nil {
-		b.cli.NewsService = news.New(b.cfg, b.auth, b.httpClient) // default
-	}
-
-	if b.cli.LogosService == nil {
-		b.cli.LogosService = logos.New(b.cfg, b.auth, b.httpClient) // default
+	if b.cli.News == nil {
+		b.cli.News = news.New(b.cfg, b.auth, b.httpClient) // default
 	}
 
-	if b.cli.PassportService == nil {
-		b.cli.PassportService = passport.New(b.cfg, b.auth, b.httpClient) // default
+	if b.cli.Logos == nil {
+		b.cli.Logos = logos.New(b.cfg, b.auth, b.httpClient) // default
 	}
 
-	if b.cli.TipRankService == nil {
-		b.cli.TipRankService = tiprank.New(b.cfg, b.auth, b.httpClient) // default
+	if b.cli.Passport == nil {
+		b.cli.Passport = passport.New(b.cfg, b.auth, b.httpClient) // default
+	}
+
+	if b.cli.TipRank == nil {
+		b.cli.TipRank = tiprank.New(b.cfg, b.auth, b.httpClient) // default
+	}
+
+	if b.cli.Equity == nil {
+		b.cli.Equity = equity.New(b.cfg, b.auth, b.httpClient) // default
+	}
+
+	if b.cli.Funds == nil {
+		b.cli.Funds = funds.New(b.cfg, b.auth, b.httpClient) // default
 	}
 
 	return b.cli
