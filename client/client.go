@@ -8,6 +8,7 @@ import (
 	"github.com/OrbisSystems/orbis-sdk-go/client/news"
 	"github.com/OrbisSystems/orbis-sdk-go/client/passport"
 	"github.com/OrbisSystems/orbis-sdk-go/client/quotes"
+	"github.com/OrbisSystems/orbis-sdk-go/client/research"
 	"github.com/OrbisSystems/orbis-sdk-go/client/tiprank"
 	"github.com/OrbisSystems/orbis-sdk-go/config"
 )
@@ -21,6 +22,7 @@ type Client struct {
 	TipRank  sdk.TipRankService
 	Quote    sdk.QuoteService
 	Funds    sdk.FundsService
+	Research sdk.ResearchService
 }
 
 // SDKBuilder provides building Orbis Client with custom parts.
@@ -77,6 +79,11 @@ func (b *SDKBuilder) SetFundsService(srv sdk.FundsService) *SDKBuilder {
 	return b
 }
 
+func (b *SDKBuilder) SetResearchService(srv sdk.ResearchService) *SDKBuilder {
+	b.cli.Research = srv
+	return b
+}
+
 func (b *SDKBuilder) Build() *Client {
 	if b.cli.Account == nil {
 		b.cli.Account = account.New(b.cfg, b.auth, b.httpClient) // default
@@ -103,6 +110,10 @@ func (b *SDKBuilder) Build() *Client {
 
 	if b.cli.Funds == nil {
 		b.cli.Funds = funds.New(b.cfg, b.auth, b.httpClient) // default
+	}
+
+	if b.cli.Research == nil {
+		b.cli.Research = research.New(b.cfg, b.auth, b.httpClient) // default
 	}
 
 	return b.cli

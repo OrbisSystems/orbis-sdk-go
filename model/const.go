@@ -98,4 +98,18 @@ const (
 	URLInsightFundsScreener        = "/funds/screener"
 	URLInsightFundsSectorScreener  = "/funds/sector-screener"
 	URLInsightFundsTop             = "/funds/top"
+
+	// *******************************************
+	// 		Research
+	// *******************************************
+
+	URLInsightCompanyProfile        = "/company-profile"
+	URLInsightQuoteProfile          = "/quote-profile"
+	URLInsightSymbolOwnerships      = "/symbol-ownerships"
+	URLInsightOwnerships            = "/ownerships"
+	URLInsightEarningsCalendar      = "/earnings-calendar"
+	URLInsightFundamentals          = "/fundamentals"
+	URLInsightStockScreener         = "/stock-screener"
+	URLInsightHeatmaps              = "/heatmaps"
+	URLInsightIndustriesPerformance = "/industries-performance"
 )

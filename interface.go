@@ -100,3 +100,15 @@ type FundsService interface {
 	ScreenSectorFunds(ctx context.Context, req model.FundSectorScreenerRequest) (model.FundScreenerResponse, error)
 	GetTopFunds(ctx context.Context, req model.GetTopFundsRequest) ([]string, error)
 }
+
+type ResearchService interface {
+	GetCompanyProfile(ctx context.Context, symbol string) (model.CompanyProfile, error)
+	GetCombinedProfile(ctx context.Context, symbol string) (model.CompanyProfile, error)
+	GetOwnershipsBySymbol(ctx context.Context, req model.GetOwnershipsBySymbolRequest) (model.GetOwnershipsBySymbolResponse, error)
+	GetOwnershipsByID(ctx context.Context, req model.GetOwnershipsByIDRequest) (model.GetOwnershipsBySymbolResponse, error)
+	GetEarningReleases(ctx context.Context, req model.EarningReleasesRequest) (model.EarningReleasesResponse, error)
+	GetSymbolFundamentals(ctx context.Context, req model.EarningReleasesRequest) (model.GetSymbolFundamentalsResponse, error)
+	Screener(ctx context.Context, req model.StockScreenerRequest) (model.StockScreenerResponse, error)
+	StockMarketHeatmap(ctx context.Context, heatmapName, quoteType string) (model.StockMarketHeatmapResponse, error)
+	GetIndustriesPerformance(ctx context.Context, req model.GetIndustriesPerformanceRequest) (model.GetIndustriesPerformanceResponse, error)
+}
