@@ -112,4 +112,11 @@ const (
 	URLInsightStockScreener         = "/stock-screener"
 	URLInsightHeatmaps              = "/heatmaps"
 	URLInsightIndustriesPerformance = "/industries-performance"
+
+	// *******************************************
+	// 		IPO
+	// *******************************************
+
+	URLInsightIPOsUpcoming = "/ipos/upcoming"
+	URLInsightIPOsRecent   = "/ipos/recent"
 )

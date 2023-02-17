@@ -112,3 +112,8 @@ type ResearchService interface {
 	StockMarketHeatmap(ctx context.Context, heatmapName, quoteType string) (model.StockMarketHeatmapResponse, error)
 	GetIndustriesPerformance(ctx context.Context, req model.GetIndustriesPerformanceRequest) (model.GetIndustriesPerformanceResponse, error)
 }
+
+type IPOService interface {
+	GetUpcomingIPOs(ctx context.Context, limit, offset int) (model.IPOResponse, error)
+	GetRecentIPOs(ctx context.Context, req model.RecentIPORequest) (model.IPOResponse, error)
+}
