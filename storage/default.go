@@ -3,6 +3,8 @@ package storage
 import (
 	"context"
 	"sync"
+
+	log "github.com/sirupsen/logrus"
 )
 
 // InMemoryStorage is just a simple in-memory storage.
@@ -17,6 +19,8 @@ func NewInMemoryStorage() *InMemoryStorage {
 }
 
 func (s *InMemoryStorage) Store(_ context.Context, data []byte) error {
+	log.Trace("InMemoryStorage: method Store called")
+
 	s.mx.Lock()
 	defer s.mx.Unlock()
 	s.data = data
@@ -25,6 +29,8 @@ func (s *InMemoryStorage) Store(_ context.Context, data []byte) error {
 }
 
 func (s *InMemoryStorage) Get(_ context.Context) ([]byte, error) {
+	log.Trace("InMemoryStorage: method Get called")
+
 	s.mx.RLock()
 	defer s.mx.RUnlock()
 

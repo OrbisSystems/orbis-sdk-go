@@ -7,6 +7,7 @@ import (
 	"fmt"
 
 	"github.com/pkg/errors"
+	log "github.com/sirupsen/logrus"
 
 	sdk "github.com/OrbisSystems/orbis-sdk-go"
 	"github.com/OrbisSystems/orbis-sdk-go/config"
@@ -29,6 +30,8 @@ func New(cfg config.Config, auth sdk.Auth, cli sdk.HTTPClient) *Research {
 }
 
 func (s *Research) GetCompanyProfile(ctx context.Context, symbol string) (model.CompanyProfile, error) {
+	log.Trace("GetCompanyProfile called")
+
 	r, err := s.cli.Get(ctx, fmt.Sprintf("%s?symbol=%s", s.cfg.AuthHost+model.URLInsightBase+model.URLInsightCompanyProfile, symbol), nil)
 	if err != nil {
 		return model.CompanyProfile{}, errors.Wrap(err, "couldn't get company profile")
@@ -44,6 +47,8 @@ func (s *Research) GetCompanyProfile(ctx context.Context, symbol string) (model.
 }
 
 func (s *Research) GetCombinedProfile(ctx context.Context, symbol string) (model.CompanyProfile, error) {
+	log.Trace("GetCombinedProfile called")
+
 	r, err := s.cli.Get(ctx, fmt.Sprintf("%s?symbol=%s", s.cfg.AuthHost+model.URLInsightBase+model.URLInsightQuoteProfile, symbol), nil)
 	if err != nil {
 		return model.CompanyProfile{}, errors.Wrap(err, "couldn't get combined company profile")
@@ -59,6 +64,8 @@ func (s *Research) GetCombinedProfile(ctx context.Context, symbol string) (model
 }
 
 func (s *Research) GetOwnershipsBySymbol(ctx context.Context, req model.GetOwnershipsBySymbolRequest) (model.GetOwnershipsBySymbolResponse, error) {
+	log.Trace("GetOwnershipsBySymbol called")
+
 	body, err := json.Marshal(req)
 	if err != nil {
 		return model.GetOwnershipsBySymbolResponse{}, errors.Wrap(err, "couldn't marshal input parameters")
@@ -79,6 +86,8 @@ func (s *Research) GetOwnershipsBySymbol(ctx context.Context, req model.GetOwner
 }
 
 func (s *Research) GetOwnershipsByID(ctx context.Context, req model.GetOwnershipsByIDRequest) (model.GetOwnershipsBySymbolResponse, error) {
+	log.Trace("GetOwnershipsByID called")
+
 	body, err := json.Marshal(req)
 	if err != nil {
 		return model.GetOwnershipsBySymbolResponse{}, errors.Wrap(err, "couldn't marshal input parameters")
@@ -99,6 +108,8 @@ func (s *Research) GetOwnershipsByID(ctx context.Context, req model.GetOwnership
 }
 
 func (s *Research) GetEarningReleases(ctx context.Context, req model.EarningReleasesRequest) (model.EarningReleasesResponse, error) {
+	log.Trace("GetEarningReleases called")
+
 	body, err := json.Marshal(req)
 	if err != nil {
 		return model.EarningReleasesResponse{}, errors.Wrap(err, "couldn't marshal input parameters")
@@ -119,6 +130,8 @@ func (s *Research) GetEarningReleases(ctx context.Context, req model.EarningRele
 }
 
 func (s *Research) GetSymbolFundamentals(ctx context.Context, req model.EarningReleasesRequest) (model.GetSymbolFundamentalsResponse, error) {
+	log.Trace("GetSymbolFundamentals called")
+
 	body, err := json.Marshal(req)
 	if err != nil {
 		return model.GetSymbolFundamentalsResponse{}, errors.Wrap(err, "couldn't marshal input parameters")
@@ -139,6 +152,8 @@ func (s *Research) GetSymbolFundamentals(ctx context.Context, req model.EarningR
 }
 
 func (s *Research) Screener(ctx context.Context, req model.StockScreenerRequest) (model.StockScreenerResponse, error) {
+	log.Trace("Screener called")
+
 	body, err := json.Marshal(req)
 	if err != nil {
 		return model.StockScreenerResponse{}, errors.Wrap(err, "couldn't marshal input parameters")
@@ -159,6 +174,8 @@ func (s *Research) Screener(ctx context.Context, req model.StockScreenerRequest)
 }
 
 func (s *Research) StockMarketHeatmap(ctx context.Context, heatmapName, quoteType string) (model.StockMarketHeatmapResponse, error) {
+	log.Trace("StockMarketHeatmap called")
+
 	r, err := s.cli.Get(ctx, fmt.Sprintf("%s?heatmapName=%s&quoteType=%s", s.cfg.AuthHost+model.URLInsightBase+model.URLInsightHeatmaps, heatmapName, quoteType), nil)
 	if err != nil {
 		return model.StockMarketHeatmapResponse{}, errors.Wrap(err, "couldn't get combined company profile")
@@ -174,6 +191,8 @@ func (s *Research) StockMarketHeatmap(ctx context.Context, heatmapName, quoteTyp
 }
 
 func (s *Research) GetIndustriesPerformance(ctx context.Context, req model.GetIndustriesPerformanceRequest) (model.GetIndustriesPerformanceResponse, error) {
+	log.Trace("GetIndustriesPerformance called")
+
 	body, err := json.Marshal(req)
 	if err != nil {
 		return model.GetIndustriesPerformanceResponse{}, errors.Wrap(err, "couldn't marshal input parameters")

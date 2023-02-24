@@ -7,6 +7,7 @@ import (
 	"fmt"
 
 	"github.com/pkg/errors"
+	log "github.com/sirupsen/logrus"
 
 	sdk "github.com/OrbisSystems/orbis-sdk-go"
 	"github.com/OrbisSystems/orbis-sdk-go/config"
@@ -29,6 +30,8 @@ func New(cfg config.Config, auth sdk.Auth, cli sdk.HTTPClient) *TipRank {
 }
 
 func (t *TipRank) AnalystConsensus(ctx context.Context, req model.AnalystConsensusRequest) ([]model.AnalystConsensusResponse, error) {
+	log.Trace("AnalystConsensus called")
+
 	body, err := json.Marshal(req)
 	if err != nil {
 		return nil, errors.Wrap(err, "couldn't marshal input parameters")
@@ -49,6 +52,8 @@ func (t *TipRank) AnalystConsensus(ctx context.Context, req model.AnalystConsens
 }
 
 func (t *TipRank) LatestAnalystRatingsOnStock(ctx context.Context, req model.LatestAnalystRatingsOnStockRequest) ([]model.LatestAnalystRatingsOnStockResponse, error) {
+	log.Trace("LatestAnalystRatingsOnStock called")
+
 	body, err := json.Marshal(req)
 	if err != nil {
 		return nil, errors.Wrap(err, "couldn't marshal input parameters")
@@ -69,6 +74,8 @@ func (t *TipRank) LatestAnalystRatingsOnStock(ctx context.Context, req model.Lat
 }
 
 func (t *TipRank) LiveFeed(ctx context.Context, req model.LiveFeedRequest) ([]model.LiveFeedResponse, error) {
+	log.Trace("LiveFeed called")
+
 	body, err := json.Marshal(req)
 	if err != nil {
 		return nil, errors.Wrap(err, "couldn't marshal input parameters")
@@ -89,6 +96,8 @@ func (t *TipRank) LiveFeed(ctx context.Context, req model.LiveFeedRequest) ([]mo
 }
 
 func (t *TipRank) TrendingStocks(ctx context.Context, req model.TrendingStocksRequest) ([]model.TrendingStocksResponse, error) {
+	log.Trace("TrendingStocks called")
+
 	body, err := json.Marshal(req)
 	if err != nil {
 		return nil, errors.Wrap(err, "couldn't marshal input parameters")
@@ -109,6 +118,8 @@ func (t *TipRank) TrendingStocks(ctx context.Context, req model.TrendingStocksRe
 }
 
 func (t *TipRank) AnalystPortfolios(ctx context.Context, req model.PortfoliosRequest) ([]model.PortfoliosResponse, error) {
+	log.Trace("AnalystPortfolios called")
+
 	body, err := json.Marshal(req)
 	if err != nil {
 		return nil, errors.Wrap(err, "couldn't marshal input parameters")
@@ -129,6 +140,8 @@ func (t *TipRank) AnalystPortfolios(ctx context.Context, req model.PortfoliosReq
 }
 
 func (t *TipRank) AnalystProfile(ctx context.Context, id string) (model.AnalystProfileResponse, error) {
+	log.Trace("AnalystProfile called")
+
 	r, err := t.cli.Get(ctx, fmt.Sprintf("%s?id=%s", t.cfg.AuthHost+model.URLInsightBase+model.URLInsightTipRankAnalystProfile, id), nil)
 	if err != nil {
 		return model.AnalystProfileResponse{}, errors.Wrap(err, "couldn't get analyst profile")
@@ -144,6 +157,8 @@ func (t *TipRank) AnalystProfile(ctx context.Context, id string) (model.AnalystP
 }
 
 func (t *TipRank) SectorConsensus(ctx context.Context) (model.SectorConsensusResponse, error) {
+	log.Trace("SectorConsensus called")
+
 	r, err := t.cli.Get(ctx, t.cfg.AuthHost+model.URLInsightBase+model.URLInsightTipRankSectorConsensus, nil)
 	if err != nil {
 		return model.SectorConsensusResponse{}, errors.Wrap(err, "couldn't get sector consensus")
@@ -159,6 +174,8 @@ func (t *TipRank) SectorConsensus(ctx context.Context) (model.SectorConsensusRes
 }
 
 func (t *TipRank) BestPerformingExperts(ctx context.Context, num int) ([]model.BestPerformingExpertsResponse, error) {
+	log.Trace("BestPerformingExperts called")
+
 	r, err := t.cli.Get(ctx, fmt.Sprintf("%s?num=%d", t.cfg.AuthHost+model.URLInsightBase+model.URLInsightTipRankBestPerformingExperts, num), nil)
 	if err != nil {
 		return nil, errors.Wrap(err, "couldn't get best performing experts")
@@ -174,6 +191,8 @@ func (t *TipRank) BestPerformingExperts(ctx context.Context, num int) ([]model.B
 }
 
 func (t *TipRank) StocksSimilarStocks(ctx context.Context, ticker string) ([]string, error) {
+	log.Trace("StocksSimilarStocks called")
+
 	r, err := t.cli.Get(ctx, fmt.Sprintf("%s?ticker=%s", t.cfg.AuthHost+model.URLInsightBase+model.URLInsightTipRankStocksSimilarStocks, ticker), nil)
 	if err != nil {
 		return nil, errors.Wrap(err, "couldn't get stocks similar stocks")
@@ -189,6 +208,8 @@ func (t *TipRank) StocksSimilarStocks(ctx context.Context, ticker string) ([]str
 }
 
 func (t *TipRank) AnalystsExpertPictureStore(ctx context.Context) (model.AnalystsExpertPictureStoreResponse, error) {
+	log.Trace("AnalystsExpertPictureStore called")
+
 	r, err := t.cli.Get(ctx, t.cfg.AuthHost+model.URLInsightBase+model.URLInsightTipRankAnalystsExpertPictureStore, nil)
 	if err != nil {
 		return model.AnalystsExpertPictureStoreResponse{}, errors.Wrap(err, "couldn't get analysts expert picture store")
@@ -204,6 +225,8 @@ func (t *TipRank) AnalystsExpertPictureStore(ctx context.Context) (model.Analyst
 }
 
 func (t *TipRank) SupportedTickers(ctx context.Context) (model.SupportedTickersResponse, error) {
+	log.Trace("SupportedTickers called")
+
 	r, err := t.cli.Get(ctx, t.cfg.AuthHost+model.URLInsightBase+model.URLInsightTipRankSupportedTickers, nil)
 	if err != nil {
 		return model.SupportedTickersResponse{}, errors.Wrap(err, "couldn't get supported tickers")
@@ -219,6 +242,8 @@ func (t *TipRank) SupportedTickers(ctx context.Context) (model.SupportedTickersR
 }
 
 func (t *TipRank) GeneralStockUpdates(ctx context.Context, utcTime, details string) (model.GeneralStockUpdatesResponse, error) {
+	log.Trace("GeneralStockUpdates called")
+
 	r, err := t.cli.Get(ctx, fmt.Sprintf("%s?utc_time=%s&details=%s", t.cfg.AuthHost+model.URLInsightBase+model.URLInsightTipRankGeneralStockUpdates, utcTime, details), nil)
 	if err != nil {
 		return model.GeneralStockUpdatesResponse{}, errors.Wrap(err, "couldn't get general stock updates")
@@ -234,6 +259,8 @@ func (t *TipRank) GeneralStockUpdates(ctx context.Context, utcTime, details stri
 }
 
 func (t *TipRank) InsidersOverview(ctx context.Context, expertUID string) (model.InsidersOverviewResponse, error) {
+	log.Trace("InsidersOverview called")
+
 	r, err := t.cli.Get(ctx, fmt.Sprintf("%s?expert_uid=%s", t.cfg.AuthHost+model.URLInsightBase+model.URLInsightTipRankInsidersOverview, expertUID), nil)
 	if err != nil {
 		return model.InsidersOverviewResponse{}, errors.Wrap(err, "couldn't get insiders overview")
@@ -249,6 +276,8 @@ func (t *TipRank) InsidersOverview(ctx context.Context, expertUID string) (model
 }
 
 func (t *TipRank) InsidersBestPerformingExperts(ctx context.Context, num int) ([]model.InsidersBestPerformingExpertsResponse, error) {
+	log.Trace("InsidersBestPerformingExperts called")
+
 	r, err := t.cli.Get(ctx, fmt.Sprintf("%s?num=%d", t.cfg.AuthHost+model.URLInsightBase+model.URLInsightTipRankInsidersBestPerformingExperts, num), nil)
 	if err != nil {
 		return nil, errors.Wrap(err, "couldn't get insiders best performing experts")
@@ -264,6 +293,8 @@ func (t *TipRank) InsidersBestPerformingExperts(ctx context.Context, num int) ([
 }
 
 func (t *TipRank) InsidersLiveFeed(ctx context.Context, num int, sort string) ([]model.InsidersLiveFeedResponse, error) {
+	log.Trace("InsidersLiveFeed called")
+
 	r, err := t.cli.Get(ctx, fmt.Sprintf("%s?num=%d&sort=%s", t.cfg.AuthHost+model.URLInsightBase+model.URLInsightTipRankInsidersLiveFeed, num, sort), nil)
 	if err != nil {
 		return nil, errors.Wrap(err, "couldn't get insiders live feed")
@@ -279,6 +310,8 @@ func (t *TipRank) InsidersLiveFeed(ctx context.Context, num int, sort string) ([
 }
 
 func (t *TipRank) HedgeFundsBestPerformingExperts(ctx context.Context, num int) ([]model.HedgeFundsBestPerformingExpertsResponse, error) {
+	log.Trace("HedgeFundsBestPerformingExperts called")
+
 	r, err := t.cli.Get(ctx, fmt.Sprintf("%s?num=%d", t.cfg.AuthHost+model.URLInsightBase+model.URLInsightTipRankHedgefundsBestPerformingExperts, num), nil)
 	if err != nil {
 		return nil, errors.Wrap(err, "couldn't get hedgefunds best performing experts")

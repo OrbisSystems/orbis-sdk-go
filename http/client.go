@@ -12,13 +12,10 @@ import (
 )
 
 const (
-	accessTokenHeader = "Authorization"
-
+	accessTokenHeader    = "Authorization"
 	contentTypeHeaderKey = "Content-Type"
-
-	applicationJson = "application/json"
-
-	defaultTimeout = time.Minute
+	applicationJson      = "application/json"
+	defaultTimeout       = time.Minute
 )
 
 // OrbisClient is a wrapper for http client with additional functionality.

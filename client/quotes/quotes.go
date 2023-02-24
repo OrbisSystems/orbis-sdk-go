@@ -7,6 +7,7 @@ import (
 	"fmt"
 
 	"github.com/pkg/errors"
+	log "github.com/sirupsen/logrus"
 
 	sdk "github.com/OrbisSystems/orbis-sdk-go"
 	"github.com/OrbisSystems/orbis-sdk-go/config"
@@ -30,6 +31,8 @@ func New(cfg config.Config, auth sdk.Auth, cli sdk.HTTPClient) *Quotes {
 }
 
 func (q *Quotes) GetQuotesEquityData(ctx context.Context, symbols, quoteType string) ([]model.QuoteEquityDataResponse, error) {
+	log.Trace("GetQuotesEquityData called")
+
 	r, err := q.cli.Get(ctx, fmt.Sprintf("%s?symbols=%s&quote_type=%s", q.cfg.AuthHost+model.URLInsightBase+model.URLInsightQuotesEquity, symbols, quoteType), nil)
 	if err != nil {
 		return nil, errors.Wrap(err, "couldn't get quotes equity")
@@ -45,6 +48,8 @@ func (q *Quotes) GetQuotesEquityData(ctx context.Context, symbols, quoteType str
 }
 
 func (q *Quotes) GetQuoteHistory(ctx context.Context, req model.QuoteHistoryRequest) (model.QuoteHistoryResponse, error) {
+	log.Trace("GetQuoteHistory called")
+
 	body, err := json.Marshal(req)
 	if err != nil {
 		return model.QuoteHistoryResponse{}, errors.Wrap(err, "couldn't marshal input parameters")
@@ -65,6 +70,8 @@ func (q *Quotes) GetQuoteHistory(ctx context.Context, req model.QuoteHistoryRequ
 }
 
 func (q *Quotes) GetIntradayQuotes(ctx context.Context, req model.IntradayRequest) ([]model.IntradayResponse, error) {
+	log.Trace("GetIntradayQuotes called")
+
 	body, err := json.Marshal(req)
 	if err != nil {
 		return nil, errors.Wrap(err, "couldn't marshal input parameters")

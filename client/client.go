@@ -1,11 +1,16 @@
 package client
 
 import (
+	"os"
+
+	log "github.com/sirupsen/logrus"
+
 	sdk "github.com/OrbisSystems/orbis-sdk-go"
 	"github.com/OrbisSystems/orbis-sdk-go/client/account"
 	"github.com/OrbisSystems/orbis-sdk-go/client/funds"
 	"github.com/OrbisSystems/orbis-sdk-go/client/ipo"
 	"github.com/OrbisSystems/orbis-sdk-go/client/logos"
+	"github.com/OrbisSystems/orbis-sdk-go/client/market"
 	"github.com/OrbisSystems/orbis-sdk-go/client/news"
 	"github.com/OrbisSystems/orbis-sdk-go/client/passport"
 	"github.com/OrbisSystems/orbis-sdk-go/client/quotes"
@@ -14,17 +19,28 @@ import (
 	"github.com/OrbisSystems/orbis-sdk-go/config"
 )
 
+var logLevelMap = map[config.Level]log.Level{
+	config.PanicLogLevel: log.PanicLevel,
+	config.FatalLogLevel: log.FatalLevel,
+	config.ErrorLogLevel: log.ErrorLevel,
+	config.WarnLogLevel:  log.WarnLevel,
+	config.InfoLogLevel:  log.InfoLevel,
+	config.DebugLogLevel: log.DebugLevel,
+	config.TraceLogLevel: log.TraceLevel,
+}
+
 // Client top-level client for this SDK. Use it for calling all available API we provide for you.
 type Client struct {
-	Account  sdk.AccountService
-	News     sdk.NewsService
-	Logos    sdk.LogosService
-	Passport sdk.PassportService
-	TipRank  sdk.TipRankService
-	Quote    sdk.QuoteService
-	Funds    sdk.FundsService
-	Research sdk.ResearchService
-	IPO      sdk.IPOService
+	Account     sdk.AccountService
+	News        sdk.NewsService
+	Logos       sdk.LogosService
+	Passport    sdk.PassportService
+	TipRank     sdk.TipRankService
+	Quote       sdk.QuoteService
+	Funds       sdk.FundsService
+	Research    sdk.ResearchService
+	IPO         sdk.IPOService
+	WorldMarket sdk.WorldMarketService
 }
 
 // SDKBuilder provides building Orbis Client with custom parts.
@@ -38,6 +54,10 @@ type SDKBuilder struct {
 }
 
 func NewSDKBuilder(cfg config.Config, httpClient sdk.HTTPClient, auth sdk.Auth) *SDKBuilder {
+	log.SetLevel(logLevelMap[cfg.LogLevel])
+	log.SetFormatter(&log.JSONFormatter{})
+	log.SetOutput(os.Stderr)
+
 	return &SDKBuilder{
 		cli:        &Client{},
 		cfg:        cfg,
@@ -91,6 +111,13 @@ func (b *SDKBuilder) SetIPOService(srv sdk.IPOService) *SDKBuilder {
 	return b
 }
 
+func (b *SDKBuilder) SetWorldMarketService(srv sdk.WorldMarketService) *SDKBuilder {
+	b.cli.WorldMarket = srv
+	return b
+}
+
+// Build builds Orbis Client.
+// It uses default services except you set some service manually.
 func (b *SDKBuilder) Build() *Client {
 	if b.cli.Account == nil {
 		b.cli.Account = account.New(b.cfg, b.auth, b.httpClient) // default
@@ -125,6 +152,10 @@ func (b *SDKBuilder) Build() *Client {
 
 	if b.cli.IPO == nil {
 		b.cli.IPO = ipo.New(b.cfg, b.auth, b.httpClient) // default
+	}
+
+	if b.cli.WorldMarket == nil {
+		b.cli.WorldMarket = market.New(b.cfg, b.auth, b.httpClient) // default
 	}
 
 	return b.cli

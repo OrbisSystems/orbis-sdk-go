@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 
 	"github.com/pkg/errors"
+	log "github.com/sirupsen/logrus"
 
 	sdk "github.com/OrbisSystems/orbis-sdk-go"
 	"github.com/OrbisSystems/orbis-sdk-go/config"
@@ -28,6 +29,8 @@ func New(cfg config.Config, auth sdk.Auth, cli sdk.HTTPClient) *Passport {
 }
 
 func (p *Passport) Articles(ctx context.Context, req model.ArticlesRequest) ([]model.Article, error) {
+	log.Trace("Articles called")
+
 	body, err := json.Marshal(req)
 	if err != nil {
 		return nil, errors.Wrap(err, "couldn't marshal input parameters")
@@ -48,6 +51,8 @@ func (p *Passport) Articles(ctx context.Context, req model.ArticlesRequest) ([]m
 }
 
 func (p *Passport) Newsfeed(ctx context.Context, req model.NewsfeedRequest) ([]model.Newsfeed, error) {
+	log.Trace("Newsfeed called")
+
 	body, err := json.Marshal(req)
 	if err != nil {
 		return nil, errors.Wrap(err, "couldn't marshal input parameters")
@@ -68,6 +73,8 @@ func (p *Passport) Newsfeed(ctx context.Context, req model.NewsfeedRequest) ([]m
 }
 
 func (p *Passport) ArticleByID(ctx context.Context, req model.ArticleByIDRequest) (model.Article, error) {
+	log.Trace("ArticleByID called")
+
 	body, err := json.Marshal(req)
 	if err != nil {
 		return model.Article{}, errors.Wrap(err, "couldn't marshal input parameters")
@@ -88,6 +95,8 @@ func (p *Passport) ArticleByID(ctx context.Context, req model.ArticleByIDRequest
 }
 
 func (p *Passport) SearchArticle(ctx context.Context, req model.SearchArticleRequest) ([]model.Article, error) {
+	log.Trace("SearchArticle called")
+
 	body, err := json.Marshal(req)
 	if err != nil {
 		return nil, errors.Wrap(err, "couldn't marshal input parameters")
@@ -108,6 +117,8 @@ func (p *Passport) SearchArticle(ctx context.Context, req model.SearchArticleReq
 }
 
 func (p *Passport) AuthorProfile(ctx context.Context, req model.AuthorProfileRequest) ([]model.AuthorProfileResponse, error) {
+	log.Trace("AuthorProfile called")
+
 	body, err := json.Marshal(req)
 	if err != nil {
 		return nil, errors.Wrap(err, "couldn't marshal input parameters")
@@ -128,6 +139,8 @@ func (p *Passport) AuthorProfile(ctx context.Context, req model.AuthorProfileReq
 }
 
 func (p *Passport) MostPopularTags(ctx context.Context, req model.MostPopularTagsRequest) ([]model.TagShortInfo, error) {
+	log.Trace("MostPopularTags called")
+
 	body, err := json.Marshal(req)
 	if err != nil {
 		return nil, errors.Wrap(err, "couldn't marshal input parameters")

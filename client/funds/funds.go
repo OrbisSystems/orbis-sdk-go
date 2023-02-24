@@ -7,6 +7,7 @@ import (
 	"fmt"
 
 	"github.com/pkg/errors"
+	log "github.com/sirupsen/logrus"
 
 	sdk "github.com/OrbisSystems/orbis-sdk-go"
 	"github.com/OrbisSystems/orbis-sdk-go/config"
@@ -30,6 +31,8 @@ func New(cfg config.Config, auth sdk.Auth, cli sdk.HTTPClient) *Funds {
 }
 
 func (f *Funds) GetFundDetails(ctx context.Context, symbol string) (model.GetFundDetailsResponse, error) {
+	log.Trace("GetFundDetails called")
+
 	r, err := f.cli.Get(ctx, fmt.Sprintf("%s?symbol=%s", f.cfg.AuthHost+model.URLInsightBase+model.URLInsightFundsDetails, symbol), nil)
 	if err != nil {
 		return model.GetFundDetailsResponse{}, errors.Wrap(err, "couldn't get funds details")
@@ -45,6 +48,8 @@ func (f *Funds) GetFundDetails(ctx context.Context, symbol string) (model.GetFun
 }
 
 func (f *Funds) GetFundScreenerFilters(ctx context.Context) (model.GetFundScreenerFiltersResponse, error) {
+	log.Trace("GetFundScreenerFilters called")
+
 	r, err := f.cli.Get(ctx, f.cfg.AuthHost+model.URLInsightBase+model.URLInsightFundsScreenerFilters, nil)
 	if err != nil {
 		return model.GetFundScreenerFiltersResponse{}, errors.Wrap(err, "couldn't get funds screener filters")
@@ -60,6 +65,8 @@ func (f *Funds) GetFundScreenerFilters(ctx context.Context) (model.GetFundScreen
 }
 
 func (f *Funds) ScreenFunds(ctx context.Context, req model.FundScreenerRequest) (model.FundScreenerResponse, error) {
+	log.Trace("ScreenFunds called")
+
 	body, err := json.Marshal(req)
 	if err != nil {
 		return model.FundScreenerResponse{}, errors.Wrap(err, "couldn't marshal input parameters")
@@ -80,6 +87,8 @@ func (f *Funds) ScreenFunds(ctx context.Context, req model.FundScreenerRequest) 
 }
 
 func (f *Funds) ScreenSectorFunds(ctx context.Context, req model.FundSectorScreenerRequest) (model.FundScreenerResponse, error) {
+	log.Trace("ScreenSectorFunds called")
+
 	body, err := json.Marshal(req)
 	if err != nil {
 		return model.FundScreenerResponse{}, errors.Wrap(err, "couldn't marshal input parameters")
@@ -100,6 +109,8 @@ func (f *Funds) ScreenSectorFunds(ctx context.Context, req model.FundSectorScree
 }
 
 func (f *Funds) GetTopFunds(ctx context.Context, req model.GetTopFundsRequest) ([]string, error) {
+	log.Trace("GetTopFunds called")
+
 	body, err := json.Marshal(req)
 	if err != nil {
 		return nil, errors.Wrap(err, "couldn't marshal input parameters")

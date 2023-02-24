@@ -34,6 +34,7 @@ type AccountService interface {
 	LoginByEmail(ctx context.Context, req model.LoginByEmailRequest) error
 	LoginByAPIKey(ctx context.Context, req model.LoginByAPIKeyRequest) error
 	CreateAPIKey(ctx context.Context, req model.CreateAPIKeyRequest) (model.CreateAPIKeyResponse, error)
+	RefreshToken(ctx context.Context) error
 }
 
 type NewsService interface {
@@ -116,4 +117,11 @@ type ResearchService interface {
 type IPOService interface {
 	GetUpcomingIPOs(ctx context.Context, limit, offset int) (model.IPOResponse, error)
 	GetRecentIPOs(ctx context.Context, req model.RecentIPORequest) (model.IPOResponse, error)
+}
+
+type WorldMarketService interface {
+	GetContinents(ctx context.Context, limit, offset int) ([]model.Continent, error)
+	GetRegions(ctx context.Context, limit, offset int) ([]model.Region, error)
+	GetCountryCodes(ctx context.Context, limit, offset int) ([]model.CountryCode, error)
+	GetGlobalIndexes(ctx context.Context, limit, offset int, continent, quoteType string) ([]model.GlobalIndexFull, error)
 }

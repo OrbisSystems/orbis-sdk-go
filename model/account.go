@@ -10,11 +10,7 @@ type LoginByEmailRequest struct {
 type LoginByEmailResponse struct {
 	Status     int `json:"status"`
 	LoginBasic struct {
-		Tokens struct {
-			AccessToken  string `json:"access_token"`
-			RefreshToken string `json:"refresh_token"`
-			PairId       string `json:"pair_id"`
-		} `json:"tokens"`
+		Tokens Token `json:"tokens"`
 	} `json:"login_basic"`
 }
 
@@ -26,11 +22,7 @@ type LoginByAPIKeyRequest struct {
 type LoginByAPIKeyResponse struct {
 	Status       int `json:"status"`
 	ApiKeysLogin struct {
-		Tokens struct {
-			AccessToken  string `json:"access_token"`
-			RefreshToken string `json:"refresh_token"`
-			PairId       string `json:"pair_id"`
-		} `json:"tokens"`
+		Tokens Token `json:"tokens"`
 	} `json:"api_keys_login"`
 }
 
@@ -225,4 +217,8 @@ type CreateAPIKeyResponse struct {
 		UpdatedAt string `json:"updated_at"`
 	} `json:"api_keys"`
 	Status int `json:"status"`
+}
+
+type RefreshTokenRequest struct {
+	RefreshToken string `json:"refresh_token"`
 }

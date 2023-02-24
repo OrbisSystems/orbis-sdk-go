@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/redis/go-redis/v9"
+	log "github.com/sirupsen/logrus"
 )
 
 const (
@@ -51,9 +52,13 @@ func NewRedisStorage(cfg Config) (*Client, error) {
 }
 
 func (c *Client) Store(ctx context.Context, data []byte) error {
+	log.Trace("Redis: method Store called")
+
 	return c.cli.Set(ctx, c.keyForStore, data, 0).Err()
 }
 
 func (c *Client) Get(ctx context.Context) ([]byte, error) {
+	log.Trace("Redis: method Get called")
+
 	return c.cli.Get(ctx, c.keyForStore).Bytes()
 }

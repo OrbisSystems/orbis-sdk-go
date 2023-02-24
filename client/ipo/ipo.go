@@ -7,6 +7,7 @@ import (
 	"fmt"
 
 	"github.com/pkg/errors"
+	log "github.com/sirupsen/logrus"
 
 	sdk "github.com/OrbisSystems/orbis-sdk-go"
 	"github.com/OrbisSystems/orbis-sdk-go/config"
@@ -29,6 +30,8 @@ func New(cfg config.Config, auth sdk.Auth, cli sdk.HTTPClient) *IPO {
 }
 
 func (i *IPO) GetUpcomingIPOs(ctx context.Context, limit, offset int) (model.IPOResponse, error) {
+	log.Trace("GetUpcomingIPOs called")
+
 	r, err := i.cli.Get(ctx, fmt.Sprintf("%s?limit=%d&offset=%d", i.cfg.AuthHost+model.URLInsightBase+model.URLInsightIPOsUpcoming, limit, offset), nil)
 	if err != nil {
 		return model.IPOResponse{}, errors.Wrap(err, "couldn't get upcoming ipo")
@@ -44,6 +47,8 @@ func (i *IPO) GetUpcomingIPOs(ctx context.Context, limit, offset int) (model.IPO
 }
 
 func (i *IPO) GetRecentIPOs(ctx context.Context, req model.RecentIPORequest) (model.IPOResponse, error) {
+	log.Trace("GetRecentIPOs called")
+
 	body, err := json.Marshal(req)
 	if err != nil {
 		return model.IPOResponse{}, errors.Wrap(err, "couldn't marshal input parameters")

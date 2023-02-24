@@ -11,6 +11,7 @@ const (
 	URLB2BLoginByEmail  = "/uma/api/v1/auth/b2b/login/basic"
 	URLB2BLoginByAPIKey = "/uma/api/v1/auth/b2b/login/api-keys"
 	URLB2BCreateAPIKey  = "/uma/api/v1/b2b/api-keys"
+	URLB2BRefreshToken  = "/uma/api/v1/auth/b2b/refresh"
 )
 
 // --------------------------------------------------------------------------------------
@@ -18,6 +19,16 @@ const (
 // 						Insight	URL
 // --------------------------------------------------------------------------------------
 // --------------------------------------------------------------------------------------
+
+// TODO need to add endpoints
+/*
+	seasonality
+	rst
+	history
+	today
+	calculate-params
+	calculate-matrix
+*/
 
 const (
 	URLInsightBase = "/insight-api/api/v1"
@@ -119,4 +130,13 @@ const (
 
 	URLInsightIPOsUpcoming = "/ipos/upcoming"
 	URLInsightIPOsRecent   = "/ipos/recent"
+
+	// *******************************************
+	// 		World Market
+	// *******************************************
+
+	URLInsightContinents    = "/continents"
+	URLInsightRegions       = "/regions"
+	URLInsightCountryCodes  = "/country-codes"
+	URLInsightGlobalIndexes = "/global-indexes"
 )

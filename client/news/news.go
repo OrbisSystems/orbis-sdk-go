@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 
 	"github.com/pkg/errors"
+	log "github.com/sirupsen/logrus"
 
 	sdk "github.com/OrbisSystems/orbis-sdk-go"
 	"github.com/OrbisSystems/orbis-sdk-go/config"
@@ -30,6 +31,8 @@ func New(cfg config.Config, auth sdk.Auth, cli sdk.HTTPClient) *News {
 
 // GetByFilter returns news by filters.
 func (c *News) GetByFilter(ctx context.Context, req model.NewsFilterRequest) ([]model.NewsResponse, error) {
+	log.Trace("GetByFilter called")
+
 	body, err := json.Marshal(req)
 	if err != nil {
 		return nil, errors.Wrap(err, "couldn't marshal input parameters")
@@ -51,6 +54,8 @@ func (c *News) GetByFilter(ctx context.Context, req model.NewsFilterRequest) ([]
 
 // GetByID returns news by ID.
 func (c *News) GetByID(ctx context.Context, req model.NewsByIDRequest) (model.NewsResponse, error) {
+	log.Trace("GetByID called")
+
 	body, err := json.Marshal(req)
 	if err != nil {
 		return model.NewsResponse{}, errors.Wrap(err, "couldn't marshal input parameters")
@@ -72,6 +77,8 @@ func (c *News) GetByID(ctx context.Context, req model.NewsByIDRequest) (model.Ne
 
 // GetSymbolSubjects returns available subjects for symbol.
 func (c *News) GetSymbolSubjects(ctx context.Context, req model.SymbolSubjectsRequest) ([]model.SymbolSubjectsResponse, error) {
+	log.Trace("GetSymbolSubjects called")
+
 	body, err := json.Marshal(req)
 	if err != nil {
 		return nil, errors.Wrap(err, "couldn't marshal input parameters")
@@ -93,6 +100,8 @@ func (c *News) GetSymbolSubjects(ctx context.Context, req model.SymbolSubjectsRe
 
 // GetAvailableTaxonomy returns all available taxonomy codes for news. You can use it for GetByFilter filter.
 func (c *News) GetAvailableTaxonomy(ctx context.Context) ([]model.TaxonomyCode, error) {
+	log.Trace("GetAvailableTaxonomy called")
+
 	r, err := c.cli.Get(ctx, c.cfg.AuthHost+model.URLInsightBase+model.URLInsightNewsTaxonomy, nil)
 	if err != nil {
 		return nil, errors.Wrap(err, "couldn't get news available taxonomy codes")
@@ -109,6 +118,8 @@ func (c *News) GetAvailableTaxonomy(ctx context.Context) ([]model.TaxonomyCode, 
 
 // GetAvailableSubjects returns all available news subjects.
 func (c *News) GetAvailableSubjects(ctx context.Context) ([]string, error) {
+	log.Trace("GetAvailableSubjects called")
+
 	r, err := c.cli.Get(ctx, c.cfg.AuthHost+model.URLInsightBase+model.URLInsightNewsRelevance, nil)
 	if err != nil {
 		return nil, errors.Wrap(err, "couldn't get news available subjects")
@@ -125,6 +136,8 @@ func (c *News) GetAvailableSubjects(ctx context.Context) ([]string, error) {
 
 // GetAvailableSymbols returns all available symbols of news.
 func (c *News) GetAvailableSymbols(ctx context.Context) ([]string, error) {
+	log.Trace("GetAvailableSymbols called")
+
 	r, err := c.cli.Get(ctx, c.cfg.AuthHost+model.URLInsightBase+model.URLInsightNewsSymbols, nil)
 	if err != nil {
 		return nil, errors.Wrap(err, "couldn't get news available symbols")
@@ -141,6 +154,8 @@ func (c *News) GetAvailableSymbols(ctx context.Context) ([]string, error) {
 
 // GetAvailableSources returns all available news sources.
 func (c *News) GetAvailableSources(ctx context.Context) ([]string, error) {
+	log.Trace("GetAvailableSources called")
+
 	r, err := c.cli.Get(ctx, c.cfg.AuthHost+model.URLInsightBase+model.URLInsightNewsSources, nil)
 	if err != nil {
 		return nil, errors.Wrap(err, "couldn't get news available sources")
@@ -157,6 +172,8 @@ func (c *News) GetAvailableSources(ctx context.Context) ([]string, error) {
 
 // GetAvailableLanguages returns all available news languages.
 func (c *News) GetAvailableLanguages(ctx context.Context) ([]string, error) {
+	log.Trace("GetAvailableLanguages called")
+
 	r, err := c.cli.Get(ctx, c.cfg.AuthHost+model.URLInsightBase+model.URLInsightNewsLang, nil)
 	if err != nil {
 		return nil, errors.Wrap(err, "couldn't get news available languages")
