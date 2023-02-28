@@ -7,11 +7,13 @@ import (
 
 	sdk "github.com/OrbisSystems/orbis-sdk-go"
 	"github.com/OrbisSystems/orbis-sdk-go/client/account"
+	"github.com/OrbisSystems/orbis-sdk-go/client/dates"
 	"github.com/OrbisSystems/orbis-sdk-go/client/funds"
 	"github.com/OrbisSystems/orbis-sdk-go/client/ipo"
 	"github.com/OrbisSystems/orbis-sdk-go/client/logos"
 	"github.com/OrbisSystems/orbis-sdk-go/client/market"
 	"github.com/OrbisSystems/orbis-sdk-go/client/news"
+	"github.com/OrbisSystems/orbis-sdk-go/client/og"
 	"github.com/OrbisSystems/orbis-sdk-go/client/passport"
 	"github.com/OrbisSystems/orbis-sdk-go/client/quotes"
 	"github.com/OrbisSystems/orbis-sdk-go/client/research"
@@ -31,16 +33,18 @@ var logLevelMap = map[config.Level]log.Level{
 
 // Client top-level client for this SDK. Use it for calling all available API we provide for you.
 type Client struct {
-	Account     sdk.AccountService
-	News        sdk.NewsService
-	Logos       sdk.LogosService
-	Passport    sdk.PassportService
-	TipRank     sdk.TipRankService
-	Quote       sdk.QuoteService
-	Funds       sdk.FundsService
-	Research    sdk.ResearchService
-	IPO         sdk.IPOService
-	WorldMarket sdk.WorldMarketService
+	Account      sdk.AccountService
+	News         sdk.NewsService
+	Logos        sdk.LogosService
+	Passport     sdk.PassportService
+	TipRank      sdk.TipRankService
+	Quote        sdk.QuoteService
+	Funds        sdk.FundsService
+	Research     sdk.ResearchService
+	IPO          sdk.IPOService
+	WorldMarket  sdk.WorldMarketService
+	MarketDates  sdk.MarketDatesService
+	OptionGreeks sdk.OptionGreeksService
 }
 
 // SDKBuilder provides building Orbis Client with custom parts.
@@ -116,6 +120,16 @@ func (b *SDKBuilder) SetWorldMarketService(srv sdk.WorldMarketService) *SDKBuild
 	return b
 }
 
+func (b *SDKBuilder) SetMarketDatesService(srv sdk.MarketDatesService) *SDKBuilder {
+	b.cli.MarketDates = srv
+	return b
+}
+
+func (b *SDKBuilder) SetOptionGreeksService(srv sdk.OptionGreeksService) *SDKBuilder {
+	b.cli.OptionGreeks = srv
+	return b
+}
+
 // Build builds Orbis Client.
 // It uses default services except you set some service manually.
 func (b *SDKBuilder) Build() *Client {
@@ -156,6 +170,14 @@ func (b *SDKBuilder) Build() *Client {
 
 	if b.cli.WorldMarket == nil {
 		b.cli.WorldMarket = market.New(b.cfg, b.auth, b.httpClient) // default
+	}
+
+	if b.cli.MarketDates == nil {
+		b.cli.MarketDates = dates.New(b.cfg, b.auth, b.httpClient) // default
+	}
+
+	if b.cli.OptionGreeks == nil {
+		b.cli.OptionGreeks = og.New(b.cfg, b.auth, b.httpClient) // default
 	}
 
 	return b.cli

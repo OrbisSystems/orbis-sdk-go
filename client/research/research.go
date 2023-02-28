@@ -211,3 +211,47 @@ func (s *Research) GetIndustriesPerformance(ctx context.Context, req model.GetIn
 
 	return resp, err
 }
+
+func (s *Research) GetMomentumRatioGraph(ctx context.Context, req model.MomentumRatioGraphRequest) (model.MomentumRatioGraphResponse, error) {
+	log.Trace("GetMomentumRatioGraph called")
+
+	body, err := json.Marshal(req)
+	if err != nil {
+		return model.MomentumRatioGraphResponse{}, errors.Wrap(err, "couldn't marshal input parameters")
+	}
+
+	r, err := s.cli.Post(ctx, s.cfg.AuthHost+model.URLInsightBase+model.URLInsightGetMomentumRatioGraph, bytes.NewBuffer(body), nil)
+	if err != nil {
+		return model.MomentumRatioGraphResponse{}, errors.Wrap(err, "couldn't get momentum ratio graph")
+	}
+
+	var resp model.MomentumRatioGraphResponse
+	err = s.cli.UnmarshalAndCheckOk(&resp, r)
+	if err != nil {
+		return model.MomentumRatioGraphResponse{}, err
+	}
+
+	return resp, err
+}
+
+func (s *Research) GetSeasonality(ctx context.Context, req model.SeasonalityRequest) (model.SeasonalityResponse, error) {
+	log.Trace("GetSeasonality called")
+
+	body, err := json.Marshal(req)
+	if err != nil {
+		return model.SeasonalityResponse{}, errors.Wrap(err, "couldn't marshal input parameters")
+	}
+
+	r, err := s.cli.Post(ctx, s.cfg.AuthHost+model.URLInsightBase+model.URLInsightSeasonality, bytes.NewBuffer(body), nil)
+	if err != nil {
+		return model.SeasonalityResponse{}, errors.Wrap(err, "couldn't get seasonality")
+	}
+
+	var resp model.SeasonalityResponse
+	err = s.cli.UnmarshalAndCheckOk(&resp, r)
+	if err != nil {
+		return model.SeasonalityResponse{}, err
+	}
+
+	return resp, err
+}

@@ -194,3 +194,67 @@ type IndustryGroup struct {
 	IndustryGroupMarketCap2WeekPercent  float64 `json:"industry_group_market_cap_2week"`
 	IndustryGroupMarketCap1MonthPercent float64 `json:"industry_group_market_cap_1month"`
 }
+
+type MomentumRatioGraphRequest struct {
+	Symbols   []string `json:"symbols"`
+	Benchmark string   `json:"benchmark"`
+	Range     string   `json:"range"`
+	Period    int      `json:"period"`
+	SetEma    bool     `json:"set_ema"`
+	Mode      string   `json:"mode"`
+}
+
+type MomentumRatioGraphResponse struct {
+	AAPL []SymbolMomentum `json:"AAPL"`
+	CSCO []SymbolMomentum `json:"CSCO"`
+}
+
+type SymbolMomentum struct {
+	ResultRatio    float64 `json:"result_ratio"`
+	ResultMomentum float64 `json:"result_momentum"`
+	Date           string  `json:"date"`
+}
+
+type SeasonalityRequest struct {
+	Lookahead int      `json:"lookahead"`
+	Benchmark string   `json:"benchmark"`
+	Symbols   []string `json:"symbols"`
+	Years     int      `json:"years"`
+}
+
+type SeasonalityResponse map[string]SeasonalityEntry
+
+type SeasonalityEntry struct {
+	Score     int               `json:"score"`
+	January   TickerSeasonality `json:"january"`
+	June      TickerSeasonality `json:"june"`
+	May       TickerSeasonality `json:"may"`
+	October   TickerSeasonality `json:"october"`
+	December  TickerSeasonality `json:"december"`
+	March     TickerSeasonality `json:"march"`
+	February  TickerSeasonality `json:"february"`
+	August    TickerSeasonality `json:"august"`
+	July      TickerSeasonality `json:"july"`
+	September TickerSeasonality `json:"september"`
+	November  TickerSeasonality `json:"november"`
+	April     TickerSeasonality `json:"april"`
+}
+
+type TickerSeasonality struct {
+	Success          float32      `json:"success"`
+	Failure          float32      `json:"failure"`
+	Average          float32      `json:"average"`
+	YearlyData       []YearlyData `json:"yearly_data"`
+	TotalYears       int          `json:"total_years"`
+	BenchmarkAverage float32      `json:"benchmark_average"`
+	Difference       float32      `json:"difference"`
+	Score            int          `json:"score"`
+}
+
+type YearlyData struct {
+	Year             int     `json:"year"`
+	Date             int64   `json:"date"`
+	Value            float32 `json:"value"`
+	BenchmarkAverage float32 `json:"benchmark_average"`
+	Difference       float32 `json:"difference"`
+}

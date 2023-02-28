@@ -112,6 +112,8 @@ type ResearchService interface {
 	Screener(ctx context.Context, req model.StockScreenerRequest) (model.StockScreenerResponse, error)
 	StockMarketHeatmap(ctx context.Context, heatmapName, quoteType string) (model.StockMarketHeatmapResponse, error)
 	GetIndustriesPerformance(ctx context.Context, req model.GetIndustriesPerformanceRequest) (model.GetIndustriesPerformanceResponse, error)
+	GetMomentumRatioGraph(ctx context.Context, req model.MomentumRatioGraphRequest) (model.MomentumRatioGraphResponse, error)
+	GetSeasonality(ctx context.Context, req model.SeasonalityRequest) (model.SeasonalityResponse, error)
 }
 
 type IPOService interface {
@@ -124,4 +126,14 @@ type WorldMarketService interface {
 	GetRegions(ctx context.Context, limit, offset int) ([]model.Region, error)
 	GetCountryCodes(ctx context.Context, limit, offset int) ([]model.CountryCode, error)
 	GetGlobalIndexes(ctx context.Context, limit, offset int, continent, quoteType string) ([]model.GlobalIndexFull, error)
+}
+
+type MarketDatesService interface {
+	GetMarketDatesHistory(ctx context.Context, req model.GetMarketDatesRequest) (model.GetMarketDatesResponse, error)
+	GetTodayMarketHours(ctx context.Context, market string) (model.GetMarketHoursResponse, error)
+}
+
+type OptionGreeksService interface {
+	CalculateParams(ctx context.Context, req model.CalculateParamsRequest) (model.CalculateParamsResponse, error)
+	CalculateMatrix(ctx context.Context, req model.CalculateParamsRequest) (model.CalculateMatrixParamsRequest, error)
 }

@@ -20,16 +20,6 @@ const (
 // --------------------------------------------------------------------------------------
 // --------------------------------------------------------------------------------------
 
-// TODO need to add endpoints
-/*
-	seasonality
-	rst
-	history
-	today
-	calculate-params
-	calculate-matrix
-*/
-
 const (
 	URLInsightBase = "/insight-api/api/v1"
 
@@ -123,6 +113,8 @@ const (
 	URLInsightStockScreener         = "/stock-screener"
 	URLInsightHeatmaps              = "/heatmaps"
 	URLInsightIndustriesPerformance = "/industries-performance"
+	URLInsightGetMomentumRatioGraph = "/rst"
+	URLInsightSeasonality           = "/seasonality"
 
 	// *******************************************
 	// 		IPO
@@ -139,4 +131,18 @@ const (
 	URLInsightRegions       = "/regions"
 	URLInsightCountryCodes  = "/country-codes"
 	URLInsightGlobalIndexes = "/global-indexes"
+
+	// *******************************************
+	// 		Market Dates
+	// *******************************************
+
+	URLInsightMarketDatesHistory = "/market-dates/history "
+	URLInsightMarketDatesToday   = "/market-dates/today "
+
+	// *******************************************
+	// 		Option Greeks
+	// *******************************************
+
+	URLInsightOptionGreeksCalculateParams = "/og/calculate-params "
+	URLInsightOptionGreeksCalculateMatrix = "/og/calculate-matrix "
 )
