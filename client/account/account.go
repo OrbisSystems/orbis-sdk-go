@@ -28,6 +28,8 @@ type Account struct {
 
 	resetTokenRefreshCh    chan int64
 	watchTokenRefreshState bool
+
+	refreshTicker *time.Ticker
 }
 
 func New(cfg config.Config, auth sdk.Auth, cli sdk.HTTPClient) *Account {
@@ -37,6 +39,7 @@ func New(cfg config.Config, auth sdk.Auth, cli sdk.HTTPClient) *Account {
 		cli:  cli,
 
 		resetTokenRefreshCh: make(chan int64),
+		refreshTicker:       time.NewTicker(time.Hour * 100), // default
 	}
 
 	a.watchTokenRefresh()
@@ -44,46 +47,42 @@ func New(cfg config.Config, auth sdk.Auth, cli sdk.HTTPClient) *Account {
 	return a
 }
 
-func (c *Account) watchTokenRefresh() {
+func (a *Account) watchTokenRefresh() {
 	// run background routing for token refreshing
 	go func() {
 		log.Trace("watchTokenRefresh started")
-		c.watchTokenRefreshState = true
+		a.watchTokenRefreshState = true
 
 		defer func() {
 			log.Trace("watchTokenRefresh stopped")
-			c.watchTokenRefreshState = false
+			a.watchTokenRefreshState = false
 		}()
 
 		var refreshDuration time.Duration
 
-		tkn, err := c.Auth.GetToken(context.Background())
+		tkn, err := a.Auth.GetToken(context.Background())
 
-		// if got an error from storage
-		// or token is not presented in storage
-		// or access token was expired
-		// -> exit, need to call Login flow
-		if err != nil || tkn.AccessExpiresAt == 0 || tkn.AccessExpiresAt < time.Now().Unix() {
-			log.Tracef("reason for stoping watchTokenRefresh. Err %v, tkn.AccessExpiresAt %d", err, tkn.AccessExpiresAt)
-			return
+		// if no error from storage
+		// and token is presented in storage
+		// and access token is not expired
+		// -> make a ticker
+		if err == nil && tkn.AccessExpiresAt != 0 && tkn.AccessExpiresAt > time.Now().Unix() {
+			refreshDuration = getRefreshDuration(tkn.AccessExpiresAt)
+			a.refreshTicker = time.NewTicker(refreshDuration)
 		}
-
-		refreshDuration = getRefreshDuration(tkn.AccessExpiresAt)
-
-		ticker := time.NewTicker(refreshDuration)
 
 		for {
 			select {
-			case <-ticker.C:
+			case <-a.refreshTicker.C:
 				log.Trace("refreshing token...")
 				rCtx, _ := context.WithTimeout(context.Background(), time.Minute)
-				err := c.RefreshToken(rCtx)
+				err := a.RefreshToken(rCtx)
 				if err != nil {
 					log.Errorf("error while updating token by refresh token: %v", err)
 				}
-			case v := <-c.resetTokenRefreshCh:
+			case v := <-a.resetTokenRefreshCh:
 				log.Tracef("resetting token refresh duration... new unix time: %d", v)
-				ticker.Reset(getRefreshDuration(v))
+				a.refreshTicker.Reset(getRefreshDuration(v))
 			}
 		}
 	}()
@@ -92,7 +91,7 @@ func (c *Account) watchTokenRefresh() {
 // LoginByEmail uses for getting token if you are a client with the biggest access in you company.
 // After log in, you can create api keys with limited access for you users using CreateAPIKey method.
 // With these api keys your users can log in via SDK using LoginByAPIKey method.
-func (c *Account) LoginByEmail(ctx context.Context, req model.LoginByEmailRequest) error {
+func (a *Account) LoginByEmail(ctx context.Context, req model.LoginByEmailRequest) error {
 	log.Trace("LoginByEmail called")
 
 	if req.DeviceID == "" {
@@ -104,25 +103,25 @@ func (c *Account) LoginByEmail(ctx context.Context, req model.LoginByEmailReques
 		return errors.Wrap(err, "couldn't marshal input parameters")
 	}
 
-	r, err := c.cli.Post(ctx, c.cfg.AuthHost+model.URLB2BLoginByEmail, bytes.NewBuffer(body), nil)
+	r, err := a.cli.Post(ctx, a.cfg.AuthHost+model.URLB2BLoginByEmail, bytes.NewBuffer(body), nil)
 	if err != nil {
 		return errors.Wrap(err, "account couldn't login by email")
 	}
 
 	var resp model.LoginByEmailResponse
-	err = c.cli.UnmarshalAndCheckOk(&resp, r)
+	err = a.cli.UnmarshalAndCheckOk(&resp, r)
 	if err != nil {
 		return err
 	}
 
-	c.processNewToken(resp.LoginBasic.Tokens)
+	a.processNewToken(resp.LoginBasic.Tokens)
 
-	return c.SetToken(ctx, resp.LoginBasic.Tokens)
+	return a.SetToken(ctx, resp.LoginBasic.Tokens)
 }
 
 // LoginByAPIKey allows lo log in into the system for users with limited access.
 // See LoginByEmail and CreateAPIKey for more information.
-func (c *Account) LoginByAPIKey(ctx context.Context, req model.LoginByAPIKeyRequest) error {
+func (a *Account) LoginByAPIKey(ctx context.Context, req model.LoginByAPIKeyRequest) error {
 	log.Trace("LoginByAPIKey called")
 
 	body, err := json.Marshal(req)
@@ -130,24 +129,24 @@ func (c *Account) LoginByAPIKey(ctx context.Context, req model.LoginByAPIKeyRequ
 		return errors.Wrap(err, "couldn't marshal input parameters")
 	}
 
-	r, err := c.cli.Post(ctx, c.cfg.AuthHost+model.URLB2BLoginByAPIKey, bytes.NewBuffer(body), nil)
+	r, err := a.cli.Post(ctx, a.cfg.AuthHost+model.URLB2BLoginByAPIKey, bytes.NewBuffer(body), nil)
 	if err != nil {
 		return errors.Wrap(err, "account couldn't login by api key")
 	}
 
 	var resp model.LoginByAPIKeyResponse
-	err = c.cli.UnmarshalAndCheckOk(&resp, r)
+	err = a.cli.UnmarshalAndCheckOk(&resp, r)
 	if err != nil {
 		return err
 	}
 
-	c.processNewToken(resp.ApiKeysLogin.Tokens)
+	a.processNewToken(resp.ApiKeysLogin.Tokens)
 
-	return c.SetToken(ctx, resp.ApiKeysLogin.Tokens)
+	return a.SetToken(ctx, resp.ApiKeysLogin.Tokens)
 }
 
 // CreateAPIKey provides creating api keys with limited access to branches, microservices, specific roles and permissions.
-func (c *Account) CreateAPIKey(ctx context.Context, req model.CreateAPIKeyRequest) (model.CreateAPIKeyResponse, error) {
+func (a *Account) CreateAPIKey(ctx context.Context, req model.CreateAPIKeyRequest) (model.CreateAPIKeyResponse, error) {
 	log.Trace("CreateAPIKey called")
 
 	body, err := json.Marshal(req)
@@ -155,21 +154,25 @@ func (c *Account) CreateAPIKey(ctx context.Context, req model.CreateAPIKeyReques
 		return model.CreateAPIKeyResponse{}, errors.Wrap(err, "couldn't marshal input parameters")
 	}
 
-	r, err := c.cli.Post(ctx, c.cfg.AuthHost+model.URLB2BCreateAPIKey, bytes.NewBuffer(body), nil)
+	r, err := a.cli.Post(ctx, a.cfg.AuthHost+model.URLB2BCreateAPIKey, bytes.NewBuffer(body), nil)
 	if err != nil {
 		return model.CreateAPIKeyResponse{}, errors.Wrap(err, "account couldn't login")
 	}
 
 	var resp model.CreateAPIKeyResponse
-	err = c.cli.UnmarshalAndCheckOk(&resp, r)
+	err = a.cli.UnmarshalAndCheckOk(&resp, r)
 
 	return resp, err
 }
 
-func (c *Account) RefreshToken(ctx context.Context) error {
+func (a *Account) RefreshToken(ctx context.Context) error {
 	log.Trace("RefreshToken called")
 
-	tkn, err := c.GetToken(ctx)
+	// marking this flag that we are refreshing the token
+	a.setRefreshingState(true)
+	defer a.setRefreshingState(false)
+
+	tkn, err := a.GetToken(ctx)
 	if err != nil {
 		return err
 	}
@@ -183,36 +186,40 @@ func (c *Account) RefreshToken(ctx context.Context) error {
 		return errors.Wrap(err, "couldn't marshal input parameters")
 	}
 
-	r, err := c.cli.Post(ctx, c.cfg.AuthHost+model.URLB2BRefreshToken, bytes.NewBuffer(body), nil)
+	r, err := a.cli.Post(ctx, a.cfg.AuthHost+model.URLB2BRefreshToken, bytes.NewBuffer(body), nil)
 	if err != nil {
 		return errors.Wrap(err, "account couldn't refresh token")
 	}
 
 	var resp model.LoginByEmailResponse
-	err = c.cli.UnmarshalAndCheckOk(&resp, r)
+	err = a.cli.UnmarshalAndCheckOk(&resp, r)
 
 	if err != nil {
 		return err
 	}
 
-	c.processNewToken(resp.LoginBasic.Tokens)
+	a.processNewToken(resp.LoginBasic.Tokens)
 
-	return c.SetToken(ctx, resp.LoginBasic.Tokens)
+	return a.SetToken(ctx, resp.LoginBasic.Tokens)
 }
 
 func getRefreshDuration(v int64) time.Duration {
-	expTime := time.Unix(v, 0)
+	expTime := time.Unix(v, 0).Add(-time.Minute * 1) // make trigger little-bit earlier than exp time
 	return expTime.UTC().Sub(time.Now())
 }
 
-func (c *Account) processNewToken(tkn model.Token) {
-	if !c.watchTokenRefreshState {
-		c.watchTokenRefresh()
+func (a *Account) processNewToken(tkn model.Token) {
+	if !a.watchTokenRefreshState {
+		a.watchTokenRefresh()
 	}
 
 	time.Sleep(time.Millisecond * 100)
 
 	go func() {
-		c.resetTokenRefreshCh <- tkn.AccessExpiresAt
+		a.resetTokenRefreshCh <- tkn.AccessExpiresAt
 	}()
+}
+
+func (a *Account) setRefreshingState(state bool) {
+	a.Auth.SetTokenRefreshingState(state)
 }
