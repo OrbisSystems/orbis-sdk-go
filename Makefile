@@ -19,7 +19,7 @@ test:
 	go test -tags=unit -cover -race -count=1 -timeout=60s ./...
 
 check-lint:
-	@which $(GOLINT) || curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(GO_PATH)/bin v1.51.1
+	@which $(GOLINT) || curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.51.1
 
 dc-up:
 	docker-compose up -d

@@ -23,18 +23,20 @@ const (
 const (
 	URLInsightBase = "/insight-api/api/v1"
 
+	WSInsightNews = "/insight-ws/ws/news"
+
 	// *******************************************
 	// 		NEWS
 	// *******************************************
 
 	URLInsightNewsFilter         = "/news/filter"
 	URLInsightNewsByID           = "/news/id"
-	URLInsightNewsSymbolSubjects = "/news/symbol_subjects"
-	URLInsightNewsTaxonomy       = "/news/taxonomy"
-	URLInsightNewsRelevance      = "/news/relevance"
+	URLInsightNewsSymbolTags     = "/news/symbol_tags"
+	URLInsightNewsSymbolChannels = "/news/symbol_channels"
+	URLInsightNewsAuthors        = "/news/authors"
+	URLInsightNewsChannels       = "/news/channels"
 	URLInsightNewsSymbols        = "/news/symbols"
-	URLInsightNewsSources        = "/news/sources"
-	URLInsightNewsLang           = "/news/lang"
+	URLInsightNewsTags           = "/news/tags"
 
 	// *******************************************
 	// 		LOGOS

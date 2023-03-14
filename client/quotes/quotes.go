@@ -9,8 +9,7 @@ import (
 	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
 
-	sdk "github.com/OrbisSystems/orbis-sdk-go"
-	"github.com/OrbisSystems/orbis-sdk-go/config"
+	sdk "github.com/OrbisSystems/orbis-sdk-go/interface"
 	"github.com/OrbisSystems/orbis-sdk-go/model"
 )
 
@@ -18,14 +17,14 @@ import (
 type Quotes struct {
 	sdk.Auth
 
-	cfg config.Config
+	url string
 	cli sdk.HTTPClient
 }
 
-func New(cfg config.Config, auth sdk.Auth, cli sdk.HTTPClient) *Quotes {
+func New(url string, auth sdk.Auth, cli sdk.HTTPClient) *Quotes {
 	return &Quotes{
 		Auth: auth,
-		cfg:  cfg,
+		url:  url,
 		cli:  cli,
 	}
 }
@@ -33,7 +32,7 @@ func New(cfg config.Config, auth sdk.Auth, cli sdk.HTTPClient) *Quotes {
 func (q *Quotes) GetQuotesEquityData(ctx context.Context, symbols, quoteType string) ([]model.QuoteEquityDataResponse, error) {
 	log.Trace("GetQuotesEquityData called")
 
-	r, err := q.cli.Get(ctx, fmt.Sprintf("%s?symbols=%s&quote_type=%s", q.cfg.AuthHost+model.URLInsightBase+model.URLInsightQuotesEquity, symbols, quoteType), nil)
+	r, err := q.cli.Get(ctx, fmt.Sprintf("%s?symbols=%s&quote_type=%s", q.url+model.URLInsightBase+model.URLInsightQuotesEquity, symbols, quoteType), nil)
 	if err != nil {
 		return nil, errors.Wrap(err, "couldn't get quotes equity")
 	}
@@ -55,7 +54,7 @@ func (q *Quotes) GetQuoteHistory(ctx context.Context, req model.QuoteHistoryRequ
 		return model.QuoteHistoryResponse{}, errors.Wrap(err, "couldn't marshal input parameters")
 	}
 
-	r, err := q.cli.Post(ctx, q.cfg.AuthHost+model.URLInsightBase+model.URLInsightQuoteHistory, bytes.NewBuffer(body), nil)
+	r, err := q.cli.Post(ctx, q.url+model.URLInsightBase+model.URLInsightQuoteHistory, bytes.NewBuffer(body), nil)
 	if err != nil {
 		return model.QuoteHistoryResponse{}, errors.Wrap(err, "couldn't get quote history")
 	}
@@ -77,7 +76,7 @@ func (q *Quotes) GetIntradayQuotes(ctx context.Context, req model.IntradayReques
 		return nil, errors.Wrap(err, "couldn't marshal input parameters")
 	}
 
-	r, err := q.cli.Post(ctx, q.cfg.AuthHost+model.URLInsightBase+model.URLInsightIntradayQuotes, bytes.NewBuffer(body), nil)
+	r, err := q.cli.Post(ctx, q.url+model.URLInsightBase+model.URLInsightIntradayQuotes, bytes.NewBuffer(body), nil)
 	if err != nil {
 		return nil, errors.Wrap(err, "couldn't get intraday quotes")
 	}

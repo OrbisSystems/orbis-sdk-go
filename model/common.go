@@ -19,3 +19,9 @@ type Ordering struct {
 	Field     string
 	Direction OrderDirection `enums:"asc,desc" default:"asc"`
 }
+
+type SubscriptionType int
+
+const (
+	NewsSubscription SubscriptionType = iota
+)

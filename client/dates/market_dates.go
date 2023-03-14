@@ -9,22 +9,21 @@ import (
 	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
 
-	sdk "github.com/OrbisSystems/orbis-sdk-go"
-	"github.com/OrbisSystems/orbis-sdk-go/config"
+	sdk "github.com/OrbisSystems/orbis-sdk-go/interface"
 	"github.com/OrbisSystems/orbis-sdk-go/model"
 )
 
 type MarketDates struct {
 	sdk.Auth
 
-	cfg config.Config
+	url string
 	cli sdk.HTTPClient
 }
 
-func New(cfg config.Config, auth sdk.Auth, cli sdk.HTTPClient) *MarketDates {
+func New(url string, auth sdk.Auth, cli sdk.HTTPClient) *MarketDates {
 	return &MarketDates{
 		Auth: auth,
-		cfg:  cfg,
+		url:  url,
 		cli:  cli,
 	}
 }
@@ -37,7 +36,7 @@ func (m *MarketDates) GetMarketDatesHistory(ctx context.Context, req model.GetMa
 		return model.GetMarketDatesResponse{}, errors.Wrap(err, "couldn't marshal input parameters")
 	}
 
-	r, err := m.cli.Post(ctx, m.cfg.AuthHost+model.URLInsightBase+model.URLInsightMarketDatesHistory, bytes.NewBuffer(body), nil)
+	r, err := m.cli.Post(ctx, m.url+model.URLInsightBase+model.URLInsightMarketDatesHistory, bytes.NewBuffer(body), nil)
 	if err != nil {
 		return model.GetMarketDatesResponse{}, errors.Wrap(err, "couldn't get market dates history")
 	}
@@ -54,7 +53,7 @@ func (m *MarketDates) GetMarketDatesHistory(ctx context.Context, req model.GetMa
 func (m *MarketDates) GetTodayMarketHours(ctx context.Context, market string) (model.GetMarketHoursResponse, error) {
 	log.Trace("GetTodayMarketHours called")
 
-	r, err := m.cli.Get(ctx, fmt.Sprintf("%s?market=%s", m.cfg.AuthHost+model.URLInsightBase+model.URLInsightMarketDatesToday, market), nil)
+	r, err := m.cli.Get(ctx, fmt.Sprintf("%s?market=%s", m.url+model.URLInsightBase+model.URLInsightMarketDatesToday, market), nil)
 	if err != nil {
 		return model.GetMarketHoursResponse{}, errors.Wrap(err, "couldn't get today's market hours")
 	}

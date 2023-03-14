@@ -10,8 +10,7 @@ import (
 	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
 
-	sdk "github.com/OrbisSystems/orbis-sdk-go"
-	"github.com/OrbisSystems/orbis-sdk-go/config"
+	sdk "github.com/OrbisSystems/orbis-sdk-go/interface"
 	"github.com/OrbisSystems/orbis-sdk-go/model"
 )
 
@@ -23,7 +22,7 @@ var (
 type Account struct {
 	sdk.Auth
 
-	cfg config.Config
+	url string
 	cli sdk.HTTPClient
 
 	resetTokenRefreshCh    chan int64
@@ -32,10 +31,10 @@ type Account struct {
 	refreshTicker *time.Ticker
 }
 
-func New(cfg config.Config, auth sdk.Auth, cli sdk.HTTPClient) *Account {
+func New(url string, auth sdk.Auth, cli sdk.HTTPClient) *Account {
 	a := &Account{
 		Auth: auth,
-		cfg:  cfg,
+		url:  url,
 		cli:  cli,
 
 		resetTokenRefreshCh: make(chan int64),
@@ -103,7 +102,7 @@ func (a *Account) LoginByEmail(ctx context.Context, req model.LoginByEmailReques
 		return errors.Wrap(err, "couldn't marshal input parameters")
 	}
 
-	r, err := a.cli.Post(ctx, a.cfg.AuthHost+model.URLB2BLoginByEmail, bytes.NewBuffer(body), nil)
+	r, err := a.cli.Post(ctx, a.url+model.URLB2BLoginByEmail, bytes.NewBuffer(body), nil)
 	if err != nil {
 		return errors.Wrap(err, "account couldn't login by email")
 	}
@@ -129,7 +128,7 @@ func (a *Account) LoginByAPIKey(ctx context.Context, req model.LoginByAPIKeyRequ
 		return errors.Wrap(err, "couldn't marshal input parameters")
 	}
 
-	r, err := a.cli.Post(ctx, a.cfg.AuthHost+model.URLB2BLoginByAPIKey, bytes.NewBuffer(body), nil)
+	r, err := a.cli.Post(ctx, a.url+model.URLB2BLoginByAPIKey, bytes.NewBuffer(body), nil)
 	if err != nil {
 		return errors.Wrap(err, "account couldn't login by api key")
 	}
@@ -154,7 +153,7 @@ func (a *Account) CreateAPIKey(ctx context.Context, req model.CreateAPIKeyReques
 		return model.CreateAPIKeyResponse{}, errors.Wrap(err, "couldn't marshal input parameters")
 	}
 
-	r, err := a.cli.Post(ctx, a.cfg.AuthHost+model.URLB2BCreateAPIKey, bytes.NewBuffer(body), nil)
+	r, err := a.cli.Post(ctx, a.url+model.URLB2BCreateAPIKey, bytes.NewBuffer(body), nil)
 	if err != nil {
 		return model.CreateAPIKeyResponse{}, errors.Wrap(err, "account couldn't login")
 	}
@@ -186,7 +185,7 @@ func (a *Account) RefreshToken(ctx context.Context) error {
 		return errors.Wrap(err, "couldn't marshal input parameters")
 	}
 
-	r, err := a.cli.Post(ctx, a.cfg.AuthHost+model.URLB2BRefreshToken, bytes.NewBuffer(body), nil)
+	r, err := a.cli.Post(ctx, a.url+model.URLB2BRefreshToken, bytes.NewBuffer(body), nil)
 	if err != nil {
 		return errors.Wrap(err, "account couldn't refresh token")
 	}

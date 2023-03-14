@@ -9,22 +9,21 @@ import (
 	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
 
-	sdk "github.com/OrbisSystems/orbis-sdk-go"
-	"github.com/OrbisSystems/orbis-sdk-go/config"
+	sdk "github.com/OrbisSystems/orbis-sdk-go/interface"
 	"github.com/OrbisSystems/orbis-sdk-go/model"
 )
 
 type Research struct {
 	sdk.Auth
 
-	cfg config.Config
+	url string
 	cli sdk.HTTPClient
 }
 
-func New(cfg config.Config, auth sdk.Auth, cli sdk.HTTPClient) *Research {
+func New(url string, auth sdk.Auth, cli sdk.HTTPClient) *Research {
 	return &Research{
 		Auth: auth,
-		cfg:  cfg,
+		url:  url,
 		cli:  cli,
 	}
 }
@@ -32,7 +31,7 @@ func New(cfg config.Config, auth sdk.Auth, cli sdk.HTTPClient) *Research {
 func (s *Research) GetCompanyProfile(ctx context.Context, symbol string) (model.CompanyProfile, error) {
 	log.Trace("GetCompanyProfile called")
 
-	r, err := s.cli.Get(ctx, fmt.Sprintf("%s?symbol=%s", s.cfg.AuthHost+model.URLInsightBase+model.URLInsightCompanyProfile, symbol), nil)
+	r, err := s.cli.Get(ctx, fmt.Sprintf("%s?symbol=%s", s.url+model.URLInsightBase+model.URLInsightCompanyProfile, symbol), nil)
 	if err != nil {
 		return model.CompanyProfile{}, errors.Wrap(err, "couldn't get company profile")
 	}
@@ -49,7 +48,7 @@ func (s *Research) GetCompanyProfile(ctx context.Context, symbol string) (model.
 func (s *Research) GetCombinedProfile(ctx context.Context, symbol string) (model.CompanyProfile, error) {
 	log.Trace("GetCombinedProfile called")
 
-	r, err := s.cli.Get(ctx, fmt.Sprintf("%s?symbol=%s", s.cfg.AuthHost+model.URLInsightBase+model.URLInsightQuoteProfile, symbol), nil)
+	r, err := s.cli.Get(ctx, fmt.Sprintf("%s?symbol=%s", s.url+model.URLInsightBase+model.URLInsightQuoteProfile, symbol), nil)
 	if err != nil {
 		return model.CompanyProfile{}, errors.Wrap(err, "couldn't get combined company profile")
 	}
@@ -71,7 +70,7 @@ func (s *Research) GetOwnershipsBySymbol(ctx context.Context, req model.GetOwner
 		return model.GetOwnershipsBySymbolResponse{}, errors.Wrap(err, "couldn't marshal input parameters")
 	}
 
-	r, err := s.cli.Post(ctx, s.cfg.AuthHost+model.URLInsightBase+model.URLInsightSymbolOwnerships, bytes.NewBuffer(body), nil)
+	r, err := s.cli.Post(ctx, s.url+model.URLInsightBase+model.URLInsightSymbolOwnerships, bytes.NewBuffer(body), nil)
 	if err != nil {
 		return model.GetOwnershipsBySymbolResponse{}, errors.Wrap(err, "couldn't get ownership by symbol")
 	}
@@ -93,7 +92,7 @@ func (s *Research) GetOwnershipsByID(ctx context.Context, req model.GetOwnership
 		return model.GetOwnershipsBySymbolResponse{}, errors.Wrap(err, "couldn't marshal input parameters")
 	}
 
-	r, err := s.cli.Post(ctx, s.cfg.AuthHost+model.URLInsightBase+model.URLInsightOwnerships, bytes.NewBuffer(body), nil)
+	r, err := s.cli.Post(ctx, s.url+model.URLInsightBase+model.URLInsightOwnerships, bytes.NewBuffer(body), nil)
 	if err != nil {
 		return model.GetOwnershipsBySymbolResponse{}, errors.Wrap(err, "couldn't get ownership by id")
 	}
@@ -115,7 +114,7 @@ func (s *Research) GetEarningReleases(ctx context.Context, req model.EarningRele
 		return model.EarningReleasesResponse{}, errors.Wrap(err, "couldn't marshal input parameters")
 	}
 
-	r, err := s.cli.Post(ctx, s.cfg.AuthHost+model.URLInsightBase+model.URLInsightEarningsCalendar, bytes.NewBuffer(body), nil)
+	r, err := s.cli.Post(ctx, s.url+model.URLInsightBase+model.URLInsightEarningsCalendar, bytes.NewBuffer(body), nil)
 	if err != nil {
 		return model.EarningReleasesResponse{}, errors.Wrap(err, "couldn't get earning release")
 	}
@@ -137,7 +136,7 @@ func (s *Research) GetSymbolFundamentals(ctx context.Context, req model.EarningR
 		return model.GetSymbolFundamentalsResponse{}, errors.Wrap(err, "couldn't marshal input parameters")
 	}
 
-	r, err := s.cli.Post(ctx, s.cfg.AuthHost+model.URLInsightBase+model.URLInsightFundamentals, bytes.NewBuffer(body), nil)
+	r, err := s.cli.Post(ctx, s.url+model.URLInsightBase+model.URLInsightFundamentals, bytes.NewBuffer(body), nil)
 	if err != nil {
 		return model.GetSymbolFundamentalsResponse{}, errors.Wrap(err, "couldn't get fundamentals")
 	}
@@ -159,7 +158,7 @@ func (s *Research) Screener(ctx context.Context, req model.StockScreenerRequest)
 		return model.StockScreenerResponse{}, errors.Wrap(err, "couldn't marshal input parameters")
 	}
 
-	r, err := s.cli.Post(ctx, s.cfg.AuthHost+model.URLInsightBase+model.URLInsightStockScreener, bytes.NewBuffer(body), nil)
+	r, err := s.cli.Post(ctx, s.url+model.URLInsightBase+model.URLInsightStockScreener, bytes.NewBuffer(body), nil)
 	if err != nil {
 		return model.StockScreenerResponse{}, errors.Wrap(err, "couldn't get fundamentals")
 	}
@@ -176,7 +175,7 @@ func (s *Research) Screener(ctx context.Context, req model.StockScreenerRequest)
 func (s *Research) StockMarketHeatmap(ctx context.Context, heatmapName, quoteType string) (model.StockMarketHeatmapResponse, error) {
 	log.Trace("StockMarketHeatmap called")
 
-	r, err := s.cli.Get(ctx, fmt.Sprintf("%s?heatmapName=%s&quoteType=%s", s.cfg.AuthHost+model.URLInsightBase+model.URLInsightHeatmaps, heatmapName, quoteType), nil)
+	r, err := s.cli.Get(ctx, fmt.Sprintf("%s?heatmapName=%s&quoteType=%s", s.url+model.URLInsightBase+model.URLInsightHeatmaps, heatmapName, quoteType), nil)
 	if err != nil {
 		return model.StockMarketHeatmapResponse{}, errors.Wrap(err, "couldn't get combined company profile")
 	}
@@ -198,7 +197,7 @@ func (s *Research) GetIndustriesPerformance(ctx context.Context, req model.GetIn
 		return model.GetIndustriesPerformanceResponse{}, errors.Wrap(err, "couldn't marshal input parameters")
 	}
 
-	r, err := s.cli.Post(ctx, s.cfg.AuthHost+model.URLInsightBase+model.URLInsightIndustriesPerformance, bytes.NewBuffer(body), nil)
+	r, err := s.cli.Post(ctx, s.url+model.URLInsightBase+model.URLInsightIndustriesPerformance, bytes.NewBuffer(body), nil)
 	if err != nil {
 		return model.GetIndustriesPerformanceResponse{}, errors.Wrap(err, "couldn't get fundamentals")
 	}
@@ -220,7 +219,7 @@ func (s *Research) GetMomentumRatioGraph(ctx context.Context, req model.Momentum
 		return model.MomentumRatioGraphResponse{}, errors.Wrap(err, "couldn't marshal input parameters")
 	}
 
-	r, err := s.cli.Post(ctx, s.cfg.AuthHost+model.URLInsightBase+model.URLInsightGetMomentumRatioGraph, bytes.NewBuffer(body), nil)
+	r, err := s.cli.Post(ctx, s.url+model.URLInsightBase+model.URLInsightGetMomentumRatioGraph, bytes.NewBuffer(body), nil)
 	if err != nil {
 		return model.MomentumRatioGraphResponse{}, errors.Wrap(err, "couldn't get momentum ratio graph")
 	}
@@ -242,7 +241,7 @@ func (s *Research) GetSeasonality(ctx context.Context, req model.SeasonalityRequ
 		return model.SeasonalityResponse{}, errors.Wrap(err, "couldn't marshal input parameters")
 	}
 
-	r, err := s.cli.Post(ctx, s.cfg.AuthHost+model.URLInsightBase+model.URLInsightSeasonality, bytes.NewBuffer(body), nil)
+	r, err := s.cli.Post(ctx, s.url+model.URLInsightBase+model.URLInsightSeasonality, bytes.NewBuffer(body), nil)
 	if err != nil {
 		return model.SeasonalityResponse{}, errors.Wrap(err, "couldn't get seasonality")
 	}

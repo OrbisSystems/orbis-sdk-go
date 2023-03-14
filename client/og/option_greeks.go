@@ -8,22 +8,21 @@ import (
 	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
 
-	sdk "github.com/OrbisSystems/orbis-sdk-go"
-	"github.com/OrbisSystems/orbis-sdk-go/config"
+	sdk "github.com/OrbisSystems/orbis-sdk-go/interface"
 	"github.com/OrbisSystems/orbis-sdk-go/model"
 )
 
 type OptionGreeks struct {
 	sdk.Auth
 
-	cfg config.Config
+	url string
 	cli sdk.HTTPClient
 }
 
-func New(cfg config.Config, auth sdk.Auth, cli sdk.HTTPClient) *OptionGreeks {
+func New(url string, auth sdk.Auth, cli sdk.HTTPClient) *OptionGreeks {
 	return &OptionGreeks{
 		Auth: auth,
-		cfg:  cfg,
+		url:  url,
 		cli:  cli,
 	}
 }
@@ -36,7 +35,7 @@ func (og *OptionGreeks) CalculateParams(ctx context.Context, req model.Calculate
 		return model.CalculateParamsResponse{}, errors.Wrap(err, "couldn't marshal input parameters")
 	}
 
-	r, err := og.cli.Post(ctx, og.cfg.AuthHost+model.URLInsightBase+model.URLInsightOptionGreeksCalculateParams, bytes.NewBuffer(body), nil)
+	r, err := og.cli.Post(ctx, og.url+model.URLInsightBase+model.URLInsightOptionGreeksCalculateParams, bytes.NewBuffer(body), nil)
 	if err != nil {
 		return model.CalculateParamsResponse{}, errors.Wrap(err, "couldn't get og calculated params")
 	}
@@ -58,7 +57,7 @@ func (og *OptionGreeks) CalculateMatrix(ctx context.Context, req model.Calculate
 		return model.CalculateMatrixParamsRequest{}, errors.Wrap(err, "couldn't marshal input parameters")
 	}
 
-	r, err := og.cli.Post(ctx, og.cfg.AuthHost+model.URLInsightBase+model.URLInsightOptionGreeksCalculateMatrix, bytes.NewBuffer(body), nil)
+	r, err := og.cli.Post(ctx, og.url+model.URLInsightBase+model.URLInsightOptionGreeksCalculateMatrix, bytes.NewBuffer(body), nil)
 	if err != nil {
 		return model.CalculateMatrixParamsRequest{}, errors.Wrap(err, "couldn't get og calculated matrix")
 	}

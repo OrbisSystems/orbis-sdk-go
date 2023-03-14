@@ -1,4 +1,4 @@
-package orbis_sdk_go
+package _interface
 
 import (
 	"context"
@@ -40,14 +40,14 @@ type AccountService interface {
 }
 
 type NewsService interface {
-	GetByFilter(ctx context.Context, req model.NewsFilterRequest) ([]model.NewsResponse, error)
-	GetByID(ctx context.Context, req model.NewsByIDRequest) (model.NewsResponse, error)
-	GetSymbolSubjects(ctx context.Context, req model.SymbolSubjectsRequest) ([]model.SymbolSubjectsResponse, error)
-	GetAvailableTaxonomy(ctx context.Context) ([]model.TaxonomyCode, error)
-	GetAvailableSubjects(ctx context.Context) ([]string, error)
+	GetByFilter(ctx context.Context, req model.NewsFilterRequest) (model.NewsResponse, error)
+	GetByID(ctx context.Context, req model.NewsRequest) (model.News, error)
+	GetTagsForSymbol(ctx context.Context, req model.SymbolTagsRequest) ([]string, error)
+	GetChannelsForSymbol(ctx context.Context, req model.SymbolChannelsRequest) ([]string, error)
+	GetAvailableAuthors(ctx context.Context) ([]string, error)
+	GetAvailableChannels(ctx context.Context) ([]string, error)
 	GetAvailableSymbols(ctx context.Context) ([]string, error)
-	GetAvailableSources(ctx context.Context) ([]string, error)
-	GetAvailableLanguages(ctx context.Context) ([]string, error)
+	GetAvailableTags(ctx context.Context) ([]string, error)
 }
 
 type LogosService interface {
@@ -138,4 +138,8 @@ type MarketDatesService interface {
 type OptionGreeksService interface {
 	CalculateParams(ctx context.Context, req model.CalculateParamsRequest) (model.CalculateParamsResponse, error)
 	CalculateMatrix(ctx context.Context, req model.CalculateParamsRequest) (model.CalculateMatrixParamsRequest, error)
+}
+
+type WS interface {
+	Subscribe(ctx context.Context, subscriptionType model.SubscriptionType) (chan model.News, error)
 }

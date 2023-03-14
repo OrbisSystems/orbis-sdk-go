@@ -8,7 +8,7 @@ import (
 
 	"github.com/pkg/errors"
 
-	sdk "github.com/OrbisSystems/orbis-sdk-go"
+	sdk "github.com/OrbisSystems/orbis-sdk-go/interface"
 )
 
 const (

@@ -8,22 +8,21 @@ import (
 	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
 
-	sdk "github.com/OrbisSystems/orbis-sdk-go"
-	"github.com/OrbisSystems/orbis-sdk-go/config"
+	sdk "github.com/OrbisSystems/orbis-sdk-go/interface"
 	"github.com/OrbisSystems/orbis-sdk-go/model"
 )
 
 type Passport struct {
 	sdk.Auth
 
-	cfg config.Config
+	url string
 	cli sdk.HTTPClient
 }
 
-func New(cfg config.Config, auth sdk.Auth, cli sdk.HTTPClient) *Passport {
+func New(url string, auth sdk.Auth, cli sdk.HTTPClient) *Passport {
 	return &Passport{
 		Auth: auth,
-		cfg:  cfg,
+		url:  url,
 		cli:  cli,
 	}
 }
@@ -36,7 +35,7 @@ func (p *Passport) Articles(ctx context.Context, req model.ArticlesRequest) ([]m
 		return nil, errors.Wrap(err, "couldn't marshal input parameters")
 	}
 
-	r, err := p.cli.Post(ctx, p.cfg.AuthHost+model.URLInsightBase+model.URLInsightPassportArticles, bytes.NewBuffer(body), nil)
+	r, err := p.cli.Post(ctx, p.url+model.URLInsightBase+model.URLInsightPassportArticles, bytes.NewBuffer(body), nil)
 	if err != nil {
 		return nil, errors.Wrap(err, "couldn't get articles")
 	}
@@ -58,7 +57,7 @@ func (p *Passport) Newsfeed(ctx context.Context, req model.NewsfeedRequest) ([]m
 		return nil, errors.Wrap(err, "couldn't marshal input parameters")
 	}
 
-	r, err := p.cli.Post(ctx, p.cfg.AuthHost+model.URLInsightBase+model.URLInsightPassportNewsFeed, bytes.NewBuffer(body), nil)
+	r, err := p.cli.Post(ctx, p.url+model.URLInsightBase+model.URLInsightPassportNewsFeed, bytes.NewBuffer(body), nil)
 	if err != nil {
 		return nil, errors.Wrap(err, "couldn't get article news feed")
 	}
@@ -80,7 +79,7 @@ func (p *Passport) ArticleByID(ctx context.Context, req model.ArticleByIDRequest
 		return model.Article{}, errors.Wrap(err, "couldn't marshal input parameters")
 	}
 
-	r, err := p.cli.Post(ctx, p.cfg.AuthHost+model.URLInsightBase+model.URLInsightPassportArticleByID, bytes.NewBuffer(body), nil)
+	r, err := p.cli.Post(ctx, p.url+model.URLInsightBase+model.URLInsightPassportArticleByID, bytes.NewBuffer(body), nil)
 	if err != nil {
 		return model.Article{}, errors.Wrap(err, "couldn't get article by id")
 	}
@@ -102,7 +101,7 @@ func (p *Passport) SearchArticle(ctx context.Context, req model.SearchArticleReq
 		return nil, errors.Wrap(err, "couldn't marshal input parameters")
 	}
 
-	r, err := p.cli.Post(ctx, p.cfg.AuthHost+model.URLInsightBase+model.URLInsightPassportSearchArticle, bytes.NewBuffer(body), nil)
+	r, err := p.cli.Post(ctx, p.url+model.URLInsightBase+model.URLInsightPassportSearchArticle, bytes.NewBuffer(body), nil)
 	if err != nil {
 		return nil, errors.Wrap(err, "couldn't get articles by search")
 	}
@@ -124,7 +123,7 @@ func (p *Passport) AuthorProfile(ctx context.Context, req model.AuthorProfileReq
 		return nil, errors.Wrap(err, "couldn't marshal input parameters")
 	}
 
-	r, err := p.cli.Post(ctx, p.cfg.AuthHost+model.URLInsightBase+model.URLInsightPassportAuthorProfile, bytes.NewBuffer(body), nil)
+	r, err := p.cli.Post(ctx, p.url+model.URLInsightBase+model.URLInsightPassportAuthorProfile, bytes.NewBuffer(body), nil)
 	if err != nil {
 		return nil, errors.Wrap(err, "couldn't get author profiles")
 	}
@@ -146,7 +145,7 @@ func (p *Passport) MostPopularTags(ctx context.Context, req model.MostPopularTag
 		return nil, errors.Wrap(err, "couldn't marshal input parameters")
 	}
 
-	r, err := p.cli.Post(ctx, p.cfg.AuthHost+model.URLInsightBase+model.URLInsightPassportMostPopularTags, bytes.NewBuffer(body), nil)
+	r, err := p.cli.Post(ctx, p.url+model.URLInsightBase+model.URLInsightPassportMostPopularTags, bytes.NewBuffer(body), nil)
 	if err != nil {
 		return nil, errors.Wrap(err, "couldn't get most popular tags")
 	}

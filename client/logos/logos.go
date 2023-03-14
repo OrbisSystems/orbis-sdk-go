@@ -10,8 +10,7 @@ import (
 	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
 
-	sdk "github.com/OrbisSystems/orbis-sdk-go"
-	"github.com/OrbisSystems/orbis-sdk-go/config"
+	sdk "github.com/OrbisSystems/orbis-sdk-go/interface"
 	"github.com/OrbisSystems/orbis-sdk-go/model"
 )
 
@@ -19,14 +18,14 @@ import (
 type Logos struct {
 	sdk.Auth
 
-	cfg config.Config
+	url string
 	cli sdk.HTTPClient
 }
 
-func New(cfg config.Config, auth sdk.Auth, cli sdk.HTTPClient) *Logos {
+func New(url string, auth sdk.Auth, cli sdk.HTTPClient) *Logos {
 	return &Logos{
 		Auth: auth,
-		cfg:  cfg,
+		url:  url,
 		cli:  cli,
 	}
 }
@@ -35,7 +34,7 @@ func New(cfg config.Config, auth sdk.Auth, cli sdk.HTTPClient) *Logos {
 func (l *Logos) SymbolLogos(ctx context.Context, symbol string) (model.SymbolLogosResponse, error) {
 	log.Trace("SymbolLogos called")
 
-	r, err := l.cli.Get(ctx, fmt.Sprintf("%s?symbol=%s", l.cfg.AuthHost+model.URLInsightBase+model.URLInsightLogosSymbolLogos, symbol), nil)
+	r, err := l.cli.Get(ctx, fmt.Sprintf("%s?symbol=%s", l.url+model.URLInsightBase+model.URLInsightLogosSymbolLogos, symbol), nil)
 	if err != nil {
 		return model.SymbolLogosResponse{}, errors.Wrap(err, "couldn't get symbol logos")
 	}
@@ -53,7 +52,7 @@ func (l *Logos) SymbolLogos(ctx context.Context, symbol string) (model.SymbolLog
 func (l *Logos) SocialSymbolLogos(ctx context.Context, symbol string) (model.SymbolSocialsResponse, error) {
 	log.Trace("SocialSymbolLogos called")
 
-	r, err := l.cli.Get(ctx, fmt.Sprintf("%s?symbol=%s", l.cfg.AuthHost+model.URLInsightBase+model.URLInsightLogosSocialSymbolLogos, symbol), nil)
+	r, err := l.cli.Get(ctx, fmt.Sprintf("%s?symbol=%s", l.url+model.URLInsightBase+model.URLInsightLogosSocialSymbolLogos, symbol), nil)
 	if err != nil {
 		return model.SymbolSocialsResponse{}, errors.Wrap(err, "couldn't get social symbol logos")
 	}
@@ -71,7 +70,7 @@ func (l *Logos) SocialSymbolLogos(ctx context.Context, symbol string) (model.Sym
 func (l *Logos) DirectSymbolLogo(ctx context.Context, symbol string) (io.ReadCloser, error) {
 	log.Trace("DirectSymbolLogo called")
 
-	r, err := l.cli.Get(ctx, fmt.Sprintf("%s?symbol=%s", l.cfg.AuthHost+model.URLInsightBase+model.URLInsightLogosDirectSymbolLogos, symbol), nil)
+	r, err := l.cli.Get(ctx, fmt.Sprintf("%s?symbol=%s", l.url+model.URLInsightBase+model.URLInsightLogosDirectSymbolLogos, symbol), nil)
 	if err != nil {
 		return nil, errors.Wrap(err, "couldn't get direct symbol logos")
 	}
@@ -83,7 +82,7 @@ func (l *Logos) DirectSymbolLogo(ctx context.Context, symbol string) (io.ReadClo
 func (l *Logos) CryptoSymbolLogo(ctx context.Context, symbol string) (model.SymbolLogosResponse, error) {
 	log.Trace("CryptoSymbolLogo called")
 
-	r, err := l.cli.Get(ctx, fmt.Sprintf("%s?symbol=%s", l.cfg.AuthHost+model.URLInsightBase+model.URLInsightLogosCryptoSymbolLogo, symbol), nil)
+	r, err := l.cli.Get(ctx, fmt.Sprintf("%s?symbol=%s", l.url+model.URLInsightBase+model.URLInsightLogosCryptoSymbolLogo, symbol), nil)
 	if err != nil {
 		return model.SymbolLogosResponse{}, errors.Wrap(err, "couldn't get crypto symbol logos")
 	}
@@ -101,7 +100,7 @@ func (l *Logos) CryptoSymbolLogo(ctx context.Context, symbol string) (model.Symb
 func (l *Logos) DirectCryptoSymbolLogo(ctx context.Context, symbol string) (io.ReadCloser, error) {
 	log.Trace("DirectCryptoSymbolLogo called")
 
-	r, err := l.cli.Get(ctx, fmt.Sprintf("%s?symbol=%s", l.cfg.AuthHost+model.URLInsightBase+model.URLInsightLogosDirectCryptoSymbolLogos, symbol), nil)
+	r, err := l.cli.Get(ctx, fmt.Sprintf("%s?symbol=%s", l.url+model.URLInsightBase+model.URLInsightLogosDirectCryptoSymbolLogos, symbol), nil)
 	if err != nil {
 		return nil, errors.Wrap(err, "couldn't get direct crypto symbol logos")
 	}
@@ -118,7 +117,7 @@ func (l *Logos) MultiSymbolLogos(ctx context.Context, req model.MultipleSymbolLo
 		return nil, errors.Wrap(err, "couldn't marshal input parameters")
 	}
 
-	r, err := l.cli.Post(ctx, l.cfg.AuthHost+model.URLInsightBase+model.URLInsightLogosMultiSymbolLogos, bytes.NewBuffer(body), nil)
+	r, err := l.cli.Post(ctx, l.url+model.URLInsightBase+model.URLInsightLogosMultiSymbolLogos, bytes.NewBuffer(body), nil)
 	if err != nil {
 		return nil, errors.Wrap(err, "couldn't get multi symbol logos")
 	}
@@ -141,7 +140,7 @@ func (l *Logos) ConvertedSymbolLogo(ctx context.Context, req model.SymbolLogoCon
 		return nil, errors.Wrap(err, "couldn't marshal input parameters")
 	}
 
-	r, err := l.cli.Post(ctx, l.cfg.AuthHost+model.URLInsightBase+model.URLInsightLogosConvertedSymbolLogos, bytes.NewBuffer(body), nil)
+	r, err := l.cli.Post(ctx, l.url+model.URLInsightBase+model.URLInsightLogosConvertedSymbolLogos, bytes.NewBuffer(body), nil)
 	if err != nil {
 		return nil, errors.Wrap(err, "couldn't get converted symbol logo")
 	}
@@ -158,7 +157,7 @@ func (l *Logos) MultipleCryptoSymbolLogo(ctx context.Context, req model.Multiple
 		return nil, errors.Wrap(err, "couldn't marshal input parameters")
 	}
 
-	r, err := l.cli.Post(ctx, l.cfg.AuthHost+model.URLInsightBase+model.URLInsightLogosMultipleCryptoSymbolLogo, bytes.NewBuffer(body), nil)
+	r, err := l.cli.Post(ctx, l.url+model.URLInsightBase+model.URLInsightLogosMultipleCryptoSymbolLogo, bytes.NewBuffer(body), nil)
 	if err != nil {
 		return nil, errors.Wrap(err, "couldn't get multi crypto symbol logo")
 	}
@@ -181,7 +180,7 @@ func (l *Logos) ConvertedCryptoSymbolLogo(ctx context.Context, req model.SymbolL
 		return nil, errors.Wrap(err, "couldn't marshal input parameters")
 	}
 
-	r, err := l.cli.Post(ctx, l.cfg.AuthHost+model.URLInsightBase+model.URLInsightLogosConvertedCryptoSymbolLogo, bytes.NewBuffer(body), nil)
+	r, err := l.cli.Post(ctx, l.url+model.URLInsightBase+model.URLInsightLogosConvertedCryptoSymbolLogo, bytes.NewBuffer(body), nil)
 	if err != nil {
 		return nil, errors.Wrap(err, "couldn't get converted crypto symbol logo")
 	}

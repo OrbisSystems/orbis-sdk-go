@@ -14,5 +14,5 @@ const (
 
 type Config struct {
 	LogLevel Level
-	AuthHost string
+	Host     string // JUST hostname, without setting schema. Example: localhost, NOT https://localhost
 }
