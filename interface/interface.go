@@ -142,4 +142,5 @@ type OptionGreeksService interface {
 
 type WS interface {
 	Subscribe(ctx context.Context, subscriptionType model.SubscriptionType) (chan model.News, error)
+	Close() error
 }

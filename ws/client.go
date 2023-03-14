@@ -19,15 +19,21 @@ var (
 )
 
 type Client struct {
-	auth     sdk.Auth
-	url      string
+	auth sdk.Auth
+	url  string
+
 	newsConn *websocket.Conn
+
+	newsOutputCh chan model.News
+	closeCh      chan struct{}
 }
 
 func New(cfg config.Config, auth sdk.Auth) *Client {
 	return &Client{
-		url:  wrapWS(cfg.Host),
-		auth: auth,
+		url:          wrapWS(cfg.Host),
+		auth:         auth,
+		newsOutputCh: make(chan model.News, 100),
+		closeCh:      make(chan struct{}),
 	}
 }
 
@@ -40,37 +46,77 @@ func (c *Client) Subscribe(ctx context.Context, subscriptionType model.Subscript
 	}
 }
 
+func (c *Client) Close() error {
+	close(c.newsOutputCh)
+	close(c.closeCh)
+
+	return c.newsConn.Close()
+}
+
 func (c *Client) subscribeNews(ctx context.Context) (chan model.News, error) {
 	if c.newsConn == nil {
-		tkn, err := c.auth.GetToken(ctx)
-		if err != nil {
+		if err := c.connect(ctx); err != nil {
 			return nil, err
 		}
-
-		headers := http.Header{}
-		headers.Add("Authorization", fmt.Sprintf("Bearer %s", tkn.AccessToken))
-
-		cli, _, err := websocket.DefaultDialer.Dial(c.url+model.WSInsightNews, headers)
-		if err != nil {
-			return nil, err
-		}
-		c.newsConn = cli
 	}
 
-	outputCh := make(chan model.News, 100)
-	go func() {
-		for {
-			var msg model.News
-			err := c.newsConn.ReadJSON(&msg)
-			if err != nil {
-				log.Errorf("error while getting message via ws: %v", err)
-			}
+	go c.processNewsFeed(ctx)
 
-			outputCh <- msg
+	return c.newsOutputCh, nil
+}
+
+func (c *Client) connect(ctx context.Context) error {
+	tkn, err := c.auth.GetToken(ctx)
+	if err != nil {
+		return err
+	}
+
+	headers := http.Header{}
+	headers.Add("Authorization", fmt.Sprintf("Bearer %s", tkn.AccessToken))
+
+	cli, _, err := websocket.DefaultDialer.Dial(c.url+model.WSInsightNews, headers)
+	if err != nil {
+		return err
+	}
+	c.newsConn = cli
+
+	return nil
+}
+
+func (c *Client) processNewsFeed(ctx context.Context) {
+	for {
+		select {
+		case <-c.closeCh:
+			return
+		default:
+			c.getFeedNews(ctx)
 		}
-	}()
+	}
+}
 
-	return outputCh, nil
+func (c *Client) getFeedNews(ctx context.Context) {
+	var msg model.News
+	err := c.newsConn.ReadJSON(&msg)
+	if err != nil {
+		if ce, ok := err.(*websocket.CloseError); ok {
+			switch ce.Code {
+			case websocket.CloseNormalClosure, websocket.CloseGoingAway, websocket.CloseNoStatusReceived:
+				log.Info("normal ws connection closing.")
+			case websocket.CloseProtocolError, websocket.CloseAbnormalClosure, websocket.CloseInternalServerErr:
+				// reconnect
+				log.Warn("abnormal ws connection closing. Reconnect...")
+				if err := c.connect(ctx); err != nil {
+					log.Errorf("can't reconnect to ws server. Terminating. Err : %v", err)
+					c.Close()
+					return
+				}
+			}
+			return
+		}
+		log.Errorf("error while getting message via ws: %v", err)
+	}
+
+	c.newsOutputCh <- msg
 }
 
 func wrapWS(hostname string) string {

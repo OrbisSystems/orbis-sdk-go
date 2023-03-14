@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/OrbisSystems/orbis-sdk-go/ws"
-
 	log "github.com/sirupsen/logrus"
 
 	"github.com/OrbisSystems/orbis-sdk-go/client/account"
@@ -23,6 +21,7 @@ import (
 	"github.com/OrbisSystems/orbis-sdk-go/config"
 	"github.com/OrbisSystems/orbis-sdk-go/http"
 	sdk "github.com/OrbisSystems/orbis-sdk-go/interface"
+	"github.com/OrbisSystems/orbis-sdk-go/ws"
 )
 
 var logLevelMap = map[config.Level]log.Level{
@@ -53,7 +52,7 @@ type Client struct {
 }
 
 func NewSDK(cfg config.Config, auth sdk.Auth) *Client {
-	log.SetLevel(logLevelMap[cfg.LogLevel])
+	log.SetLevel(getLogLevel(cfg.LogLevel))
 	log.SetFormatter(&log.JSONFormatter{})
 	log.SetOutput(os.Stderr)
 
@@ -77,6 +76,17 @@ func NewSDK(cfg config.Config, auth sdk.Auth) *Client {
 	}
 }
 
+func (c *Client) Close() error {
+	return c.WS.Close()
+}
+
 func wrapHTTPS(hostname string) string {
 	return fmt.Sprintf("https://%s", hostname)
+}
+
+func getLogLevel(lvl config.Level) log.Level {
+	if v, ok := logLevelMap[lvl]; ok {
+		return v
+	}
+	return log.InfoLevel
 }
