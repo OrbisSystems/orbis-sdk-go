@@ -120,5 +120,5 @@ func (c *Client) getFeedNews(ctx context.Context) {
 }
 
 func wrapWS(hostname string) string {
-	return fmt.Sprintf("ws://%s", hostname)
+	return fmt.Sprintf("wss://%s", hostname)
 }
