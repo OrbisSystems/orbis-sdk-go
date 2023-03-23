@@ -76,6 +76,30 @@ func NewSDK(cfg config.Config, auth sdk.Auth) *Client {
 	}
 }
 
+func NewSDKWithHTTPClient(cfg config.Config, auth sdk.Auth, httpClient sdk.HTTPClient) *Client {
+	log.SetLevel(getLogLevel(cfg.LogLevel))
+	log.SetFormatter(&log.JSONFormatter{})
+	log.SetOutput(os.Stderr)
+
+	httpsURL := wrapHTTPS(cfg.Host)
+
+	return &Client{
+		Account:      account.New(httpsURL, auth, httpClient),
+		News:         news.New(httpsURL, auth, httpClient),
+		Logos:        logos.New(httpsURL, auth, httpClient),
+		Passport:     passport.New(httpsURL, auth, httpClient),
+		TipRank:      tiprank.New(httpsURL, auth, httpClient),
+		Quote:        quotes.New(httpsURL, auth, httpClient),
+		Funds:        funds.New(httpsURL, auth, httpClient),
+		Research:     research.New(httpsURL, auth, httpClient),
+		IPO:          ipo.New(httpsURL, auth, httpClient),
+		WorldMarket:  market.New(httpsURL, auth, httpClient),
+		MarketDates:  dates.New(httpsURL, auth, httpClient),
+		OptionGreeks: og.New(httpsURL, auth, httpClient),
+		WS:           ws.New(cfg, auth),
+	}
+}
+
 func (c *Client) Close() error {
 	return c.WS.Close()
 }

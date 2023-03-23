@@ -11,6 +11,7 @@ import (
 
 	sdk "github.com/OrbisSystems/orbis-sdk-go/interface"
 	"github.com/OrbisSystems/orbis-sdk-go/model"
+	"github.com/OrbisSystems/orbis-sdk-go/utils"
 )
 
 type MarketDates struct {
@@ -42,7 +43,7 @@ func (m *MarketDates) GetMarketDatesHistory(ctx context.Context, req model.GetMa
 	}
 
 	var resp model.GetMarketDatesResponse
-	err = m.cli.UnmarshalAndCheckOk(&resp, r)
+	err = utils.UnmarshalAndCheckOk(&resp, r)
 	if err != nil {
 		return model.GetMarketDatesResponse{}, err
 	}
@@ -59,7 +60,7 @@ func (m *MarketDates) GetTodayMarketHours(ctx context.Context, market string) (m
 	}
 
 	var resp model.GetMarketHoursResponse
-	err = m.cli.UnmarshalAndCheckOk(&resp, r)
+	err = utils.UnmarshalAndCheckOk(&resp, r)
 	if err != nil {
 		return model.GetMarketHoursResponse{}, err
 	}

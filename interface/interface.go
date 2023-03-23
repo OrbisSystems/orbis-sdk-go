@@ -16,13 +16,6 @@ type Storage interface {
 type HTTPClient interface {
 	Get(ctx context.Context, url string, headers http.Header) (*http.Response, error)
 	Post(ctx context.Context, url string, body io.Reader, headers http.Header) (*http.Response, error)
-
-	Wrapper
-}
-
-type Wrapper interface {
-	GetBodyAndCheckOK(r *http.Response) (io.ReadCloser, error)
-	UnmarshalAndCheckOk(v interface{}, r *http.Response) error
 }
 
 type Auth interface {

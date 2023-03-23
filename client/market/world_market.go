@@ -9,6 +9,7 @@ import (
 
 	sdk "github.com/OrbisSystems/orbis-sdk-go/interface"
 	"github.com/OrbisSystems/orbis-sdk-go/model"
+	"github.com/OrbisSystems/orbis-sdk-go/utils"
 )
 
 type WorldMarket struct {
@@ -35,7 +36,7 @@ func (wm *WorldMarket) GetContinents(ctx context.Context, limit, offset int) ([]
 	}
 
 	var resp []model.Continent
-	err = wm.cli.UnmarshalAndCheckOk(&resp, r)
+	err = utils.UnmarshalAndCheckOk(&resp, r)
 	if err != nil {
 		return nil, err
 	}
@@ -52,7 +53,7 @@ func (wm *WorldMarket) GetRegions(ctx context.Context, limit, offset int) ([]mod
 	}
 
 	var resp []model.Region
-	err = wm.cli.UnmarshalAndCheckOk(&resp, r)
+	err = utils.UnmarshalAndCheckOk(&resp, r)
 	if err != nil {
 		return nil, err
 	}
@@ -69,7 +70,7 @@ func (wm *WorldMarket) GetCountryCodes(ctx context.Context, limit, offset int) (
 	}
 
 	var resp []model.CountryCode
-	err = wm.cli.UnmarshalAndCheckOk(&resp, r)
+	err = utils.UnmarshalAndCheckOk(&resp, r)
 	if err != nil {
 		return nil, err
 	}
@@ -86,7 +87,7 @@ func (wm *WorldMarket) GetGlobalIndexes(ctx context.Context, limit, offset int, 
 	}
 
 	var resp []model.GlobalIndexFull
-	err = wm.cli.UnmarshalAndCheckOk(&resp, r)
+	err = utils.UnmarshalAndCheckOk(&resp, r)
 	if err != nil {
 		return nil, err
 	}

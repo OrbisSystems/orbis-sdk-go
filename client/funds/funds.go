@@ -11,6 +11,7 @@ import (
 
 	sdk "github.com/OrbisSystems/orbis-sdk-go/interface"
 	"github.com/OrbisSystems/orbis-sdk-go/model"
+	"github.com/OrbisSystems/orbis-sdk-go/utils"
 )
 
 // Funds service returns different funds info such as screener, top, etc.
@@ -38,7 +39,7 @@ func (f *Funds) GetFundDetails(ctx context.Context, symbol string) (model.GetFun
 	}
 
 	var resp model.GetFundDetailsResponse
-	err = f.cli.UnmarshalAndCheckOk(&resp, r)
+	err = utils.UnmarshalAndCheckOk(&resp, r)
 	if err != nil {
 		return model.GetFundDetailsResponse{}, err
 	}
@@ -55,7 +56,7 @@ func (f *Funds) GetFundScreenerFilters(ctx context.Context) (model.GetFundScreen
 	}
 
 	var resp model.GetFundScreenerFiltersResponse
-	err = f.cli.UnmarshalAndCheckOk(&resp, r)
+	err = utils.UnmarshalAndCheckOk(&resp, r)
 	if err != nil {
 		return model.GetFundScreenerFiltersResponse{}, err
 	}
@@ -77,7 +78,7 @@ func (f *Funds) ScreenFunds(ctx context.Context, req model.FundScreenerRequest) 
 	}
 
 	var resp model.FundScreenerResponse
-	err = f.cli.UnmarshalAndCheckOk(&resp, r)
+	err = utils.UnmarshalAndCheckOk(&resp, r)
 	if err != nil {
 		return model.FundScreenerResponse{}, err
 	}
@@ -99,7 +100,7 @@ func (f *Funds) ScreenSectorFunds(ctx context.Context, req model.FundSectorScree
 	}
 
 	var resp model.FundScreenerResponse
-	err = f.cli.UnmarshalAndCheckOk(&resp, r)
+	err = utils.UnmarshalAndCheckOk(&resp, r)
 	if err != nil {
 		return model.FundScreenerResponse{}, err
 	}
@@ -121,7 +122,7 @@ func (f *Funds) GetTopFunds(ctx context.Context, req model.GetTopFundsRequest) (
 	}
 
 	var resp []string
-	err = f.cli.UnmarshalAndCheckOk(&resp, r)
+	err = utils.UnmarshalAndCheckOk(&resp, r)
 	if err != nil {
 		return nil, err
 	}

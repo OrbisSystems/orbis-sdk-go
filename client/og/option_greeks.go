@@ -10,6 +10,7 @@ import (
 
 	sdk "github.com/OrbisSystems/orbis-sdk-go/interface"
 	"github.com/OrbisSystems/orbis-sdk-go/model"
+	"github.com/OrbisSystems/orbis-sdk-go/utils"
 )
 
 type OptionGreeks struct {
@@ -41,7 +42,7 @@ func (og *OptionGreeks) CalculateParams(ctx context.Context, req model.Calculate
 	}
 
 	var resp model.CalculateParamsResponse
-	err = og.cli.UnmarshalAndCheckOk(&resp, r)
+	err = utils.UnmarshalAndCheckOk(&resp, r)
 	if err != nil {
 		return model.CalculateParamsResponse{}, err
 	}
@@ -63,7 +64,7 @@ func (og *OptionGreeks) CalculateMatrix(ctx context.Context, req model.Calculate
 	}
 
 	var resp model.CalculateMatrixParamsRequest
-	err = og.cli.UnmarshalAndCheckOk(&resp, r)
+	err = utils.UnmarshalAndCheckOk(&resp, r)
 	if err != nil {
 		return model.CalculateMatrixParamsRequest{}, err
 	}

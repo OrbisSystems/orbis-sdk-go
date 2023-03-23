@@ -10,6 +10,7 @@ import (
 
 	sdk "github.com/OrbisSystems/orbis-sdk-go/interface"
 	"github.com/OrbisSystems/orbis-sdk-go/model"
+	"github.com/OrbisSystems/orbis-sdk-go/utils"
 )
 
 // News service provides API for getting news.
@@ -43,7 +44,7 @@ func (c *News) GetByFilter(ctx context.Context, req model.NewsFilterRequest) (mo
 	}
 
 	var resp model.NewsResponse
-	err = c.cli.UnmarshalAndCheckOk(&resp, r)
+	err = utils.UnmarshalAndCheckOk(&resp, r)
 	if err != nil {
 		return model.NewsResponse{}, err
 	}
@@ -66,7 +67,7 @@ func (c *News) GetByID(ctx context.Context, req model.NewsRequest) (model.News, 
 	}
 
 	var resp model.News
-	err = c.cli.UnmarshalAndCheckOk(&resp, r)
+	err = utils.UnmarshalAndCheckOk(&resp, r)
 	if err != nil {
 		return model.News{}, err
 	}
@@ -89,7 +90,7 @@ func (c *News) GetTagsForSymbol(ctx context.Context, req model.SymbolTagsRequest
 	}
 
 	var resp []string
-	err = c.cli.UnmarshalAndCheckOk(&resp, r)
+	err = utils.UnmarshalAndCheckOk(&resp, r)
 	if err != nil {
 		return nil, err
 	}
@@ -112,7 +113,7 @@ func (c *News) GetChannelsForSymbol(ctx context.Context, req model.SymbolChannel
 	}
 
 	var resp []string
-	err = c.cli.UnmarshalAndCheckOk(&resp, r)
+	err = utils.UnmarshalAndCheckOk(&resp, r)
 	if err != nil {
 		return nil, err
 	}
@@ -130,7 +131,7 @@ func (c *News) GetAvailableAuthors(ctx context.Context) ([]string, error) {
 	}
 
 	var resp []string
-	err = c.cli.UnmarshalAndCheckOk(&resp, r)
+	err = utils.UnmarshalAndCheckOk(&resp, r)
 	if err != nil {
 		return nil, err
 	}
@@ -148,7 +149,7 @@ func (c *News) GetAvailableChannels(ctx context.Context) ([]string, error) {
 	}
 
 	var resp []string
-	err = c.cli.UnmarshalAndCheckOk(&resp, r)
+	err = utils.UnmarshalAndCheckOk(&resp, r)
 	if err != nil {
 		return nil, err
 	}
@@ -166,7 +167,7 @@ func (c *News) GetAvailableSymbols(ctx context.Context) ([]string, error) {
 	}
 
 	var resp []string
-	err = c.cli.UnmarshalAndCheckOk(&resp, r)
+	err = utils.UnmarshalAndCheckOk(&resp, r)
 	if err != nil {
 		return nil, err
 	}
@@ -184,7 +185,7 @@ func (c *News) GetAvailableTags(ctx context.Context) ([]string, error) {
 	}
 
 	var resp []string
-	err = c.cli.UnmarshalAndCheckOk(&resp, r)
+	err = utils.UnmarshalAndCheckOk(&resp, r)
 	if err != nil {
 		return nil, err
 	}

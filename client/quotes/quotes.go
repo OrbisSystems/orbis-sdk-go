@@ -11,6 +11,7 @@ import (
 
 	sdk "github.com/OrbisSystems/orbis-sdk-go/interface"
 	"github.com/OrbisSystems/orbis-sdk-go/model"
+	"github.com/OrbisSystems/orbis-sdk-go/utils"
 )
 
 // Quotes service returns quotes data.
@@ -38,7 +39,7 @@ func (q *Quotes) GetQuotesEquityData(ctx context.Context, symbols, quoteType str
 	}
 
 	var resp []model.QuoteEquityDataResponse
-	err = q.cli.UnmarshalAndCheckOk(&resp, r)
+	err = utils.UnmarshalAndCheckOk(&resp, r)
 	if err != nil {
 		return nil, err
 	}
@@ -60,7 +61,7 @@ func (q *Quotes) GetQuoteHistory(ctx context.Context, req model.QuoteHistoryRequ
 	}
 
 	var resp model.QuoteHistoryResponse
-	err = q.cli.UnmarshalAndCheckOk(&resp, r)
+	err = utils.UnmarshalAndCheckOk(&resp, r)
 	if err != nil {
 		return model.QuoteHistoryResponse{}, err
 	}
@@ -82,7 +83,7 @@ func (q *Quotes) GetIntradayQuotes(ctx context.Context, req model.IntradayReques
 	}
 
 	var resp []model.IntradayResponse
-	err = q.cli.UnmarshalAndCheckOk(&resp, r)
+	err = utils.UnmarshalAndCheckOk(&resp, r)
 	if err != nil {
 		return nil, err
 	}

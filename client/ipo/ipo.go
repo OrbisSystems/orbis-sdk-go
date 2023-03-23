@@ -11,6 +11,7 @@ import (
 
 	sdk "github.com/OrbisSystems/orbis-sdk-go/interface"
 	"github.com/OrbisSystems/orbis-sdk-go/model"
+	"github.com/OrbisSystems/orbis-sdk-go/utils"
 )
 
 type IPO struct {
@@ -37,7 +38,7 @@ func (i *IPO) GetUpcomingIPOs(ctx context.Context, limit, offset int) (model.IPO
 	}
 
 	var resp model.IPOResponse
-	err = i.cli.UnmarshalAndCheckOk(&resp, r)
+	err = utils.UnmarshalAndCheckOk(&resp, r)
 	if err != nil {
 		return model.IPOResponse{}, err
 	}
@@ -59,7 +60,7 @@ func (i *IPO) GetRecentIPOs(ctx context.Context, req model.RecentIPORequest) (mo
 	}
 
 	var resp model.IPOResponse
-	err = i.cli.UnmarshalAndCheckOk(&resp, r)
+	err = utils.UnmarshalAndCheckOk(&resp, r)
 	if err != nil {
 		return model.IPOResponse{}, err
 	}

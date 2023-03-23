@@ -12,6 +12,7 @@ import (
 
 	sdk "github.com/OrbisSystems/orbis-sdk-go/interface"
 	"github.com/OrbisSystems/orbis-sdk-go/model"
+	"github.com/OrbisSystems/orbis-sdk-go/utils"
 )
 
 var (
@@ -108,7 +109,7 @@ func (a *Account) LoginByEmail(ctx context.Context, req model.LoginByEmailReques
 	}
 
 	var resp model.LoginByEmailResponse
-	err = a.cli.UnmarshalAndCheckOk(&resp, r)
+	err = utils.UnmarshalAndCheckOk(&resp, r)
 	if err != nil {
 		return err
 	}
@@ -134,7 +135,7 @@ func (a *Account) LoginByAPIKey(ctx context.Context, req model.LoginByAPIKeyRequ
 	}
 
 	var resp model.LoginByAPIKeyResponse
-	err = a.cli.UnmarshalAndCheckOk(&resp, r)
+	err = utils.UnmarshalAndCheckOk(&resp, r)
 	if err != nil {
 		return err
 	}
@@ -159,7 +160,7 @@ func (a *Account) CreateAPIKey(ctx context.Context, req model.CreateAPIKeyReques
 	}
 
 	var resp model.CreateAPIKeyResponse
-	err = a.cli.UnmarshalAndCheckOk(&resp, r)
+	err = utils.UnmarshalAndCheckOk(&resp, r)
 
 	return resp, err
 }
@@ -191,7 +192,7 @@ func (a *Account) RefreshToken(ctx context.Context) error {
 	}
 
 	var resp model.LoginByEmailResponse
-	err = a.cli.UnmarshalAndCheckOk(&resp, r)
+	err = utils.UnmarshalAndCheckOk(&resp, r)
 
 	if err != nil {
 		return err

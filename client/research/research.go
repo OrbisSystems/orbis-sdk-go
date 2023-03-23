@@ -11,6 +11,7 @@ import (
 
 	sdk "github.com/OrbisSystems/orbis-sdk-go/interface"
 	"github.com/OrbisSystems/orbis-sdk-go/model"
+	"github.com/OrbisSystems/orbis-sdk-go/utils"
 )
 
 type Research struct {
@@ -37,7 +38,7 @@ func (s *Research) GetCompanyProfile(ctx context.Context, symbol string) (model.
 	}
 
 	var resp model.CompanyProfile
-	err = s.cli.UnmarshalAndCheckOk(&resp, r)
+	err = utils.UnmarshalAndCheckOk(&resp, r)
 	if err != nil {
 		return model.CompanyProfile{}, err
 	}
@@ -54,7 +55,7 @@ func (s *Research) GetCombinedProfile(ctx context.Context, symbol string) (model
 	}
 
 	var resp model.CompanyProfile
-	err = s.cli.UnmarshalAndCheckOk(&resp, r)
+	err = utils.UnmarshalAndCheckOk(&resp, r)
 	if err != nil {
 		return model.CompanyProfile{}, err
 	}
@@ -76,7 +77,7 @@ func (s *Research) GetOwnershipsBySymbol(ctx context.Context, req model.GetOwner
 	}
 
 	var resp model.GetOwnershipsBySymbolResponse
-	err = s.cli.UnmarshalAndCheckOk(&resp, r)
+	err = utils.UnmarshalAndCheckOk(&resp, r)
 	if err != nil {
 		return model.GetOwnershipsBySymbolResponse{}, err
 	}
@@ -98,7 +99,7 @@ func (s *Research) GetOwnershipsByID(ctx context.Context, req model.GetOwnership
 	}
 
 	var resp model.GetOwnershipsBySymbolResponse
-	err = s.cli.UnmarshalAndCheckOk(&resp, r)
+	err = utils.UnmarshalAndCheckOk(&resp, r)
 	if err != nil {
 		return model.GetOwnershipsBySymbolResponse{}, err
 	}
@@ -120,7 +121,7 @@ func (s *Research) GetEarningReleases(ctx context.Context, req model.EarningRele
 	}
 
 	var resp model.EarningReleasesResponse
-	err = s.cli.UnmarshalAndCheckOk(&resp, r)
+	err = utils.UnmarshalAndCheckOk(&resp, r)
 	if err != nil {
 		return model.EarningReleasesResponse{}, err
 	}
@@ -142,7 +143,7 @@ func (s *Research) GetSymbolFundamentals(ctx context.Context, req model.EarningR
 	}
 
 	var resp model.GetSymbolFundamentalsResponse
-	err = s.cli.UnmarshalAndCheckOk(&resp, r)
+	err = utils.UnmarshalAndCheckOk(&resp, r)
 	if err != nil {
 		return model.GetSymbolFundamentalsResponse{}, err
 	}
@@ -164,7 +165,7 @@ func (s *Research) Screener(ctx context.Context, req model.StockScreenerRequest)
 	}
 
 	var resp model.StockScreenerResponse
-	err = s.cli.UnmarshalAndCheckOk(&resp, r)
+	err = utils.UnmarshalAndCheckOk(&resp, r)
 	if err != nil {
 		return model.StockScreenerResponse{}, err
 	}
@@ -181,7 +182,7 @@ func (s *Research) StockMarketHeatmap(ctx context.Context, heatmapName, quoteTyp
 	}
 
 	var resp model.StockMarketHeatmapResponse
-	err = s.cli.UnmarshalAndCheckOk(&resp, r)
+	err = utils.UnmarshalAndCheckOk(&resp, r)
 	if err != nil {
 		return model.StockMarketHeatmapResponse{}, err
 	}
@@ -203,7 +204,7 @@ func (s *Research) GetIndustriesPerformance(ctx context.Context, req model.GetIn
 	}
 
 	var resp model.GetIndustriesPerformanceResponse
-	err = s.cli.UnmarshalAndCheckOk(&resp, r)
+	err = utils.UnmarshalAndCheckOk(&resp, r)
 	if err != nil {
 		return model.GetIndustriesPerformanceResponse{}, err
 	}
@@ -225,7 +226,7 @@ func (s *Research) GetMomentumRatioGraph(ctx context.Context, req model.Momentum
 	}
 
 	var resp model.MomentumRatioGraphResponse
-	err = s.cli.UnmarshalAndCheckOk(&resp, r)
+	err = utils.UnmarshalAndCheckOk(&resp, r)
 	if err != nil {
 		return model.MomentumRatioGraphResponse{}, err
 	}
@@ -247,7 +248,7 @@ func (s *Research) GetSeasonality(ctx context.Context, req model.SeasonalityRequ
 	}
 
 	var resp model.SeasonalityResponse
-	err = s.cli.UnmarshalAndCheckOk(&resp, r)
+	err = utils.UnmarshalAndCheckOk(&resp, r)
 	if err != nil {
 		return model.SeasonalityResponse{}, err
 	}

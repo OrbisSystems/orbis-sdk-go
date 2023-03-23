@@ -12,6 +12,7 @@ import (
 
 	sdk "github.com/OrbisSystems/orbis-sdk-go/interface"
 	"github.com/OrbisSystems/orbis-sdk-go/model"
+	"github.com/OrbisSystems/orbis-sdk-go/utils"
 )
 
 // Logos service provides API for getting different information about symbol's logo etc.
@@ -40,7 +41,7 @@ func (l *Logos) SymbolLogos(ctx context.Context, symbol string) (model.SymbolLog
 	}
 
 	var resp model.SymbolLogosResponse
-	err = l.cli.UnmarshalAndCheckOk(&resp, r)
+	err = utils.UnmarshalAndCheckOk(&resp, r)
 	if err != nil {
 		return model.SymbolLogosResponse{}, err
 	}
@@ -58,7 +59,7 @@ func (l *Logos) SocialSymbolLogos(ctx context.Context, symbol string) (model.Sym
 	}
 
 	var resp model.SymbolSocialsResponse
-	err = l.cli.UnmarshalAndCheckOk(&resp, r)
+	err = utils.UnmarshalAndCheckOk(&resp, r)
 	if err != nil {
 		return model.SymbolSocialsResponse{}, err
 	}
@@ -75,7 +76,7 @@ func (l *Logos) DirectSymbolLogo(ctx context.Context, symbol string) (io.ReadClo
 		return nil, errors.Wrap(err, "couldn't get direct symbol logos")
 	}
 
-	return l.cli.GetBodyAndCheckOK(r)
+	return utils.GetBodyAndCheckOK(r)
 }
 
 // CryptoSymbolLogo returns crypto logos info for symbol
@@ -88,7 +89,7 @@ func (l *Logos) CryptoSymbolLogo(ctx context.Context, symbol string) (model.Symb
 	}
 
 	var resp model.SymbolLogosResponse
-	err = l.cli.UnmarshalAndCheckOk(&resp, r)
+	err = utils.UnmarshalAndCheckOk(&resp, r)
 	if err != nil {
 		return model.SymbolLogosResponse{}, err
 	}
@@ -105,7 +106,7 @@ func (l *Logos) DirectCryptoSymbolLogo(ctx context.Context, symbol string) (io.R
 		return nil, errors.Wrap(err, "couldn't get direct crypto symbol logos")
 	}
 
-	return l.cli.GetBodyAndCheckOK(r)
+	return utils.GetBodyAndCheckOK(r)
 }
 
 // MultiSymbolLogos returns logos details for many symbols.
@@ -123,7 +124,7 @@ func (l *Logos) MultiSymbolLogos(ctx context.Context, req model.MultipleSymbolLo
 	}
 
 	var resp []model.SymbolLogosResponse
-	err = l.cli.UnmarshalAndCheckOk(&resp, r)
+	err = utils.UnmarshalAndCheckOk(&resp, r)
 	if err != nil {
 		return nil, err
 	}
@@ -145,7 +146,7 @@ func (l *Logos) ConvertedSymbolLogo(ctx context.Context, req model.SymbolLogoCon
 		return nil, errors.Wrap(err, "couldn't get converted symbol logo")
 	}
 
-	return l.cli.GetBodyAndCheckOK(r)
+	return utils.GetBodyAndCheckOK(r)
 }
 
 // MultipleCryptoSymbolLogo returns logos details for many crypto symbols.
@@ -163,7 +164,7 @@ func (l *Logos) MultipleCryptoSymbolLogo(ctx context.Context, req model.Multiple
 	}
 
 	var resp []model.SymbolLogosResponse
-	err = l.cli.UnmarshalAndCheckOk(&resp, r)
+	err = utils.UnmarshalAndCheckOk(&resp, r)
 	if err != nil {
 		return nil, err
 	}
@@ -185,5 +186,5 @@ func (l *Logos) ConvertedCryptoSymbolLogo(ctx context.Context, req model.SymbolL
 		return nil, errors.Wrap(err, "couldn't get converted crypto symbol logo")
 	}
 
-	return l.cli.GetBodyAndCheckOK(r)
+	return utils.GetBodyAndCheckOK(r)
 }

@@ -10,6 +10,7 @@ import (
 
 	sdk "github.com/OrbisSystems/orbis-sdk-go/interface"
 	"github.com/OrbisSystems/orbis-sdk-go/model"
+	"github.com/OrbisSystems/orbis-sdk-go/utils"
 )
 
 type Passport struct {
@@ -41,7 +42,7 @@ func (p *Passport) Articles(ctx context.Context, req model.ArticlesRequest) ([]m
 	}
 
 	var resp []model.Article
-	err = p.cli.UnmarshalAndCheckOk(&resp, r)
+	err = utils.UnmarshalAndCheckOk(&resp, r)
 	if err != nil {
 		return nil, err
 	}
@@ -63,7 +64,7 @@ func (p *Passport) Newsfeed(ctx context.Context, req model.NewsfeedRequest) ([]m
 	}
 
 	var resp []model.Newsfeed
-	err = p.cli.UnmarshalAndCheckOk(&resp, r)
+	err = utils.UnmarshalAndCheckOk(&resp, r)
 	if err != nil {
 		return nil, err
 	}
@@ -85,7 +86,7 @@ func (p *Passport) ArticleByID(ctx context.Context, req model.ArticleByIDRequest
 	}
 
 	var resp model.Article
-	err = p.cli.UnmarshalAndCheckOk(&resp, r)
+	err = utils.UnmarshalAndCheckOk(&resp, r)
 	if err != nil {
 		return model.Article{}, err
 	}
@@ -107,7 +108,7 @@ func (p *Passport) SearchArticle(ctx context.Context, req model.SearchArticleReq
 	}
 
 	var resp []model.Article
-	err = p.cli.UnmarshalAndCheckOk(&resp, r)
+	err = utils.UnmarshalAndCheckOk(&resp, r)
 	if err != nil {
 		return nil, err
 	}
@@ -129,7 +130,7 @@ func (p *Passport) AuthorProfile(ctx context.Context, req model.AuthorProfileReq
 	}
 
 	var resp []model.AuthorProfileResponse
-	err = p.cli.UnmarshalAndCheckOk(&resp, r)
+	err = utils.UnmarshalAndCheckOk(&resp, r)
 	if err != nil {
 		return nil, err
 	}
@@ -151,7 +152,7 @@ func (p *Passport) MostPopularTags(ctx context.Context, req model.MostPopularTag
 	}
 
 	var resp []model.TagShortInfo
-	err = p.cli.UnmarshalAndCheckOk(&resp, r)
+	err = utils.UnmarshalAndCheckOk(&resp, r)
 	if err != nil {
 		return nil, err
 	}

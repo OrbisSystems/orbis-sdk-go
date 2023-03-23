@@ -11,6 +11,7 @@ import (
 
 	sdk "github.com/OrbisSystems/orbis-sdk-go/interface"
 	"github.com/OrbisSystems/orbis-sdk-go/model"
+	"github.com/OrbisSystems/orbis-sdk-go/utils"
 )
 
 type TipRank struct {
@@ -42,7 +43,7 @@ func (t *TipRank) AnalystConsensus(ctx context.Context, req model.AnalystConsens
 	}
 
 	var resp []model.AnalystConsensusResponse
-	err = t.cli.UnmarshalAndCheckOk(&resp, r)
+	err = utils.UnmarshalAndCheckOk(&resp, r)
 	if err != nil {
 		return nil, err
 	}
@@ -64,7 +65,7 @@ func (t *TipRank) LatestAnalystRatingsOnStock(ctx context.Context, req model.Lat
 	}
 
 	var resp []model.LatestAnalystRatingsOnStockResponse
-	err = t.cli.UnmarshalAndCheckOk(&resp, r)
+	err = utils.UnmarshalAndCheckOk(&resp, r)
 	if err != nil {
 		return nil, err
 	}
@@ -86,7 +87,7 @@ func (t *TipRank) LiveFeed(ctx context.Context, req model.LiveFeedRequest) ([]mo
 	}
 
 	var resp []model.LiveFeedResponse
-	err = t.cli.UnmarshalAndCheckOk(&resp, r)
+	err = utils.UnmarshalAndCheckOk(&resp, r)
 	if err != nil {
 		return nil, err
 	}
@@ -108,7 +109,7 @@ func (t *TipRank) TrendingStocks(ctx context.Context, req model.TrendingStocksRe
 	}
 
 	var resp []model.TrendingStocksResponse
-	err = t.cli.UnmarshalAndCheckOk(&resp, r)
+	err = utils.UnmarshalAndCheckOk(&resp, r)
 	if err != nil {
 		return nil, err
 	}
@@ -130,7 +131,7 @@ func (t *TipRank) AnalystPortfolios(ctx context.Context, req model.PortfoliosReq
 	}
 
 	var resp []model.PortfoliosResponse
-	err = t.cli.UnmarshalAndCheckOk(&resp, r)
+	err = utils.UnmarshalAndCheckOk(&resp, r)
 	if err != nil {
 		return nil, err
 	}
@@ -147,7 +148,7 @@ func (t *TipRank) AnalystProfile(ctx context.Context, id string) (model.AnalystP
 	}
 
 	var resp model.AnalystProfileResponse
-	err = t.cli.UnmarshalAndCheckOk(&resp, r)
+	err = utils.UnmarshalAndCheckOk(&resp, r)
 	if err != nil {
 		return model.AnalystProfileResponse{}, err
 	}
@@ -164,7 +165,7 @@ func (t *TipRank) SectorConsensus(ctx context.Context) (model.SectorConsensusRes
 	}
 
 	var resp model.SectorConsensusResponse
-	err = t.cli.UnmarshalAndCheckOk(&resp, r)
+	err = utils.UnmarshalAndCheckOk(&resp, r)
 	if err != nil {
 		return model.SectorConsensusResponse{}, err
 	}
@@ -181,7 +182,7 @@ func (t *TipRank) BestPerformingExperts(ctx context.Context, num int) ([]model.B
 	}
 
 	var resp []model.BestPerformingExpertsResponse
-	err = t.cli.UnmarshalAndCheckOk(&resp, r)
+	err = utils.UnmarshalAndCheckOk(&resp, r)
 	if err != nil {
 		return nil, err
 	}
@@ -198,7 +199,7 @@ func (t *TipRank) StocksSimilarStocks(ctx context.Context, ticker string) ([]str
 	}
 
 	var resp []string
-	err = t.cli.UnmarshalAndCheckOk(&resp, r)
+	err = utils.UnmarshalAndCheckOk(&resp, r)
 	if err != nil {
 		return nil, err
 	}
@@ -215,7 +216,7 @@ func (t *TipRank) AnalystsExpertPictureStore(ctx context.Context) (model.Analyst
 	}
 
 	var resp model.AnalystsExpertPictureStoreResponse
-	err = t.cli.UnmarshalAndCheckOk(&resp, r)
+	err = utils.UnmarshalAndCheckOk(&resp, r)
 	if err != nil {
 		return model.AnalystsExpertPictureStoreResponse{}, err
 	}
@@ -232,7 +233,7 @@ func (t *TipRank) SupportedTickers(ctx context.Context) (model.SupportedTickersR
 	}
 
 	var resp model.SupportedTickersResponse
-	err = t.cli.UnmarshalAndCheckOk(&resp, r)
+	err = utils.UnmarshalAndCheckOk(&resp, r)
 	if err != nil {
 		return model.SupportedTickersResponse{}, err
 	}
@@ -249,7 +250,7 @@ func (t *TipRank) GeneralStockUpdates(ctx context.Context, utcTime, details stri
 	}
 
 	var resp model.GeneralStockUpdatesResponse
-	err = t.cli.UnmarshalAndCheckOk(&resp, r)
+	err = utils.UnmarshalAndCheckOk(&resp, r)
 	if err != nil {
 		return model.GeneralStockUpdatesResponse{}, err
 	}
@@ -266,7 +267,7 @@ func (t *TipRank) InsidersOverview(ctx context.Context, expertUID string) (model
 	}
 
 	var resp model.InsidersOverviewResponse
-	err = t.cli.UnmarshalAndCheckOk(&resp, r)
+	err = utils.UnmarshalAndCheckOk(&resp, r)
 	if err != nil {
 		return model.InsidersOverviewResponse{}, err
 	}
@@ -283,7 +284,7 @@ func (t *TipRank) InsidersBestPerformingExperts(ctx context.Context, num int) ([
 	}
 
 	var resp []model.InsidersBestPerformingExpertsResponse
-	err = t.cli.UnmarshalAndCheckOk(&resp, r)
+	err = utils.UnmarshalAndCheckOk(&resp, r)
 	if err != nil {
 		return nil, err
 	}
@@ -300,7 +301,7 @@ func (t *TipRank) InsidersLiveFeed(ctx context.Context, num int, sort string) ([
 	}
 
 	var resp []model.InsidersLiveFeedResponse
-	err = t.cli.UnmarshalAndCheckOk(&resp, r)
+	err = utils.UnmarshalAndCheckOk(&resp, r)
 	if err != nil {
 		return nil, err
 	}
@@ -317,7 +318,7 @@ func (t *TipRank) HedgeFundsBestPerformingExperts(ctx context.Context, num int) 
 	}
 
 	var resp []model.HedgeFundsBestPerformingExpertsResponse
-	err = t.cli.UnmarshalAndCheckOk(&resp, r)
+	err = utils.UnmarshalAndCheckOk(&resp, r)
 	if err != nil {
 		return nil, err
 	}
