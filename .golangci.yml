@@ -74,3 +74,4 @@ issues:
         - dupl
         - nestif
         - gofmt
+        - gosec

@@ -60,7 +60,7 @@ func (a *Account) watchTokenRefresh() {
 
 		var refreshDuration time.Duration
 
-		tkn, err := a.Auth.GetToken(context.Background())
+		tkn, err := a.GetToken(context.Background())
 
 		// if no error from storage
 		// and token is presented in storage
@@ -169,8 +169,8 @@ func (a *Account) RefreshToken(ctx context.Context) error {
 	log.Trace("RefreshToken called")
 
 	// marking this flag that we are refreshing the token
-	a.setRefreshingState(true)
-	defer a.setRefreshingState(false)
+	a.SetTokenRefreshingState(true)
+	defer a.SetTokenRefreshingState(false)
 
 	tkn, err := a.GetToken(ctx)
 	if err != nil {
@@ -218,8 +218,4 @@ func (a *Account) processNewToken(tkn model.Token) {
 	go func() {
 		a.resetTokenRefreshCh <- tkn.AccessExpiresAt
 	}()
-}
-
-func (a *Account) setRefreshingState(state bool) {
-	a.Auth.SetTokenRefreshingState(state)
 }
