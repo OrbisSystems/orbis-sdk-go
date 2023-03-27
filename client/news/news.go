@@ -15,17 +15,14 @@ import (
 
 // News service provides API for getting news.
 type News struct {
-	sdk.Auth
-
 	url string
 	cli sdk.HTTPClient
 }
 
-func New(url string, auth sdk.Auth, cli sdk.HTTPClient) *News {
+func New(url string, cli sdk.HTTPClient) *News {
 	return &News{
-		Auth: auth,
-		url:  url,
-		cli:  cli,
+		url: url,
+		cli: cli,
 	}
 }
 

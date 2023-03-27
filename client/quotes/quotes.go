@@ -16,17 +16,14 @@ import (
 
 // Quotes service returns quotes data.
 type Quotes struct {
-	sdk.Auth
-
 	url string
 	cli sdk.HTTPClient
 }
 
-func New(url string, auth sdk.Auth, cli sdk.HTTPClient) *Quotes {
+func New(url string, cli sdk.HTTPClient) *Quotes {
 	return &Quotes{
-		Auth: auth,
-		url:  url,
-		cli:  cli,
+		url: url,
+		cli: cli,
 	}
 }
 

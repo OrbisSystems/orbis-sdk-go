@@ -18,7 +18,7 @@ import (
 )
 
 func TestNew(t *testing.T) {
-	assert.NotNil(t, New("", nil, nil))
+	assert.NotNil(t, New("", nil))
 }
 
 func TestMarketDates_GetMarketDatesHistory(t *testing.T) {

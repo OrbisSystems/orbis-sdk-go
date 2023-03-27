@@ -59,21 +59,7 @@ func NewSDK(cfg config.Config, auth sdk.Auth) *Client {
 	httpsURL := wrapHTTPS(cfg.Host)
 	httpClient := http.New(auth)
 
-	return &Client{
-		Account:      account.New(httpsURL, auth, httpClient),
-		News:         news.New(httpsURL, auth, httpClient),
-		Logos:        logos.New(httpsURL, auth, httpClient),
-		Passport:     passport.New(httpsURL, auth, httpClient),
-		TipRank:      tiprank.New(httpsURL, auth, httpClient),
-		Quote:        quotes.New(httpsURL, auth, httpClient),
-		Funds:        funds.New(httpsURL, auth, httpClient),
-		Research:     research.New(httpsURL, auth, httpClient),
-		IPO:          ipo.New(httpsURL, auth, httpClient),
-		WorldMarket:  market.New(httpsURL, auth, httpClient),
-		MarketDates:  dates.New(httpsURL, auth, httpClient),
-		OptionGreeks: og.New(httpsURL, auth, httpClient),
-		WS:           ws.New(cfg, auth),
-	}
+	return newCli(cfg, httpsURL, auth, httpClient)
 }
 
 func NewSDKWithHTTPClient(cfg config.Config, auth sdk.Auth, httpClient sdk.HTTPClient) *Client {
@@ -83,19 +69,23 @@ func NewSDKWithHTTPClient(cfg config.Config, auth sdk.Auth, httpClient sdk.HTTPC
 
 	httpsURL := wrapHTTPS(cfg.Host)
 
+	return newCli(cfg, httpsURL, auth, httpClient)
+}
+
+func newCli(cfg config.Config, httpsURL string, auth sdk.Auth, httpClient sdk.HTTPClient) *Client {
 	return &Client{
 		Account:      account.New(httpsURL, auth, httpClient),
-		News:         news.New(httpsURL, auth, httpClient),
-		Logos:        logos.New(httpsURL, auth, httpClient),
-		Passport:     passport.New(httpsURL, auth, httpClient),
-		TipRank:      tiprank.New(httpsURL, auth, httpClient),
-		Quote:        quotes.New(httpsURL, auth, httpClient),
-		Funds:        funds.New(httpsURL, auth, httpClient),
-		Research:     research.New(httpsURL, auth, httpClient),
-		IPO:          ipo.New(httpsURL, auth, httpClient),
-		WorldMarket:  market.New(httpsURL, auth, httpClient),
-		MarketDates:  dates.New(httpsURL, auth, httpClient),
-		OptionGreeks: og.New(httpsURL, auth, httpClient),
+		News:         news.New(httpsURL, httpClient),
+		Logos:        logos.New(httpsURL, httpClient),
+		Passport:     passport.New(httpsURL, httpClient),
+		TipRank:      tiprank.New(httpsURL, httpClient),
+		Quote:        quotes.New(httpsURL, httpClient),
+		Funds:        funds.New(httpsURL, httpClient),
+		Research:     research.New(httpsURL, httpClient),
+		IPO:          ipo.New(httpsURL, httpClient),
+		WorldMarket:  market.New(httpsURL, httpClient),
+		MarketDates:  dates.New(httpsURL, httpClient),
+		OptionGreeks: og.New(httpsURL, httpClient),
 		WS:           ws.New(cfg, auth),
 	}
 }

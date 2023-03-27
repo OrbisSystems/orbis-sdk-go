@@ -15,17 +15,14 @@ import (
 )
 
 type MarketDates struct {
-	sdk.Auth
-
 	url string
 	cli sdk.HTTPClient
 }
 
-func New(url string, auth sdk.Auth, cli sdk.HTTPClient) *MarketDates {
+func New(url string, cli sdk.HTTPClient) *MarketDates {
 	return &MarketDates{
-		Auth: auth,
-		url:  url,
-		cli:  cli,
+		url: url,
+		cli: cli,
 	}
 }
 

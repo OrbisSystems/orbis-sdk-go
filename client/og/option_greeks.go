@@ -14,17 +14,14 @@ import (
 )
 
 type OptionGreeks struct {
-	sdk.Auth
-
 	url string
 	cli sdk.HTTPClient
 }
 
-func New(url string, auth sdk.Auth, cli sdk.HTTPClient) *OptionGreeks {
+func New(url string, cli sdk.HTTPClient) *OptionGreeks {
 	return &OptionGreeks{
-		Auth: auth,
-		url:  url,
-		cli:  cli,
+		url: url,
+		cli: cli,
 	}
 }
 

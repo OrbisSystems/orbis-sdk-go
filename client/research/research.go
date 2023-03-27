@@ -15,17 +15,14 @@ import (
 )
 
 type Research struct {
-	sdk.Auth
-
 	url string
 	cli sdk.HTTPClient
 }
 
-func New(url string, auth sdk.Auth, cli sdk.HTTPClient) *Research {
+func New(url string, cli sdk.HTTPClient) *Research {
 	return &Research{
-		Auth: auth,
-		url:  url,
-		cli:  cli,
+		url: url,
+		cli: cli,
 	}
 }
 

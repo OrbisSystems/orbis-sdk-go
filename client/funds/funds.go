@@ -16,17 +16,14 @@ import (
 
 // Funds service returns different funds info such as screener, top, etc.
 type Funds struct {
-	sdk.Auth
-
 	url string
 	cli sdk.HTTPClient
 }
 
-func New(url string, auth sdk.Auth, cli sdk.HTTPClient) *Funds {
+func New(url string, cli sdk.HTTPClient) *Funds {
 	return &Funds{
-		Auth: auth,
-		url:  url,
-		cli:  cli,
+		url: url,
+		cli: cli,
 	}
 }
 

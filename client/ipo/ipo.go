@@ -15,17 +15,14 @@ import (
 )
 
 type IPO struct {
-	sdk.Auth
-
 	url string
 	cli sdk.HTTPClient
 }
 
-func New(url string, auth sdk.Auth, cli sdk.HTTPClient) *IPO {
+func New(url string, cli sdk.HTTPClient) *IPO {
 	return &IPO{
-		Auth: auth,
-		url:  url,
-		cli:  cli,
+		url: url,
+		cli: cli,
 	}
 }
 

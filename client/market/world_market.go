@@ -13,17 +13,14 @@ import (
 )
 
 type WorldMarket struct {
-	sdk.Auth
-
 	url string
 	cli sdk.HTTPClient
 }
 
-func New(url string, auth sdk.Auth, cli sdk.HTTPClient) *WorldMarket {
+func New(url string, cli sdk.HTTPClient) *WorldMarket {
 	return &WorldMarket{
-		Auth: auth,
-		url:  url,
-		cli:  cli,
+		url: url,
+		cli: cli,
 	}
 }
 

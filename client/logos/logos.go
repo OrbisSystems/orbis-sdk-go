@@ -17,17 +17,14 @@ import (
 
 // Logos service provides API for getting different information about symbol's logo etc.
 type Logos struct {
-	sdk.Auth
-
 	url string
 	cli sdk.HTTPClient
 }
 
-func New(url string, auth sdk.Auth, cli sdk.HTTPClient) *Logos {
+func New(url string, cli sdk.HTTPClient) *Logos {
 	return &Logos{
-		Auth: auth,
-		url:  url,
-		cli:  cli,
+		url: url,
+		cli: cli,
 	}
 }
 

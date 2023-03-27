@@ -19,8 +19,8 @@ var (
 )
 
 type Client struct {
-	auth sdk.Auth
-	url  string
+	sdk.Auth
+	url string
 
 	newsConn *websocket.Conn
 
@@ -31,7 +31,7 @@ type Client struct {
 func New(cfg config.Config, auth sdk.Auth) *Client {
 	return &Client{
 		url:          wrapWS(cfg.Host),
-		auth:         auth,
+		Auth:         auth,
 		newsOutputCh: make(chan model.News, 100),
 		closeCh:      make(chan struct{}),
 	}
@@ -66,7 +66,7 @@ func (c *Client) subscribeNews(ctx context.Context) (chan model.News, error) {
 }
 
 func (c *Client) connect(ctx context.Context) error {
-	tkn, err := c.auth.GetToken(ctx)
+	tkn, err := c.GetToken(ctx)
 	if err != nil {
 		return err
 	}
