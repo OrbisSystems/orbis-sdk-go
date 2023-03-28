@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"fmt"
 	"time"
 
 	"github.com/google/uuid"
@@ -201,6 +202,20 @@ func (a *Account) RefreshToken(ctx context.Context) error {
 	a.processNewToken(resp.LoginBasic.Tokens)
 
 	return a.SetToken(ctx, resp.LoginBasic.Tokens)
+}
+
+func (a *Account) GetUserByID(ctx context.Context, id int) (model.GetB2BUserByIDResponse, error) {
+	log.Trace("GetUserByID called")
+
+	r, err := a.cli.Get(ctx, fmt.Sprintf("%s/%d", a.url+model.URLB2BGetUserByID, id), nil)
+	if err != nil {
+		return model.GetB2BUserByIDResponse{}, errors.Wrap(err, "can't get user by id")
+	}
+
+	var resp model.GetB2BUserByIDResponse
+	err = utils.UnmarshalAndCheckOk(&resp, r)
+
+	return resp, err
 }
 
 func getRefreshDuration(v int64) time.Duration {

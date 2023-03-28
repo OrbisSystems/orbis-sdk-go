@@ -12,6 +12,7 @@ const (
 	URLB2BLoginByAPIKey = "/uma/api/v1/auth/b2b/login/api-keys"
 	URLB2BCreateAPIKey  = "/uma/api/v1/b2b/api-keys"
 	URLB2BRefreshToken  = "/uma/api/v1/auth/b2b/refresh"
+	URLB2BGetUserByID   = "/uma/api/v1/users/b2c"
 )
 
 // --------------------------------------------------------------------------------------

@@ -235,6 +235,21 @@ func (mr *MockAccountServiceMockRecorder) CreateAPIKey(ctx, req interface{}) *go
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateAPIKey", reflect.TypeOf((*MockAccountService)(nil).CreateAPIKey), ctx, req)
 }
 
+// GetUserByID mocks base method.
+func (m *MockAccountService) GetUserByID(ctx context.Context, id int) (model.GetB2BUserByIDResponse, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetUserByID", ctx, id)
+	ret0, _ := ret[0].(model.GetB2BUserByIDResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetUserByID indicates an expected call of GetUserByID.
+func (mr *MockAccountServiceMockRecorder) GetUserByID(ctx, id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUserByID", reflect.TypeOf((*MockAccountService)(nil).GetUserByID), ctx, id)
+}
+
 // LoginByAPIKey mocks base method.
 func (m *MockAccountService) LoginByAPIKey(ctx context.Context, req model.LoginByAPIKeyRequest) error {
 	m.ctrl.T.Helper()

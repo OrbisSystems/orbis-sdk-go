@@ -3,6 +3,7 @@ package account
 import (
 	"bytes"
 	"context"
+	"fmt"
 	"io"
 	"net/http"
 	"strings"
@@ -680,6 +681,97 @@ func TestAccount_RefreshToken(t *testing.T) {
 				assert.Error(t, err)
 			} else {
 				assert.NoError(t, err)
+			}
+		})
+	}
+}
+
+func TestAccount_GetUserByID(t *testing.T) {
+	var (
+		expResp = model.GetB2BUserByIDResponse{}
+
+		url = "http://localhost"
+
+		rawResp = `{"b2b_user":{"allow_feedback":false,"big_avatar_url":"","branches":null,"created_at":"","do_not_ask_mfa_again":false,"email":"","email_verified":true,"firms":null,"first_name":"","has_access_to_all_firm_branches":false,"id":1,"initiator_id":0,"last_name":"","locale":{"id":0,"locale":"","name":""},"locale_id":0,"mfa_enabled":false,"microservices":null,"mode":"","permissions":null,"phone":"","phone_verified":false,"rep_code":"","roles":null,"small_avatar_url":"","theme":"","updated_at":""},"status":1}`
+	)
+
+	expResp.Status = 1
+	expResp.B2BUser.Id = 1
+	expResp.B2BUser.EmailVerified = true
+
+	testCases := []struct {
+		name   string
+		hasErr bool
+		input  int
+		fn     func(ctx context.Context, id int) *Account
+	}{
+		{
+			name:   "success",
+			hasErr: false,
+			input:  1,
+			fn: func(ctx context.Context, id int) *Account {
+				ctrl := gomock.NewController(t)
+				cli := mock.NewMockHTTPClient(ctrl)
+
+				r := io.NopCloser(strings.NewReader(rawResp))
+
+				httpResponse := &http.Response{
+					StatusCode: http.StatusOK,
+					Body:       r,
+				}
+
+				cli.EXPECT().Get(ctx, fmt.Sprintf("%s/%d", url+model.URLB2BGetUserByID, id), nil).Return(httpResponse, nil)
+
+				return &Account{
+					url:                    url,
+					cli:                    cli,
+					resetTokenRefreshCh:    make(chan int64),
+					watchTokenRefreshState: true,
+					refreshTicker:          time.NewTicker(time.Hour * 100),
+				}
+			},
+		},
+		{
+			name:   "err/unmarshal",
+			hasErr: true,
+			input:  1,
+			fn: func(ctx context.Context, id int) *Account {
+				ctrl := gomock.NewController(t)
+				cli := mock.NewMockHTTPClient(ctrl)
+
+				r := io.NopCloser(strings.NewReader("axc"))
+
+				httpResponse := &http.Response{
+					StatusCode: http.StatusOK,
+					Body:       r,
+				}
+
+				cli.EXPECT().Get(ctx, fmt.Sprintf("%s/%d", url+model.URLB2BGetUserByID, id), nil).Return(httpResponse, nil)
+
+				return &Account{
+					url:                    url,
+					cli:                    cli,
+					resetTokenRefreshCh:    make(chan int64),
+					watchTokenRefreshState: true,
+					refreshTicker:          time.NewTicker(time.Hour * 100),
+				}
+			},
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			ctx := context.Background()
+			a := tc.fn(ctx, tc.input)
+			resp, err := a.GetUserByID(ctx, tc.input)
+
+			if tc.hasErr {
+				assert.Error(t, err)
+				assert.Empty(t, resp)
+			} else {
+				assert.NoError(t, err)
+				assert.EqualValues(t, expResp, resp)
 			}
 		})
 	}

@@ -30,6 +30,7 @@ type AccountService interface {
 	LoginByAPIKey(ctx context.Context, req model.LoginByAPIKeyRequest) error
 	CreateAPIKey(ctx context.Context, req model.CreateAPIKeyRequest) (model.CreateAPIKeyResponse, error)
 	RefreshToken(ctx context.Context) error
+	GetUserByID(ctx context.Context, id int) (model.GetB2BUserByIDResponse, error)
 }
 
 type NewsService interface {
