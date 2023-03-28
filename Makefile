@@ -28,7 +28,7 @@ dc-down:
 	docker-compose down
 
 gen-mock: check-mockgen
-	mockgen -package mock -source interface/interface.go -destination interface/mock/interface.go
+	mockgen -package mock -source interfaces/interface.go -destination interfaces/mock/interface.go
 
 check-mockgen:
 	@which mockgen || go install github.com/golang/mock/mockgen@v1.6.0

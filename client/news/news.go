@@ -8,20 +8,18 @@ import (
 	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
 
-	sdk "github.com/OrbisSystems/orbis-sdk-go/interface"
+	sdk "github.com/OrbisSystems/orbis-sdk-go/interfaces"
 	"github.com/OrbisSystems/orbis-sdk-go/model"
 	"github.com/OrbisSystems/orbis-sdk-go/utils"
 )
 
 // News service provides API for getting news.
 type News struct {
-	url string
 	cli sdk.HTTPClient
 }
 
-func New(url string, cli sdk.HTTPClient) *News {
+func New(cli sdk.HTTPClient) *News {
 	return &News{
-		url: url,
 		cli: cli,
 	}
 }
@@ -35,7 +33,7 @@ func (c *News) GetByFilter(ctx context.Context, req model.NewsFilterRequest) (mo
 		return model.NewsResponse{}, errors.Wrap(err, "couldn't marshal input parameters")
 	}
 
-	r, err := c.cli.Post(ctx, c.url+model.URLInsightBase+model.URLInsightNewsFilter, bytes.NewBuffer(body), nil)
+	r, err := c.cli.Post(ctx, model.URLInsightBase+model.URLInsightNewsFilter, bytes.NewBuffer(body), nil)
 	if err != nil {
 		return model.NewsResponse{}, errors.Wrap(err, "couldn't get news by filter")
 	}
@@ -58,7 +56,7 @@ func (c *News) GetByID(ctx context.Context, req model.NewsRequest) (model.News, 
 		return model.News{}, errors.Wrap(err, "couldn't marshal input parameters")
 	}
 
-	r, err := c.cli.Post(ctx, c.url+model.URLInsightBase+model.URLInsightNewsByID, bytes.NewBuffer(body), nil)
+	r, err := c.cli.Post(ctx, model.URLInsightBase+model.URLInsightNewsByID, bytes.NewBuffer(body), nil)
 	if err != nil {
 		return model.News{}, errors.Wrap(err, "couldn't get news by id")
 	}
@@ -81,7 +79,7 @@ func (c *News) GetTagsForSymbol(ctx context.Context, req model.SymbolTagsRequest
 		return nil, errors.Wrap(err, "couldn't marshal input parameters")
 	}
 
-	r, err := c.cli.Post(ctx, c.url+model.URLInsightBase+model.URLInsightNewsSymbolTags, bytes.NewBuffer(body), nil)
+	r, err := c.cli.Post(ctx, model.URLInsightBase+model.URLInsightNewsSymbolTags, bytes.NewBuffer(body), nil)
 	if err != nil {
 		return nil, errors.Wrap(err, "couldn't get news symbol tags")
 	}
@@ -104,7 +102,7 @@ func (c *News) GetChannelsForSymbol(ctx context.Context, req model.SymbolChannel
 		return nil, errors.Wrap(err, "couldn't marshal input parameters")
 	}
 
-	r, err := c.cli.Post(ctx, c.url+model.URLInsightBase+model.URLInsightNewsSymbolChannels, bytes.NewBuffer(body), nil)
+	r, err := c.cli.Post(ctx, model.URLInsightBase+model.URLInsightNewsSymbolChannels, bytes.NewBuffer(body), nil)
 	if err != nil {
 		return nil, errors.Wrap(err, "couldn't get news symbol channels")
 	}
@@ -122,7 +120,7 @@ func (c *News) GetChannelsForSymbol(ctx context.Context, req model.SymbolChannel
 func (c *News) GetAvailableAuthors(ctx context.Context) ([]string, error) {
 	log.Trace("GetAvailableAuthors called")
 
-	r, err := c.cli.Get(ctx, c.url+model.URLInsightBase+model.URLInsightNewsAuthors, nil)
+	r, err := c.cli.Get(ctx, model.URLInsightBase+model.URLInsightNewsAuthors, nil)
 	if err != nil {
 		return nil, errors.Wrap(err, "couldn't get news available authors")
 	}
@@ -140,7 +138,7 @@ func (c *News) GetAvailableAuthors(ctx context.Context) ([]string, error) {
 func (c *News) GetAvailableChannels(ctx context.Context) ([]string, error) {
 	log.Trace("GetAvailableChannels called")
 
-	r, err := c.cli.Get(ctx, c.url+model.URLInsightBase+model.URLInsightNewsChannels, nil)
+	r, err := c.cli.Get(ctx, model.URLInsightBase+model.URLInsightNewsChannels, nil)
 	if err != nil {
 		return nil, errors.Wrap(err, "couldn't get news available channels")
 	}
@@ -158,7 +156,7 @@ func (c *News) GetAvailableChannels(ctx context.Context) ([]string, error) {
 func (c *News) GetAvailableSymbols(ctx context.Context) ([]string, error) {
 	log.Trace("GetAvailableSymbols called")
 
-	r, err := c.cli.Get(ctx, c.url+model.URLInsightBase+model.URLInsightNewsSymbols, nil)
+	r, err := c.cli.Get(ctx, model.URLInsightBase+model.URLInsightNewsSymbols, nil)
 	if err != nil {
 		return nil, errors.Wrap(err, "couldn't get news available symbols")
 	}
@@ -176,7 +174,7 @@ func (c *News) GetAvailableSymbols(ctx context.Context) ([]string, error) {
 func (c *News) GetAvailableTags(ctx context.Context) ([]string, error) {
 	log.Trace("GetAvailableTags called")
 
-	r, err := c.cli.Get(ctx, c.url+model.URLInsightBase+model.URLInsightNewsTags, nil)
+	r, err := c.cli.Get(ctx, model.URLInsightBase+model.URLInsightNewsTags, nil)
 	if err != nil {
 		return nil, errors.Wrap(err, "couldn't get news available tags")
 	}

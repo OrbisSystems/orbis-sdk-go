@@ -9,20 +9,18 @@ import (
 	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
 
-	sdk "github.com/OrbisSystems/orbis-sdk-go/interface"
+	sdk "github.com/OrbisSystems/orbis-sdk-go/interfaces"
 	"github.com/OrbisSystems/orbis-sdk-go/model"
 	"github.com/OrbisSystems/orbis-sdk-go/utils"
 )
 
 // Quotes service returns quotes data.
 type Quotes struct {
-	url string
 	cli sdk.HTTPClient
 }
 
-func New(url string, cli sdk.HTTPClient) *Quotes {
+func New(cli sdk.HTTPClient) *Quotes {
 	return &Quotes{
-		url: url,
 		cli: cli,
 	}
 }
@@ -30,7 +28,7 @@ func New(url string, cli sdk.HTTPClient) *Quotes {
 func (q *Quotes) GetQuotesEquityData(ctx context.Context, symbols, quoteType string) ([]model.QuoteEquityDataResponse, error) {
 	log.Trace("GetQuotesEquityData called")
 
-	r, err := q.cli.Get(ctx, fmt.Sprintf("%s?symbols=%s&quote_type=%s", q.url+model.URLInsightBase+model.URLInsightQuotesEquity, symbols, quoteType), nil)
+	r, err := q.cli.Get(ctx, fmt.Sprintf("%s?symbols=%s&quote_type=%s", model.URLInsightBase+model.URLInsightQuotesEquity, symbols, quoteType), nil)
 	if err != nil {
 		return nil, errors.Wrap(err, "couldn't get quotes equity")
 	}
@@ -52,7 +50,7 @@ func (q *Quotes) GetQuoteHistory(ctx context.Context, req model.QuoteHistoryRequ
 		return model.QuoteHistoryResponse{}, errors.Wrap(err, "couldn't marshal input parameters")
 	}
 
-	r, err := q.cli.Post(ctx, q.url+model.URLInsightBase+model.URLInsightQuoteHistory, bytes.NewBuffer(body), nil)
+	r, err := q.cli.Post(ctx, model.URLInsightBase+model.URLInsightQuoteHistory, bytes.NewBuffer(body), nil)
 	if err != nil {
 		return model.QuoteHistoryResponse{}, errors.Wrap(err, "couldn't get quote history")
 	}
@@ -74,7 +72,7 @@ func (q *Quotes) GetIntradayQuotes(ctx context.Context, req model.IntradayReques
 		return nil, errors.Wrap(err, "couldn't marshal input parameters")
 	}
 
-	r, err := q.cli.Post(ctx, q.url+model.URLInsightBase+model.URLInsightIntradayQuotes, bytes.NewBuffer(body), nil)
+	r, err := q.cli.Post(ctx, model.URLInsightBase+model.URLInsightIntradayQuotes, bytes.NewBuffer(body), nil)
 	if err != nil {
 		return nil, errors.Wrap(err, "couldn't get intraday quotes")
 	}

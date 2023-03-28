@@ -9,19 +9,17 @@ import (
 	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
 
-	sdk "github.com/OrbisSystems/orbis-sdk-go/interface"
+	sdk "github.com/OrbisSystems/orbis-sdk-go/interfaces"
 	"github.com/OrbisSystems/orbis-sdk-go/model"
 	"github.com/OrbisSystems/orbis-sdk-go/utils"
 )
 
 type IPO struct {
-	url string
 	cli sdk.HTTPClient
 }
 
-func New(url string, cli sdk.HTTPClient) *IPO {
+func New(cli sdk.HTTPClient) *IPO {
 	return &IPO{
-		url: url,
 		cli: cli,
 	}
 }
@@ -29,7 +27,7 @@ func New(url string, cli sdk.HTTPClient) *IPO {
 func (i *IPO) GetUpcomingIPOs(ctx context.Context, limit, offset int) (model.IPOResponse, error) {
 	log.Trace("GetUpcomingIPOs called")
 
-	r, err := i.cli.Get(ctx, fmt.Sprintf("%s?limit=%d&offset=%d", i.url+model.URLInsightBase+model.URLInsightIPOsUpcoming, limit, offset), nil)
+	r, err := i.cli.Get(ctx, fmt.Sprintf("%s?limit=%d&offset=%d", model.URLInsightBase+model.URLInsightIPOsUpcoming, limit, offset), nil)
 	if err != nil {
 		return model.IPOResponse{}, errors.Wrap(err, "couldn't get upcoming ipo")
 	}
@@ -51,7 +49,7 @@ func (i *IPO) GetRecentIPOs(ctx context.Context, req model.RecentIPORequest) (mo
 		return model.IPOResponse{}, errors.Wrap(err, "couldn't marshal input parameters")
 	}
 
-	r, err := i.cli.Post(ctx, i.url+model.URLInsightBase+model.URLInsightIPOsRecent, bytes.NewBuffer(body), nil)
+	r, err := i.cli.Post(ctx, model.URLInsightBase+model.URLInsightIPOsRecent, bytes.NewBuffer(body), nil)
 	if err != nil {
 		return model.IPOResponse{}, errors.Wrap(err, "couldn't get recent ipo")
 	}

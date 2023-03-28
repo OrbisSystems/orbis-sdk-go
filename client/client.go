@@ -20,7 +20,7 @@ import (
 	"github.com/OrbisSystems/orbis-sdk-go/client/tiprank"
 	"github.com/OrbisSystems/orbis-sdk-go/config"
 	"github.com/OrbisSystems/orbis-sdk-go/http"
-	sdk "github.com/OrbisSystems/orbis-sdk-go/interface"
+	sdk "github.com/OrbisSystems/orbis-sdk-go/interfaces"
 	"github.com/OrbisSystems/orbis-sdk-go/ws"
 )
 
@@ -57,9 +57,9 @@ func NewSDK(cfg config.Config, auth sdk.Auth) *Client {
 	log.SetOutput(os.Stderr)
 
 	httpsURL := wrapHTTPS(cfg.Host)
-	httpClient := http.New(auth)
+	httpClient := http.New(httpsURL, auth)
 
-	return newCli(cfg, httpsURL, auth, httpClient)
+	return newCli(cfg, auth, httpClient)
 }
 
 func NewSDKWithHTTPClient(cfg config.Config, auth sdk.Auth, httpClient sdk.HTTPClient) *Client {
@@ -67,25 +67,23 @@ func NewSDKWithHTTPClient(cfg config.Config, auth sdk.Auth, httpClient sdk.HTTPC
 	log.SetFormatter(&log.JSONFormatter{})
 	log.SetOutput(os.Stderr)
 
-	httpsURL := wrapHTTPS(cfg.Host)
-
-	return newCli(cfg, httpsURL, auth, httpClient)
+	return newCli(cfg, auth, httpClient)
 }
 
-func newCli(cfg config.Config, httpsURL string, auth sdk.Auth, httpClient sdk.HTTPClient) *Client {
+func newCli(cfg config.Config, auth sdk.Auth, httpClient sdk.HTTPClient) *Client {
 	return &Client{
-		Account:      account.New(httpsURL, auth, httpClient),
-		News:         news.New(httpsURL, httpClient),
-		Logos:        logos.New(httpsURL, httpClient),
-		Passport:     passport.New(httpsURL, httpClient),
-		TipRank:      tiprank.New(httpsURL, httpClient),
-		Quote:        quotes.New(httpsURL, httpClient),
-		Funds:        funds.New(httpsURL, httpClient),
-		Research:     research.New(httpsURL, httpClient),
-		IPO:          ipo.New(httpsURL, httpClient),
-		WorldMarket:  market.New(httpsURL, httpClient),
-		MarketDates:  dates.New(httpsURL, httpClient),
-		OptionGreeks: og.New(httpsURL, httpClient),
+		Account:      account.New(auth, httpClient),
+		News:         news.New(httpClient),
+		Logos:        logos.New(httpClient),
+		Passport:     passport.New(httpClient),
+		TipRank:      tiprank.New(httpClient),
+		Quote:        quotes.New(httpClient),
+		Funds:        funds.New(httpClient),
+		Research:     research.New(httpClient),
+		IPO:          ipo.New(httpClient),
+		WorldMarket:  market.New(httpClient),
+		MarketDates:  dates.New(httpClient),
+		OptionGreeks: og.New(httpClient),
 		WS:           ws.New(cfg, auth),
 	}
 }

@@ -1,12 +1,20 @@
-package _interface
+package interfaces
 
 import (
 	"context"
 	"io"
 	"net/http"
+	"time"
+
+	"github.com/redis/go-redis/v9"
 
 	"github.com/OrbisSystems/orbis-sdk-go/model"
 )
+
+type RedisRepo interface {
+	Set(ctx context.Context, key string, value interface{}, expiration time.Duration) *redis.StatusCmd
+	Get(ctx context.Context, key string) *redis.StringCmd
+}
 
 type Storage interface {
 	Store(ctx context.Context, data []byte) error

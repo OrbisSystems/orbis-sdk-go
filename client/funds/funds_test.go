@@ -13,12 +13,12 @@ import (
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/OrbisSystems/orbis-sdk-go/interface/mock"
+	"github.com/OrbisSystems/orbis-sdk-go/interfaces/mock"
 	"github.com/OrbisSystems/orbis-sdk-go/model"
 )
 
 func TestNew(t *testing.T) {
-	assert.NotNil(t, New("", nil))
+	assert.NotNil(t, New(nil))
 }
 
 func TestFunds_GetFundDetails(t *testing.T) {
@@ -32,7 +32,6 @@ func TestFunds_GetFundDetails(t *testing.T) {
 		}
 
 		rawResponse = `{"symbol":"AAPL","leverage":1.2,"city":"London","fax":"aaa.asdas.de","country":"UK"}`
-		url         = "http://localhost"
 
 		testErr = errors.New("process error")
 	)
@@ -57,10 +56,9 @@ func TestFunds_GetFundDetails(t *testing.T) {
 					Body:       r,
 				}
 
-				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?symbol=%s", url+model.URLInsightBase+model.URLInsightFundsDetails, symbol), nil).Return(httpResponse, nil)
+				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?symbol=%s", model.URLInsightBase+model.URLInsightFundsDetails, symbol), nil).Return(httpResponse, nil)
 
 				return &Funds{
-					url: url,
 					cli: cli,
 				}
 			},
@@ -80,10 +78,9 @@ func TestFunds_GetFundDetails(t *testing.T) {
 					Body:       r,
 				}
 
-				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?symbol=%s", url+model.URLInsightBase+model.URLInsightFundsDetails, symbol), nil).Return(httpResponse, nil)
+				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?symbol=%s", model.URLInsightBase+model.URLInsightFundsDetails, symbol), nil).Return(httpResponse, nil)
 
 				return &Funds{
-					url: url,
 					cli: cli,
 				}
 			},
@@ -96,10 +93,9 @@ func TestFunds_GetFundDetails(t *testing.T) {
 				ctrl := gomock.NewController(t)
 				cli := mock.NewMockHTTPClient(ctrl)
 
-				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?symbol=%s", url+model.URLInsightBase+model.URLInsightFundsDetails, symbol), nil).Return(nil, testErr)
+				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?symbol=%s", model.URLInsightBase+model.URLInsightFundsDetails, symbol), nil).Return(nil, testErr)
 
 				return &Funds{
-					url: url,
 					cli: cli,
 				}
 			},
@@ -137,7 +133,6 @@ func TestFunds_GetFundScreenerFilters(t *testing.T) {
 		}
 
 		rawResponse = `{"assets":[{"asset_name": "AAC"}], "inverse": ["Q", "C"], "leverage": ["L1"]}`
-		url         = "http://localhost"
 
 		testErr = errors.New("process error")
 	)
@@ -160,10 +155,9 @@ func TestFunds_GetFundScreenerFilters(t *testing.T) {
 					Body:       r,
 				}
 
-				cli.EXPECT().Get(ctx, url+model.URLInsightBase+model.URLInsightFundsScreenerFilters, nil).Return(httpResponse, nil)
+				cli.EXPECT().Get(ctx, model.URLInsightBase+model.URLInsightFundsScreenerFilters, nil).Return(httpResponse, nil)
 
 				return &Funds{
-					url: url,
 					cli: cli,
 				}
 			},
@@ -182,10 +176,9 @@ func TestFunds_GetFundScreenerFilters(t *testing.T) {
 					Body:       r,
 				}
 
-				cli.EXPECT().Get(ctx, url+model.URLInsightBase+model.URLInsightFundsScreenerFilters, nil).Return(httpResponse, nil)
+				cli.EXPECT().Get(ctx, model.URLInsightBase+model.URLInsightFundsScreenerFilters, nil).Return(httpResponse, nil)
 
 				return &Funds{
-					url: url,
 					cli: cli,
 				}
 			},
@@ -197,10 +190,9 @@ func TestFunds_GetFundScreenerFilters(t *testing.T) {
 				ctrl := gomock.NewController(t)
 				cli := mock.NewMockHTTPClient(ctrl)
 
-				cli.EXPECT().Get(ctx, url+model.URLInsightBase+model.URLInsightFundsScreenerFilters, nil).Return(nil, testErr)
+				cli.EXPECT().Get(ctx, model.URLInsightBase+model.URLInsightFundsScreenerFilters, nil).Return(nil, testErr)
 
 				return &Funds{
-					url: url,
 					cli: cli,
 				}
 			},
@@ -240,7 +232,6 @@ func TestFunds_ScreenFunds(t *testing.T) {
 		}
 		rawReq      = `{"assets":null,"categories":null,"sponsors":null,"inverse":"","leverage":"1.12","fund_type":"","quote_type":""}`
 		rawResponse = `{"details":[{"leverage": 1.12, "symbol": "AAPL", "name": "Apple", "category": "Tech"}], "count": 1}`
-		url         = "http://localhost"
 
 		testErr = errors.New("process error")
 	)
@@ -269,10 +260,9 @@ func TestFunds_ScreenFunds(t *testing.T) {
 					Body:       r,
 				}
 
-				cli.EXPECT().Post(ctx, url+model.URLInsightBase+model.URLInsightFundsScreener, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
+				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightFundsScreener, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &Funds{
-					url: url,
 					cli: cli,
 				}
 			},
@@ -296,10 +286,9 @@ func TestFunds_ScreenFunds(t *testing.T) {
 					Body:       r,
 				}
 
-				cli.EXPECT().Post(ctx, url+model.URLInsightBase+model.URLInsightFundsScreener, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
+				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightFundsScreener, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &Funds{
-					url: url,
 					cli: cli,
 				}
 			},
@@ -316,10 +305,9 @@ func TestFunds_ScreenFunds(t *testing.T) {
 
 				bb := []byte(rawReq)
 
-				cli.EXPECT().Post(ctx, url+model.URLInsightBase+model.URLInsightFundsScreener, bytes.NewBuffer(bb), nil).Return(nil, testErr)
+				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightFundsScreener, bytes.NewBuffer(bb), nil).Return(nil, testErr)
 
 				return &Funds{
-					url: url,
 					cli: cli,
 				}
 			},
@@ -359,7 +347,6 @@ func TestFunds_ScreenSectorFunds(t *testing.T) {
 		}
 		rawReq      = `{"sector_code":"","exposure":null,"dividend_percent":null,"sponsors":null,"inverse":"","leverage":"1.12","holdings":null,"quote_type":""}`
 		rawResponse = `{"details":[{"leverage": 1.12, "symbol": "AAPL", "name": "Apple", "category": "Tech"}], "count": 1}`
-		url         = "http://localhost"
 
 		testErr = errors.New("process error")
 	)
@@ -388,10 +375,9 @@ func TestFunds_ScreenSectorFunds(t *testing.T) {
 					Body:       r,
 				}
 
-				cli.EXPECT().Post(ctx, url+model.URLInsightBase+model.URLInsightFundsSectorScreener, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
+				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightFundsSectorScreener, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &Funds{
-					url: url,
 					cli: cli,
 				}
 			},
@@ -415,10 +401,9 @@ func TestFunds_ScreenSectorFunds(t *testing.T) {
 					Body:       r,
 				}
 
-				cli.EXPECT().Post(ctx, url+model.URLInsightBase+model.URLInsightFundsSectorScreener, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
+				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightFundsSectorScreener, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &Funds{
-					url: url,
 					cli: cli,
 				}
 			},
@@ -435,10 +420,9 @@ func TestFunds_ScreenSectorFunds(t *testing.T) {
 
 				bb := []byte(rawReq)
 
-				cli.EXPECT().Post(ctx, url+model.URLInsightBase+model.URLInsightFundsSectorScreener, bytes.NewBuffer(bb), nil).Return(nil, testErr)
+				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightFundsSectorScreener, bytes.NewBuffer(bb), nil).Return(nil, testErr)
 
 				return &Funds{
-					url: url,
 					cli: cli,
 				}
 			},
@@ -468,7 +452,6 @@ func TestFunds_GetTopFunds(t *testing.T) {
 		expResp     = []string{"A", "B"}
 		rawReq      = `{"inverse":"","leverage":"1.12","fund_type":"","quote_type":"","reverse_order":false}`
 		rawResponse = `["A", "B"]`
-		url         = "http://localhost"
 
 		testErr = errors.New("process error")
 	)
@@ -497,10 +480,9 @@ func TestFunds_GetTopFunds(t *testing.T) {
 					Body:       r,
 				}
 
-				cli.EXPECT().Post(ctx, url+model.URLInsightBase+model.URLInsightFundsTop, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
+				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightFundsTop, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &Funds{
-					url: url,
 					cli: cli,
 				}
 			},
@@ -524,10 +506,9 @@ func TestFunds_GetTopFunds(t *testing.T) {
 					Body:       r,
 				}
 
-				cli.EXPECT().Post(ctx, url+model.URLInsightBase+model.URLInsightFundsTop, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
+				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightFundsTop, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &Funds{
-					url: url,
 					cli: cli,
 				}
 			},
@@ -544,10 +525,9 @@ func TestFunds_GetTopFunds(t *testing.T) {
 
 				bb := []byte(rawReq)
 
-				cli.EXPECT().Post(ctx, url+model.URLInsightBase+model.URLInsightFundsTop, bytes.NewBuffer(bb), nil).Return(nil, testErr)
+				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightFundsTop, bytes.NewBuffer(bb), nil).Return(nil, testErr)
 
 				return &Funds{
-					url: url,
 					cli: cli,
 				}
 			},

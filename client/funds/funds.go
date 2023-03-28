@@ -9,20 +9,18 @@ import (
 	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
 
-	sdk "github.com/OrbisSystems/orbis-sdk-go/interface"
+	sdk "github.com/OrbisSystems/orbis-sdk-go/interfaces"
 	"github.com/OrbisSystems/orbis-sdk-go/model"
 	"github.com/OrbisSystems/orbis-sdk-go/utils"
 )
 
 // Funds service returns different funds info such as screener, top, etc.
 type Funds struct {
-	url string
 	cli sdk.HTTPClient
 }
 
-func New(url string, cli sdk.HTTPClient) *Funds {
+func New(cli sdk.HTTPClient) *Funds {
 	return &Funds{
-		url: url,
 		cli: cli,
 	}
 }
@@ -30,7 +28,7 @@ func New(url string, cli sdk.HTTPClient) *Funds {
 func (f *Funds) GetFundDetails(ctx context.Context, symbol string) (model.GetFundDetailsResponse, error) {
 	log.Trace("GetFundDetails called")
 
-	r, err := f.cli.Get(ctx, fmt.Sprintf("%s?symbol=%s", f.url+model.URLInsightBase+model.URLInsightFundsDetails, symbol), nil)
+	r, err := f.cli.Get(ctx, fmt.Sprintf("%s?symbol=%s", model.URLInsightBase+model.URLInsightFundsDetails, symbol), nil)
 	if err != nil {
 		return model.GetFundDetailsResponse{}, errors.Wrap(err, "couldn't get funds details")
 	}
@@ -47,7 +45,7 @@ func (f *Funds) GetFundDetails(ctx context.Context, symbol string) (model.GetFun
 func (f *Funds) GetFundScreenerFilters(ctx context.Context) (model.GetFundScreenerFiltersResponse, error) {
 	log.Trace("GetFundScreenerFilters called")
 
-	r, err := f.cli.Get(ctx, f.url+model.URLInsightBase+model.URLInsightFundsScreenerFilters, nil)
+	r, err := f.cli.Get(ctx, model.URLInsightBase+model.URLInsightFundsScreenerFilters, nil)
 	if err != nil {
 		return model.GetFundScreenerFiltersResponse{}, errors.Wrap(err, "couldn't get funds screener filters")
 	}
@@ -69,7 +67,7 @@ func (f *Funds) ScreenFunds(ctx context.Context, req model.FundScreenerRequest) 
 		return model.FundScreenerResponse{}, errors.Wrap(err, "couldn't marshal input parameters")
 	}
 
-	r, err := f.cli.Post(ctx, f.url+model.URLInsightBase+model.URLInsightFundsScreener, bytes.NewBuffer(body), nil)
+	r, err := f.cli.Post(ctx, model.URLInsightBase+model.URLInsightFundsScreener, bytes.NewBuffer(body), nil)
 	if err != nil {
 		return model.FundScreenerResponse{}, errors.Wrap(err, "couldn't get screen funds")
 	}
@@ -91,7 +89,7 @@ func (f *Funds) ScreenSectorFunds(ctx context.Context, req model.FundSectorScree
 		return model.FundScreenerResponse{}, errors.Wrap(err, "couldn't marshal input parameters")
 	}
 
-	r, err := f.cli.Post(ctx, f.url+model.URLInsightBase+model.URLInsightFundsSectorScreener, bytes.NewBuffer(body), nil)
+	r, err := f.cli.Post(ctx, model.URLInsightBase+model.URLInsightFundsSectorScreener, bytes.NewBuffer(body), nil)
 	if err != nil {
 		return model.FundScreenerResponse{}, errors.Wrap(err, "couldn't get screen sector funds")
 	}
@@ -113,7 +111,7 @@ func (f *Funds) GetTopFunds(ctx context.Context, req model.GetTopFundsRequest) (
 		return nil, errors.Wrap(err, "couldn't marshal input parameters")
 	}
 
-	r, err := f.cli.Post(ctx, f.url+model.URLInsightBase+model.URLInsightFundsTop, bytes.NewBuffer(body), nil)
+	r, err := f.cli.Post(ctx, model.URLInsightBase+model.URLInsightFundsTop, bytes.NewBuffer(body), nil)
 	if err != nil {
 		return nil, errors.Wrap(err, "couldn't get top funds")
 	}

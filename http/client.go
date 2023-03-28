@@ -2,13 +2,14 @@ package http
 
 import (
 	"context"
+	"fmt"
 	"io"
 	"net/http"
 	"time"
 
 	"github.com/pkg/errors"
 
-	sdk "github.com/OrbisSystems/orbis-sdk-go/interface"
+	sdk "github.com/OrbisSystems/orbis-sdk-go/interfaces"
 )
 
 const (
@@ -22,37 +23,37 @@ const (
 type OrbisClient struct {
 	http.Client
 
+	baseURL string
+
 	auth sdk.Auth
 }
 
 // New returns new OrbisClient instance with default http client.
-func New(auth sdk.Auth) sdk.HTTPClient {
+func New(baseURL string, auth sdk.Auth) sdk.HTTPClient {
 	var httpCli = http.Client{
 		Timeout: defaultTimeout,
 	}
 
-	cli := OrbisClient{
-		Client: httpCli,
-		auth:   auth,
-	}
-
-	return &cli
+	return newCli(baseURL, auth, httpCli)
 }
 
 // NewWithHttp returns new OrbisClient instance with http client user defined.
-func NewWithHttp(auth sdk.Auth, client http.Client) sdk.HTTPClient {
-	orbisClient := OrbisClient{
-		auth:   auth,
-		Client: client,
-	}
+func NewWithHttp(baseURL string, auth sdk.Auth, client http.Client) sdk.HTTPClient {
+	return newCli(baseURL, auth, client)
+}
 
-	return &orbisClient
+func newCli(baseURL string, auth sdk.Auth, client http.Client) sdk.HTTPClient {
+	return &OrbisClient{
+		auth:    auth,
+		baseURL: baseURL,
+		Client:  client,
+	}
 }
 
 // Get makes an HTTP GET request to provided URL
 func (c *OrbisClient) Get(ctx context.Context, url string, headers http.Header) (*http.Response, error) {
 	var response *http.Response
-	request, err := http.NewRequestWithContext(ctx, http.MethodGet, url, http.NoBody)
+	request, err := http.NewRequestWithContext(ctx, http.MethodGet, fmt.Sprintf("%s%s", c.baseURL, url), http.NoBody)
 	if err != nil {
 		return response, errors.Wrap(err, "GET - request creation failed")
 	}
@@ -65,7 +66,7 @@ func (c *OrbisClient) Get(ctx context.Context, url string, headers http.Header) 
 // Post makes an HTTP POST request to provided URL and requestBody
 func (c *OrbisClient) Post(ctx context.Context, url string, body io.Reader, headers http.Header) (*http.Response, error) {
 	var response *http.Response
-	request, err := http.NewRequestWithContext(ctx, http.MethodPost, url, body)
+	request, err := http.NewRequestWithContext(ctx, http.MethodPost, fmt.Sprintf("%s%s", c.baseURL, url), body)
 	if err != nil {
 		return response, errors.Wrap(err, "POST - request creation failed")
 	}

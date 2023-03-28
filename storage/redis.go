@@ -6,6 +6,8 @@ import (
 
 	"github.com/redis/go-redis/v9"
 	log "github.com/sirupsen/logrus"
+
+	sdk "github.com/OrbisSystems/orbis-sdk-go/interfaces"
 )
 
 const (
@@ -25,7 +27,7 @@ type Config struct {
 // It implements interface Storage.
 // You can use it instead of default in-memory storage.
 type Client struct {
-	cli *redis.Client
+	cli sdk.RedisRepo
 
 	keyForStore string
 }
@@ -41,6 +43,17 @@ func NewRedisStorage(cfg Config) (*Client, error) {
 		return nil, err
 	}
 
+	if cfg.KeyForStore == "" {
+		cfg.KeyForStore = defaultKeyForStore
+	}
+
+	return &Client{
+		cli:         cli,
+		keyForStore: cfg.KeyForStore,
+	}, nil
+}
+
+func NewRedisStorageWithOwnCli(cfg Config, cli sdk.RedisRepo) (*Client, error) {
 	if cfg.KeyForStore == "" {
 		cfg.KeyForStore = defaultKeyForStore
 	}

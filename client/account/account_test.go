@@ -14,7 +14,7 @@ import (
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/OrbisSystems/orbis-sdk-go/interface/mock"
+	"github.com/OrbisSystems/orbis-sdk-go/interfaces/mock"
 	"github.com/OrbisSystems/orbis-sdk-go/model"
 )
 
@@ -25,7 +25,7 @@ func TestNew(t *testing.T) {
 
 	auth.EXPECT().GetToken(gomock.Any()).Return(model.Token{}, nil).AnyTimes()
 
-	assert.NotNil(t, New("", auth, cli))
+	assert.NotNil(t, New(auth, cli))
 }
 
 func TestAccount_LoginByEmail(t *testing.T) {
@@ -51,8 +51,8 @@ func TestAccount_LoginByEmail(t *testing.T) {
 		}
 		rawToken = `{"status":201,"login_basic":{"tokens":{"access_token":"assda","refresh_token":"fewfsdf","access_expires_at":1679588406,"refresh_expires_at":1679588406,"pair_id":"111"}}}`
 		rawReq   = `{"email":"local@local.com","password":"pass","device_id":"123","remember_me":false}`
-		url      = "http://localhost"
-		testErr  = errors.New("process error")
+
+		testErr = errors.New("process error")
 	)
 
 	testCases := []struct {
@@ -79,12 +79,11 @@ func TestAccount_LoginByEmail(t *testing.T) {
 
 				bb := []byte(rawReq)
 
-				cli.EXPECT().Post(ctx, url+model.URLB2BLoginByEmail, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
+				cli.EXPECT().Post(ctx, model.URLB2BLoginByEmail, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 				auth.EXPECT().SetToken(ctx, token.LoginBasic.Tokens).Return(nil)
 
 				return &Account{
 					Auth:                   auth,
-					url:                    url,
 					cli:                    cli,
 					resetTokenRefreshCh:    make(chan int64),
 					watchTokenRefreshState: true,
@@ -110,12 +109,11 @@ func TestAccount_LoginByEmail(t *testing.T) {
 
 				bb := []byte(rawReq)
 
-				cli.EXPECT().Post(ctx, url+model.URLB2BLoginByEmail, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
+				cli.EXPECT().Post(ctx, model.URLB2BLoginByEmail, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 				auth.EXPECT().SetToken(ctx, token.LoginBasic.Tokens).Return(testErr)
 
 				return &Account{
 					Auth:                   auth,
-					url:                    url,
 					cli:                    cli,
 					resetTokenRefreshCh:    make(chan int64),
 					watchTokenRefreshState: true,
@@ -140,10 +138,9 @@ func TestAccount_LoginByEmail(t *testing.T) {
 
 				bb := []byte(rawReq)
 
-				cli.EXPECT().Post(ctx, url+model.URLB2BLoginByEmail, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
+				cli.EXPECT().Post(ctx, model.URLB2BLoginByEmail, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &Account{
-					url:                    url,
 					cli:                    cli,
 					resetTokenRefreshCh:    make(chan int64),
 					watchTokenRefreshState: true,
@@ -161,10 +158,9 @@ func TestAccount_LoginByEmail(t *testing.T) {
 
 				bb := []byte(rawReq)
 
-				cli.EXPECT().Post(ctx, url+model.URLB2BLoginByEmail, bytes.NewBuffer(bb), nil).Return(nil, testErr)
+				cli.EXPECT().Post(ctx, model.URLB2BLoginByEmail, bytes.NewBuffer(bb), nil).Return(nil, testErr)
 
 				return &Account{
-					url:                    url,
 					cli:                    cli,
 					resetTokenRefreshCh:    make(chan int64),
 					watchTokenRefreshState: true,
@@ -212,8 +208,8 @@ func TestAccount_LoginByAPIKey(t *testing.T) {
 		}
 		rawToken = `{"status":201,"api_keys_login":{"tokens":{"access_token":"assda","refresh_token":"fewfsdf","access_expires_at":1679588406,"refresh_expires_at":1679588406,"pair_id":"111"}}}`
 		rawReq   = `{"api_key":"11111111","api_secret":"22222222"}`
-		url      = "http://localhost"
-		testErr  = errors.New("process error")
+
+		testErr = errors.New("process error")
 	)
 
 	testCases := []struct {
@@ -240,12 +236,11 @@ func TestAccount_LoginByAPIKey(t *testing.T) {
 
 				bb := []byte(rawReq)
 
-				cli.EXPECT().Post(ctx, url+model.URLB2BLoginByAPIKey, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
+				cli.EXPECT().Post(ctx, model.URLB2BLoginByAPIKey, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 				auth.EXPECT().SetToken(ctx, token.ApiKeysLogin.Tokens).Return(nil)
 
 				return &Account{
 					Auth:                   auth,
-					url:                    url,
 					cli:                    cli,
 					resetTokenRefreshCh:    make(chan int64),
 					watchTokenRefreshState: true,
@@ -271,12 +266,11 @@ func TestAccount_LoginByAPIKey(t *testing.T) {
 
 				bb := []byte(rawReq)
 
-				cli.EXPECT().Post(ctx, url+model.URLB2BLoginByAPIKey, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
+				cli.EXPECT().Post(ctx, model.URLB2BLoginByAPIKey, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 				auth.EXPECT().SetToken(ctx, token.ApiKeysLogin.Tokens).Return(testErr)
 
 				return &Account{
 					Auth:                   auth,
-					url:                    url,
 					cli:                    cli,
 					resetTokenRefreshCh:    make(chan int64),
 					watchTokenRefreshState: true,
@@ -301,10 +295,9 @@ func TestAccount_LoginByAPIKey(t *testing.T) {
 
 				bb := []byte(rawReq)
 
-				cli.EXPECT().Post(ctx, url+model.URLB2BLoginByAPIKey, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
+				cli.EXPECT().Post(ctx, model.URLB2BLoginByAPIKey, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &Account{
-					url:                    url,
 					cli:                    cli,
 					resetTokenRefreshCh:    make(chan int64),
 					watchTokenRefreshState: true,
@@ -322,10 +315,9 @@ func TestAccount_LoginByAPIKey(t *testing.T) {
 
 				bb := []byte(rawReq)
 
-				cli.EXPECT().Post(ctx, url+model.URLB2BLoginByAPIKey, bytes.NewBuffer(bb), nil).Return(nil, testErr)
+				cli.EXPECT().Post(ctx, model.URLB2BLoginByAPIKey, bytes.NewBuffer(bb), nil).Return(nil, testErr)
 
 				return &Account{
-					url:                    url,
 					cli:                    cli,
 					resetTokenRefreshCh:    make(chan int64),
 					watchTokenRefreshState: true,
@@ -361,7 +353,6 @@ func TestAccount_CreateAPIKey(t *testing.T) {
 		}
 		rawApiKeys = `{"api_keys":{"ac_same_as_for_user":false,"api_key":"123123","api_secret":"qqqwww","branches":null,"created_at":"","id":10,"name":"","permissions":null,"roles":null,"updated_at":""},"status":201}`
 		rawReq     = `{"ac_same_as_for_user":true,"branches":null,"firms":null,"has_access_to_all_firm_branches":false,"name":"key","permissions":null,"roles":null,"updated_at":""}`
-		url        = "http://localhost"
 		testErr    = errors.New("process error")
 	)
 
@@ -393,10 +384,9 @@ func TestAccount_CreateAPIKey(t *testing.T) {
 
 				bb := []byte(rawReq)
 
-				cli.EXPECT().Post(ctx, url+model.URLB2BCreateAPIKey, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
+				cli.EXPECT().Post(ctx, model.URLB2BCreateAPIKey, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &Account{
-					url:                    url,
 					cli:                    cli,
 					resetTokenRefreshCh:    make(chan int64),
 					watchTokenRefreshState: true,
@@ -421,10 +411,9 @@ func TestAccount_CreateAPIKey(t *testing.T) {
 
 				bb := []byte(rawReq)
 
-				cli.EXPECT().Post(ctx, url+model.URLB2BCreateAPIKey, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
+				cli.EXPECT().Post(ctx, model.URLB2BCreateAPIKey, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &Account{
-					url:                    url,
 					cli:                    cli,
 					resetTokenRefreshCh:    make(chan int64),
 					watchTokenRefreshState: true,
@@ -442,10 +431,9 @@ func TestAccount_CreateAPIKey(t *testing.T) {
 
 				bb := []byte(rawReq)
 
-				cli.EXPECT().Post(ctx, url+model.URLB2BCreateAPIKey, bytes.NewBuffer(bb), nil).Return(nil, testErr)
+				cli.EXPECT().Post(ctx, model.URLB2BCreateAPIKey, bytes.NewBuffer(bb), nil).Return(nil, testErr)
 
 				return &Account{
-					url:                    url,
 					cli:                    cli,
 					resetTokenRefreshCh:    make(chan int64),
 					watchTokenRefreshState: true,
@@ -489,7 +477,6 @@ func TestAccount_RefreshToken(t *testing.T) {
 			}{
 				Tokens: tkn},
 		}
-		url = "http://localhost"
 
 		rawToken = `{"status":201,"login_basic":{"tokens":{"access_token":"assda","refresh_token":"fewfsdf","access_expires_at":1679588406,"refresh_expires_at":1679588406,"pair_id":"111"}}}`
 		rawReq   = `{"refresh_token":"fewfsdf"}`
@@ -523,11 +510,10 @@ func TestAccount_RefreshToken(t *testing.T) {
 					Body:       r,
 				}
 
-				cli.EXPECT().Post(ctx, url+model.URLB2BRefreshToken, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
+				cli.EXPECT().Post(ctx, model.URLB2BRefreshToken, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &Account{
 					Auth:                   auth,
-					url:                    url,
 					cli:                    cli,
 					resetTokenRefreshCh:    make(chan int64),
 					watchTokenRefreshState: true,
@@ -557,11 +543,10 @@ func TestAccount_RefreshToken(t *testing.T) {
 					Body:       r,
 				}
 
-				cli.EXPECT().Post(ctx, url+model.URLB2BRefreshToken, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
+				cli.EXPECT().Post(ctx, model.URLB2BRefreshToken, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &Account{
 					Auth:                   auth,
-					url:                    url,
 					cli:                    cli,
 					resetTokenRefreshCh:    make(chan int64),
 					watchTokenRefreshState: true,
@@ -590,11 +575,10 @@ func TestAccount_RefreshToken(t *testing.T) {
 					Body:       r,
 				}
 
-				cli.EXPECT().Post(ctx, url+model.URLB2BRefreshToken, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
+				cli.EXPECT().Post(ctx, model.URLB2BRefreshToken, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &Account{
 					Auth:                   auth,
-					url:                    url,
 					cli:                    cli,
 					resetTokenRefreshCh:    make(chan int64),
 					watchTokenRefreshState: true,
@@ -616,11 +600,10 @@ func TestAccount_RefreshToken(t *testing.T) {
 
 				bb := []byte(rawReq)
 
-				cli.EXPECT().Post(ctx, url+model.URLB2BRefreshToken, bytes.NewBuffer(bb), nil).Return(nil, testErr)
+				cli.EXPECT().Post(ctx, model.URLB2BRefreshToken, bytes.NewBuffer(bb), nil).Return(nil, testErr)
 
 				return &Account{
 					Auth:                   auth,
-					url:                    url,
 					cli:                    cli,
 					resetTokenRefreshCh:    make(chan int64),
 					watchTokenRefreshState: true,
@@ -641,7 +624,6 @@ func TestAccount_RefreshToken(t *testing.T) {
 
 				return &Account{
 					Auth:                   auth,
-					url:                    url,
 					resetTokenRefreshCh:    make(chan int64),
 					watchTokenRefreshState: true,
 					refreshTicker:          time.NewTicker(time.Hour * 100),
@@ -661,7 +643,6 @@ func TestAccount_RefreshToken(t *testing.T) {
 
 				return &Account{
 					Auth:                   auth,
-					url:                    url,
 					resetTokenRefreshCh:    make(chan int64),
 					watchTokenRefreshState: true,
 					refreshTicker:          time.NewTicker(time.Hour * 100),
@@ -690,9 +671,9 @@ func TestAccount_GetUserByID(t *testing.T) {
 	var (
 		expResp = model.GetB2BUserByIDResponse{}
 
-		url = "http://localhost"
-
 		rawResp = `{"b2b_user":{"allow_feedback":false,"big_avatar_url":"","branches":null,"created_at":"","do_not_ask_mfa_again":false,"email":"","email_verified":true,"firms":null,"first_name":"","has_access_to_all_firm_branches":false,"id":1,"initiator_id":0,"last_name":"","locale":{"id":0,"locale":"","name":""},"locale_id":0,"mfa_enabled":false,"microservices":null,"mode":"","permissions":null,"phone":"","phone_verified":false,"rep_code":"","roles":null,"small_avatar_url":"","theme":"","updated_at":""},"status":1}`
+
+		testErr = errors.New("process error")
 	)
 
 	expResp.Status = 1
@@ -720,10 +701,9 @@ func TestAccount_GetUserByID(t *testing.T) {
 					Body:       r,
 				}
 
-				cli.EXPECT().Get(ctx, fmt.Sprintf("%s/%d", url+model.URLB2BGetUserByID, id), nil).Return(httpResponse, nil)
+				cli.EXPECT().Get(ctx, fmt.Sprintf("%s/%d", model.URLB2BGetUserByID, id), nil).Return(httpResponse, nil)
 
 				return &Account{
-					url:                    url,
 					cli:                    cli,
 					resetTokenRefreshCh:    make(chan int64),
 					watchTokenRefreshState: true,
@@ -746,10 +726,27 @@ func TestAccount_GetUserByID(t *testing.T) {
 					Body:       r,
 				}
 
-				cli.EXPECT().Get(ctx, fmt.Sprintf("%s/%d", url+model.URLB2BGetUserByID, id), nil).Return(httpResponse, nil)
+				cli.EXPECT().Get(ctx, fmt.Sprintf("%s/%d", model.URLB2BGetUserByID, id), nil).Return(httpResponse, nil)
 
 				return &Account{
-					url:                    url,
+					cli:                    cli,
+					resetTokenRefreshCh:    make(chan int64),
+					watchTokenRefreshState: true,
+					refreshTicker:          time.NewTicker(time.Hour * 100),
+				}
+			},
+		},
+		{
+			name:   "err/cli",
+			hasErr: true,
+			input:  1,
+			fn: func(ctx context.Context, id int) *Account {
+				ctrl := gomock.NewController(t)
+				cli := mock.NewMockHTTPClient(ctrl)
+
+				cli.EXPECT().Get(ctx, fmt.Sprintf("%s/%d", model.URLB2BGetUserByID, id), nil).Return(nil, testErr)
+
+				return &Account{
 					cli:                    cli,
 					resetTokenRefreshCh:    make(chan int64),
 					watchTokenRefreshState: true,

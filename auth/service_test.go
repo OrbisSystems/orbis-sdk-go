@@ -8,7 +8,7 @@ import (
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/OrbisSystems/orbis-sdk-go/interface/mock"
+	"github.com/OrbisSystems/orbis-sdk-go/interfaces/mock"
 	"github.com/OrbisSystems/orbis-sdk-go/model"
 )
 

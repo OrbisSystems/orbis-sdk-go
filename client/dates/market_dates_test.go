@@ -13,12 +13,12 @@ import (
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/OrbisSystems/orbis-sdk-go/interface/mock"
+	"github.com/OrbisSystems/orbis-sdk-go/interfaces/mock"
 	"github.com/OrbisSystems/orbis-sdk-go/model"
 )
 
 func TestNew(t *testing.T) {
-	assert.NotNil(t, New("", nil))
+	assert.NotNil(t, New(nil))
 }
 
 func TestMarketDates_GetMarketDatesHistory(t *testing.T) {
@@ -37,7 +37,6 @@ func TestMarketDates_GetMarketDatesHistory(t *testing.T) {
 		}
 		rawReq      = `{"markets":null,"start_date":"0001-01-01T00:00:00Z","end_date":"0001-01-01T00:00:00Z","paging":{"limit":10}}`
 		rawResponse = `{"data":[{"market_code":"1","market_name":"asd","country_code":"ce1","currency_code":"usd","primary_market":true,"open_date":"","open_time":"","close_time":"","timezone":""}],"count":10}`
-		url         = "http://localhost"
 		testErr     = errors.New("process error")
 	)
 	testCases := []struct {
@@ -67,10 +66,9 @@ func TestMarketDates_GetMarketDatesHistory(t *testing.T) {
 					Body:       r,
 				}
 
-				cli.EXPECT().Post(ctx, url+model.URLInsightBase+model.URLInsightMarketDatesHistory, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
+				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightMarketDatesHistory, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &MarketDates{
-					url: url,
 					cli: cli,
 				}
 			},
@@ -96,10 +94,9 @@ func TestMarketDates_GetMarketDatesHistory(t *testing.T) {
 					Body:       r,
 				}
 
-				cli.EXPECT().Post(ctx, url+model.URLInsightBase+model.URLInsightMarketDatesHistory, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
+				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightMarketDatesHistory, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &MarketDates{
-					url: url,
 					cli: cli,
 				}
 			},
@@ -118,10 +115,9 @@ func TestMarketDates_GetMarketDatesHistory(t *testing.T) {
 
 				bb := []byte(rawReq)
 
-				cli.EXPECT().Post(ctx, url+model.URLInsightBase+model.URLInsightMarketDatesHistory, bytes.NewBuffer(bb), nil).Return(nil, testErr)
+				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightMarketDatesHistory, bytes.NewBuffer(bb), nil).Return(nil, testErr)
 
 				return &MarketDates{
-					url: url,
 					cli: cli,
 				}
 			},
@@ -156,7 +152,6 @@ func TestMarketDates_GetTodayMarketHours(t *testing.T) {
 			TimeZone:     "UTC",
 		}
 		rawResponse = `{"open_right_now":true,"open_today":true,"open_time":"10:00:00","close_time":"20:00:00","time_zone":"UTC"}`
-		url         = "http://localhost"
 		testErr     = errors.New("process error")
 	)
 	testCases := []struct {
@@ -180,10 +175,9 @@ func TestMarketDates_GetTodayMarketHours(t *testing.T) {
 					Body:       r,
 				}
 
-				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?market=%s", url+model.URLInsightBase+model.URLInsightMarketDatesToday, market), nil).Return(httpResponse, nil)
+				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?market=%s", model.URLInsightBase+model.URLInsightMarketDatesToday, market), nil).Return(httpResponse, nil)
 
 				return &MarketDates{
-					url: url,
 					cli: cli,
 				}
 			},
@@ -203,10 +197,9 @@ func TestMarketDates_GetTodayMarketHours(t *testing.T) {
 					Body:       r,
 				}
 
-				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?market=%s", url+model.URLInsightBase+model.URLInsightMarketDatesToday, market), nil).Return(httpResponse, nil)
+				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?market=%s", model.URLInsightBase+model.URLInsightMarketDatesToday, market), nil).Return(httpResponse, nil)
 
 				return &MarketDates{
-					url: url,
 					cli: cli,
 				}
 			},
@@ -219,10 +212,9 @@ func TestMarketDates_GetTodayMarketHours(t *testing.T) {
 				ctrl := gomock.NewController(t)
 				cli := mock.NewMockHTTPClient(ctrl)
 
-				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?market=%s", url+model.URLInsightBase+model.URLInsightMarketDatesToday, market), nil).Return(nil, testErr)
+				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?market=%s", model.URLInsightBase+model.URLInsightMarketDatesToday, market), nil).Return(nil, testErr)
 
 				return &MarketDates{
-					url: url,
 					cli: cli,
 				}
 			},
