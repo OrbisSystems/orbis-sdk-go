@@ -45,23 +45,23 @@ func (og *OptionGreeks) CalculateParams(ctx context.Context, req model.Calculate
 	return resp, err
 }
 
-func (og *OptionGreeks) CalculateMatrix(ctx context.Context, req model.CalculateParamsRequest) (model.CalculateMatrixParamsRequest, error) {
+func (og *OptionGreeks) CalculateMatrix(ctx context.Context, req model.CalculateMatrixParamsRequest) (model.CalculateMatrixResponse, error) {
 	log.Trace("CalculateMatrix called")
 
 	body, err := json.Marshal(req)
 	if err != nil {
-		return model.CalculateMatrixParamsRequest{}, errors.Wrap(err, "couldn't marshal input parameters")
+		return model.CalculateMatrixResponse{}, errors.Wrap(err, "couldn't marshal input parameters")
 	}
 
 	r, err := og.cli.Post(ctx, model.URLInsightBase+model.URLInsightOptionGreeksCalculateMatrix, bytes.NewBuffer(body), nil)
 	if err != nil {
-		return model.CalculateMatrixParamsRequest{}, errors.Wrap(err, "couldn't get og calculated matrix")
+		return model.CalculateMatrixResponse{}, errors.Wrap(err, "couldn't get og calculated matrix")
 	}
 
-	var resp model.CalculateMatrixParamsRequest
+	var resp model.CalculateMatrixResponse
 	err = utils.UnmarshalAndCheckOk(&resp, r)
 	if err != nil {
-		return model.CalculateMatrixParamsRequest{}, err
+		return model.CalculateMatrixResponse{}, err
 	}
 
 	return resp, err

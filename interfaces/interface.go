@@ -137,7 +137,7 @@ type MarketDatesService interface {
 
 type OptionGreeksService interface {
 	CalculateParams(ctx context.Context, req model.CalculateParamsRequest) (model.CalculateParamsResponse, error)
-	CalculateMatrix(ctx context.Context, req model.CalculateParamsRequest) (model.CalculateMatrixParamsRequest, error)
+	CalculateMatrix(ctx context.Context, req model.CalculateMatrixParamsRequest) (model.CalculateMatrixResponse, error)
 }
 
 type WS interface {

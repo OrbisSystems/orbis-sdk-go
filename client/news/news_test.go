@@ -22,7 +22,7 @@ func TestNew(t *testing.T) {
 	assert.NotNil(t, New(nil))
 }
 
-func TestLogos_GetByFilter(t *testing.T) {
+func TestNews_GetByFilter(t *testing.T) {
 	var (
 		id, _ = uuid.Parse("6edba5f5-4a5e-4ec4-8b73-4c98f1341203")
 		tt    = time.Date(2023, 10, 10, 9, 9, 1, 0, time.UTC)
@@ -141,7 +141,7 @@ func TestLogos_GetByFilter(t *testing.T) {
 	}
 }
 
-func TestLogos_GetByID(t *testing.T) {
+func TestNews_GetByID(t *testing.T) {
 	var (
 		id, _ = uuid.Parse("6edba5f5-4a5e-4ec4-8b73-4c98f1341203")
 		tt    = time.Date(2023, 10, 10, 9, 9, 1, 0, time.UTC)
@@ -255,7 +255,7 @@ func TestLogos_GetByID(t *testing.T) {
 	}
 }
 
-func TestWorldMarket_GetAvailableSymbols(t *testing.T) {
+func TestNews_GetAvailableSymbols(t *testing.T) {
 	var (
 		expResp = []string{"AAPL", "FB"}
 
@@ -343,7 +343,7 @@ func TestWorldMarket_GetAvailableSymbols(t *testing.T) {
 	}
 }
 
-func TestLogos_GetAvailableAuthors(t *testing.T) {
+func TestNews_GetAvailableAuthors(t *testing.T) {
 	var (
 		symbol = "AAPL"
 
@@ -466,7 +466,7 @@ func TestLogos_GetAvailableAuthors(t *testing.T) {
 	}
 }
 
-func TestLogos_GetAvailableChannels(t *testing.T) {
+func TestNews_GetAvailableChannels(t *testing.T) {
 	var (
 		symbol = "AAPL"
 
@@ -589,7 +589,7 @@ func TestLogos_GetAvailableChannels(t *testing.T) {
 	}
 }
 
-func TestLogos_GetAvailableTags(t *testing.T) {
+func TestNews_GetAvailableTags(t *testing.T) {
 	var (
 		symbol = "AAPL"
 

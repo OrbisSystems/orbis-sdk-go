@@ -98,7 +98,7 @@ type Newsfeed struct {
 
 type ArticleByIDRequest struct {
 	Language string `json:"language"` //
-	ID       int    `json:"ID"`       //
+	ID       int    `json:"id"`       //
 }
 
 type SearchArticleRequest struct {

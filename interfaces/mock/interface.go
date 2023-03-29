@@ -1559,10 +1559,10 @@ func (m *MockOptionGreeksService) EXPECT() *MockOptionGreeksServiceMockRecorder 
 }
 
 // CalculateMatrix mocks base method.
-func (m *MockOptionGreeksService) CalculateMatrix(ctx context.Context, req model.CalculateParamsRequest) (model.CalculateMatrixParamsRequest, error) {
+func (m *MockOptionGreeksService) CalculateMatrix(ctx context.Context, req model.CalculateMatrixParamsRequest) (model.CalculateMatrixResponse, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CalculateMatrix", ctx, req)
-	ret0, _ := ret[0].(model.CalculateMatrixParamsRequest)
+	ret0, _ := ret[0].(model.CalculateMatrixResponse)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
