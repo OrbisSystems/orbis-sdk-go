@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"io"
 
 	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
@@ -70,88 +71,6 @@ func (c *News) GetByID(ctx context.Context, req model.NewsRequest) (model.News, 
 	return resp, err
 }
 
-// GetTagsForSymbol returns available subjects for symbol.
-func (c *News) GetTagsForSymbol(ctx context.Context, req model.SymbolTagsRequest) ([]string, error) {
-	log.Trace("GetTagsForSymbol called")
-
-	body, err := json.Marshal(req)
-	if err != nil {
-		return nil, errors.Wrap(err, "couldn't marshal input parameters")
-	}
-
-	r, err := c.cli.Post(ctx, model.URLInsightBase+model.URLInsightNewsSymbolTags, bytes.NewBuffer(body), nil)
-	if err != nil {
-		return nil, errors.Wrap(err, "couldn't get news symbol tags")
-	}
-
-	var resp []string
-	err = utils.UnmarshalAndCheckOk(&resp, r)
-	if err != nil {
-		return nil, err
-	}
-
-	return resp, err
-}
-
-// GetChannelsForSymbol returns available subjects for symbol.
-func (c *News) GetChannelsForSymbol(ctx context.Context, req model.SymbolChannelsRequest) ([]string, error) {
-	log.Trace("GetChannelsForSymbol called")
-
-	body, err := json.Marshal(req)
-	if err != nil {
-		return nil, errors.Wrap(err, "couldn't marshal input parameters")
-	}
-
-	r, err := c.cli.Post(ctx, model.URLInsightBase+model.URLInsightNewsSymbolChannels, bytes.NewBuffer(body), nil)
-	if err != nil {
-		return nil, errors.Wrap(err, "couldn't get news symbol channels")
-	}
-
-	var resp []string
-	err = utils.UnmarshalAndCheckOk(&resp, r)
-	if err != nil {
-		return nil, err
-	}
-
-	return resp, err
-}
-
-// GetAvailableAuthors returns all available taxonomy codes for news. You can use it for GetByFilter filter.
-func (c *News) GetAvailableAuthors(ctx context.Context) ([]string, error) {
-	log.Trace("GetAvailableAuthors called")
-
-	r, err := c.cli.Get(ctx, model.URLInsightBase+model.URLInsightNewsAuthors, nil)
-	if err != nil {
-		return nil, errors.Wrap(err, "couldn't get news available authors")
-	}
-
-	var resp []string
-	err = utils.UnmarshalAndCheckOk(&resp, r)
-	if err != nil {
-		return nil, err
-	}
-
-	return resp, err
-}
-
-// GetAvailableChannels returns all available news subjects.
-func (c *News) GetAvailableChannels(ctx context.Context) ([]string, error) {
-	log.Trace("GetAvailableChannels called")
-
-	r, err := c.cli.Get(ctx, model.URLInsightBase+model.URLInsightNewsChannels, nil)
-	if err != nil {
-		return nil, errors.Wrap(err, "couldn't get news available channels")
-	}
-
-	var resp []string
-	err = utils.UnmarshalAndCheckOk(&resp, r)
-	if err != nil {
-		return nil, err
-	}
-
-	return resp, err
-}
-
 // GetAvailableSymbols returns all available symbols of news.
 func (c *News) GetAvailableSymbols(ctx context.Context) ([]string, error) {
 	log.Trace("GetAvailableSymbols called")
@@ -170,11 +89,62 @@ func (c *News) GetAvailableSymbols(ctx context.Context) ([]string, error) {
 	return resp, err
 }
 
-// GetAvailableTags returns all available news sources.
-func (c *News) GetAvailableTags(ctx context.Context) ([]string, error) {
+// GetAvailableAuthors returns all available authors for news. You can use it for GetByFilter filter.
+func (c *News) GetAvailableAuthors(ctx context.Context, symbol *string) ([]string, error) {
+	log.Trace("GetAvailableAuthors called")
+
+	body, err := prepareBodyWithSymbol(symbol)
+	if err != nil {
+		return nil, err
+	}
+
+	r, err := c.cli.Post(ctx, model.URLInsightBase+model.URLInsightNewsAuthors, body, nil)
+	if err != nil {
+		return nil, errors.Wrap(err, "couldn't get news available authors")
+	}
+
+	var resp []string
+	err = utils.UnmarshalAndCheckOk(&resp, r)
+	if err != nil {
+		return nil, err
+	}
+
+	return resp, err
+}
+
+// GetAvailableChannels returns all available news channels.
+func (c *News) GetAvailableChannels(ctx context.Context, symbol *string) ([]string, error) {
+	log.Trace("GetAvailableChannels called")
+
+	body, err := prepareBodyWithSymbol(symbol)
+	if err != nil {
+		return nil, err
+	}
+
+	r, err := c.cli.Post(ctx, model.URLInsightBase+model.URLInsightNewsChannels, body, nil)
+	if err != nil {
+		return nil, errors.Wrap(err, "couldn't get news available channels")
+	}
+
+	var resp []string
+	err = utils.UnmarshalAndCheckOk(&resp, r)
+	if err != nil {
+		return nil, err
+	}
+
+	return resp, err
+}
+
+// GetAvailableTags returns all available news tags.
+func (c *News) GetAvailableTags(ctx context.Context, symbol *string) ([]string, error) {
 	log.Trace("GetAvailableTags called")
 
-	r, err := c.cli.Get(ctx, model.URLInsightBase+model.URLInsightNewsTags, nil)
+	body, err := prepareBodyWithSymbol(symbol)
+	if err != nil {
+		return nil, err
+	}
+
+	r, err := c.cli.Post(ctx, model.URLInsightBase+model.URLInsightNewsTags, body, nil)
 	if err != nil {
 		return nil, errors.Wrap(err, "couldn't get news available tags")
 	}
@@ -186,4 +156,20 @@ func (c *News) GetAvailableTags(ctx context.Context) ([]string, error) {
 	}
 
 	return resp, err
+}
+
+func prepareBodyWithSymbol(symbol *string) (io.Reader, error) {
+	var (
+		body io.Reader
+	)
+	if symbol != nil {
+		req := model.HelpRequestWithSymbol{Symbol: symbol}
+		b, err := json.Marshal(req)
+		if err != nil {
+			return nil, errors.Wrap(err, "couldn't marshal input parameters")
+		}
+		body = bytes.NewBuffer(b)
+	}
+
+	return body, nil
 }

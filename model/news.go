@@ -50,12 +50,8 @@ type NewsTag struct {
 	Name string `json:"name"`
 }
 
-type SymbolTagsRequest struct {
-	Symbol string `json:"symbol"`
-}
-
-type SymbolChannelsRequest struct {
-	Symbol string `json:"symbol"`
+type HelpRequestWithSymbol struct {
+	Symbol *string `json:"symbol"`
 }
 
 type NewsFilterRequest struct {

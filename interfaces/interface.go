@@ -44,12 +44,10 @@ type AccountService interface {
 type NewsService interface {
 	GetByFilter(ctx context.Context, req model.NewsFilterRequest) (model.NewsResponse, error)
 	GetByID(ctx context.Context, req model.NewsRequest) (model.News, error)
-	GetTagsForSymbol(ctx context.Context, req model.SymbolTagsRequest) ([]string, error)
-	GetChannelsForSymbol(ctx context.Context, req model.SymbolChannelsRequest) ([]string, error)
-	GetAvailableAuthors(ctx context.Context) ([]string, error)
-	GetAvailableChannels(ctx context.Context) ([]string, error)
 	GetAvailableSymbols(ctx context.Context) ([]string, error)
-	GetAvailableTags(ctx context.Context) ([]string, error)
+	GetAvailableAuthors(ctx context.Context, symbol *string) ([]string, error)
+	GetAvailableChannels(ctx context.Context, symbol *string) ([]string, error)
+	GetAvailableTags(ctx context.Context, symbol *string) ([]string, error)
 }
 
 type LogosService interface {

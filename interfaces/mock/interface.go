@@ -369,33 +369,33 @@ func (m *MockNewsService) EXPECT() *MockNewsServiceMockRecorder {
 }
 
 // GetAvailableAuthors mocks base method.
-func (m *MockNewsService) GetAvailableAuthors(ctx context.Context) ([]string, error) {
+func (m *MockNewsService) GetAvailableAuthors(ctx context.Context, symbol *string) ([]string, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetAvailableAuthors", ctx)
+	ret := m.ctrl.Call(m, "GetAvailableAuthors", ctx, symbol)
 	ret0, _ := ret[0].([]string)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // GetAvailableAuthors indicates an expected call of GetAvailableAuthors.
-func (mr *MockNewsServiceMockRecorder) GetAvailableAuthors(ctx interface{}) *gomock.Call {
+func (mr *MockNewsServiceMockRecorder) GetAvailableAuthors(ctx, symbol interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAvailableAuthors", reflect.TypeOf((*MockNewsService)(nil).GetAvailableAuthors), ctx)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAvailableAuthors", reflect.TypeOf((*MockNewsService)(nil).GetAvailableAuthors), ctx, symbol)
 }
 
 // GetAvailableChannels mocks base method.
-func (m *MockNewsService) GetAvailableChannels(ctx context.Context) ([]string, error) {
+func (m *MockNewsService) GetAvailableChannels(ctx context.Context, symbol *string) ([]string, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetAvailableChannels", ctx)
+	ret := m.ctrl.Call(m, "GetAvailableChannels", ctx, symbol)
 	ret0, _ := ret[0].([]string)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // GetAvailableChannels indicates an expected call of GetAvailableChannels.
-func (mr *MockNewsServiceMockRecorder) GetAvailableChannels(ctx interface{}) *gomock.Call {
+func (mr *MockNewsServiceMockRecorder) GetAvailableChannels(ctx, symbol interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAvailableChannels", reflect.TypeOf((*MockNewsService)(nil).GetAvailableChannels), ctx)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAvailableChannels", reflect.TypeOf((*MockNewsService)(nil).GetAvailableChannels), ctx, symbol)
 }
 
 // GetAvailableSymbols mocks base method.
@@ -414,18 +414,18 @@ func (mr *MockNewsServiceMockRecorder) GetAvailableSymbols(ctx interface{}) *gom
 }
 
 // GetAvailableTags mocks base method.
-func (m *MockNewsService) GetAvailableTags(ctx context.Context) ([]string, error) {
+func (m *MockNewsService) GetAvailableTags(ctx context.Context, symbol *string) ([]string, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetAvailableTags", ctx)
+	ret := m.ctrl.Call(m, "GetAvailableTags", ctx, symbol)
 	ret0, _ := ret[0].([]string)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // GetAvailableTags indicates an expected call of GetAvailableTags.
-func (mr *MockNewsServiceMockRecorder) GetAvailableTags(ctx interface{}) *gomock.Call {
+func (mr *MockNewsServiceMockRecorder) GetAvailableTags(ctx, symbol interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAvailableTags", reflect.TypeOf((*MockNewsService)(nil).GetAvailableTags), ctx)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAvailableTags", reflect.TypeOf((*MockNewsService)(nil).GetAvailableTags), ctx, symbol)
 }
 
 // GetByFilter mocks base method.
@@ -456,36 +456,6 @@ func (m *MockNewsService) GetByID(ctx context.Context, req model.NewsRequest) (m
 func (mr *MockNewsServiceMockRecorder) GetByID(ctx, req interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetByID", reflect.TypeOf((*MockNewsService)(nil).GetByID), ctx, req)
-}
-
-// GetChannelsForSymbol mocks base method.
-func (m *MockNewsService) GetChannelsForSymbol(ctx context.Context, req model.SymbolChannelsRequest) ([]string, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetChannelsForSymbol", ctx, req)
-	ret0, _ := ret[0].([]string)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// GetChannelsForSymbol indicates an expected call of GetChannelsForSymbol.
-func (mr *MockNewsServiceMockRecorder) GetChannelsForSymbol(ctx, req interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetChannelsForSymbol", reflect.TypeOf((*MockNewsService)(nil).GetChannelsForSymbol), ctx, req)
-}
-
-// GetTagsForSymbol mocks base method.
-func (m *MockNewsService) GetTagsForSymbol(ctx context.Context, req model.SymbolTagsRequest) ([]string, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetTagsForSymbol", ctx, req)
-	ret0, _ := ret[0].([]string)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// GetTagsForSymbol indicates an expected call of GetTagsForSymbol.
-func (mr *MockNewsServiceMockRecorder) GetTagsForSymbol(ctx, req interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetTagsForSymbol", reflect.TypeOf((*MockNewsService)(nil).GetTagsForSymbol), ctx, req)
 }
 
 // MockLogosService is a mock of LogosService interface.

@@ -1,5 +1,7 @@
 GOLINT := golangci-lint
 
+PACKAGES_FOR_TEST := $(shell go list ./... | grep -v config | grep -v bin | grep -v interfaces | grep -v model | grep -v utils)
+
 all: dep dep-update fmt lint test
 
 dep:
@@ -16,7 +18,7 @@ lint: dep check-lint
 	$(GOLINT) run --timeout=5m -c .golangci.yml
 
 test: gen-mock
-	go test -tags=unit -cover -race -count=1 -timeout=60s ./...
+	@go test -tags=unit -cover -race -count=1 -timeout=60s $(PACKAGES_FOR_TEST)
 
 check-lint:
 	@which $(GOLINT) || curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.51.1

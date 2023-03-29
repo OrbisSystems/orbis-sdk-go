@@ -30,14 +30,12 @@ const (
 	// 		NEWS
 	// *******************************************
 
-	URLInsightNewsFilter         = "/news/filter"
-	URLInsightNewsByID           = "/news/id"
-	URLInsightNewsSymbolTags     = "/news/symbol_tags"
-	URLInsightNewsSymbolChannels = "/news/symbol_channels"
-	URLInsightNewsAuthors        = "/news/authors"
-	URLInsightNewsChannels       = "/news/channels"
-	URLInsightNewsSymbols        = "/news/symbols"
-	URLInsightNewsTags           = "/news/tags"
+	URLInsightNewsFilter   = "/news/filter"
+	URLInsightNewsByID     = "/news/id"
+	URLInsightNewsSymbols  = "/news/symbols"
+	URLInsightNewsAuthors  = "/news/authors"
+	URLInsightNewsChannels = "/news/channels"
+	URLInsightNewsTags     = "/news/tags"
 
 	// *******************************************
 	// 		LOGOS
