@@ -204,10 +204,7 @@ type MomentumRatioGraphRequest struct {
 	Mode      string   `json:"mode"`
 }
 
-type MomentumRatioGraphResponse struct {
-	AAPL []SymbolMomentum `json:"AAPL"`
-	CSCO []SymbolMomentum `json:"CSCO"`
-}
+type MomentumRatioGraphResponse map[string][]SymbolMomentum
 
 type SymbolMomentum struct {
 	ResultRatio    float64 `json:"result_ratio"`

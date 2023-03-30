@@ -124,7 +124,7 @@ func (s *Research) GetEarningReleases(ctx context.Context, req model.EarningRele
 	return resp, err
 }
 
-func (s *Research) GetSymbolFundamentals(ctx context.Context, req model.EarningReleasesRequest) (model.GetSymbolFundamentalsResponse, error) {
+func (s *Research) GetSymbolFundamentals(ctx context.Context, req model.GetSymbolFundamentalsRequest) (model.GetSymbolFundamentalsResponse, error) {
 	log.Trace("GetSymbolFundamentals called")
 
 	body, err := json.Marshal(req)

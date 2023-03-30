@@ -1302,7 +1302,7 @@ func (mr *MockResearchServiceMockRecorder) GetSeasonality(ctx, req interface{}) 
 }
 
 // GetSymbolFundamentals mocks base method.
-func (m *MockResearchService) GetSymbolFundamentals(ctx context.Context, req model.EarningReleasesRequest) (model.GetSymbolFundamentalsResponse, error) {
+func (m *MockResearchService) GetSymbolFundamentals(ctx context.Context, req model.GetSymbolFundamentalsRequest) (model.GetSymbolFundamentalsResponse, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetSymbolFundamentals", ctx, req)
 	ret0, _ := ret[0].(model.GetSymbolFundamentalsResponse)
