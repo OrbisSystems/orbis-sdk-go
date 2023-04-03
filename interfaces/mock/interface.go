@@ -119,6 +119,44 @@ func (mr *MockStorageMockRecorder) Store(ctx, data interface{}) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Store", reflect.TypeOf((*MockStorage)(nil).Store), ctx, data)
 }
 
+// MockHTTPExecutor is a mock of HTTPExecutor interface.
+type MockHTTPExecutor struct {
+	ctrl     *gomock.Controller
+	recorder *MockHTTPExecutorMockRecorder
+}
+
+// MockHTTPExecutorMockRecorder is the mock recorder for MockHTTPExecutor.
+type MockHTTPExecutorMockRecorder struct {
+	mock *MockHTTPExecutor
+}
+
+// NewMockHTTPExecutor creates a new mock instance.
+func NewMockHTTPExecutor(ctrl *gomock.Controller) *MockHTTPExecutor {
+	mock := &MockHTTPExecutor{ctrl: ctrl}
+	mock.recorder = &MockHTTPExecutorMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockHTTPExecutor) EXPECT() *MockHTTPExecutorMockRecorder {
+	return m.recorder
+}
+
+// Do mocks base method.
+func (m *MockHTTPExecutor) Do(req *http.Request) (*http.Response, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Do", req)
+	ret0, _ := ret[0].(*http.Response)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Do indicates an expected call of Do.
+func (mr *MockHTTPExecutorMockRecorder) Do(req interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Do", reflect.TypeOf((*MockHTTPExecutor)(nil).Do), req)
+}
+
 // MockHTTPClient is a mock of HTTPClient interface.
 type MockHTTPClient struct {
 	ctrl     *gomock.Controller

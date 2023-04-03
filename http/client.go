@@ -21,7 +21,7 @@ const (
 
 // OrbisClient is a wrapper for http client with additional functionality.
 type OrbisClient struct {
-	http.Client
+	cli sdk.HTTPExecutor
 
 	baseURL string
 
@@ -30,7 +30,7 @@ type OrbisClient struct {
 
 // New returns new OrbisClient instance with default http client.
 func New(baseURL string, auth sdk.Auth) sdk.HTTPClient {
-	var httpCli = http.Client{
+	var httpCli = &http.Client{
 		Timeout: defaultTimeout,
 	}
 
@@ -38,15 +38,15 @@ func New(baseURL string, auth sdk.Auth) sdk.HTTPClient {
 }
 
 // NewWithHttp returns new OrbisClient instance with http client user defined.
-func NewWithHttp(baseURL string, auth sdk.Auth, client http.Client) sdk.HTTPClient {
+func NewWithHttp(baseURL string, auth sdk.Auth, client sdk.HTTPExecutor) sdk.HTTPClient {
 	return newCli(baseURL, auth, client)
 }
 
-func newCli(baseURL string, auth sdk.Auth, client http.Client) sdk.HTTPClient {
+func newCli(baseURL string, auth sdk.Auth, client sdk.HTTPExecutor) sdk.HTTPClient {
 	return &OrbisClient{
 		auth:    auth,
 		baseURL: baseURL,
-		Client:  client,
+		cli:     client,
 	}
 }
 
@@ -83,7 +83,7 @@ func (c *OrbisClient) do(ctx context.Context, request *http.Request) (*http.Resp
 		request.Header.Add(contentTypeHeaderKey, applicationJson)
 	}
 
-	response, err := c.Client.Do(request)
+	response, err := c.cli.Do(request)
 	if err != nil {
 		return nil, err
 	}

@@ -21,6 +21,10 @@ type Storage interface {
 	Get(ctx context.Context) ([]byte, error)
 }
 
+type HTTPExecutor interface {
+	Do(req *http.Request) (*http.Response, error)
+}
+
 type HTTPClient interface {
 	Get(ctx context.Context, url string, headers http.Header) (*http.Response, error)
 	Post(ctx context.Context, url string, body io.Reader, headers http.Header) (*http.Response, error)
