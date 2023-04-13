@@ -33,8 +33,6 @@ type HTTPClient interface {
 type Auth interface {
 	SetToken(ctx context.Context, token model.Token) error
 	GetToken(ctx context.Context) (model.Token, error)
-	SetTokenRefreshingState(state bool)
-	GetTokenRefreshingState() bool
 }
 
 type AccountService interface {

@@ -96,8 +96,6 @@ func (c *OrbisClient) getTokenHeader(ctx context.Context, header http.Header) ht
 	if header == nil {
 		header = http.Header{}
 	}
-	for c.auth.GetTokenRefreshingState() {
-	} // lock getting token from auth system if there is a process for token refresh
 
 	token, err := c.auth.GetToken(ctx)
 	if err != nil {

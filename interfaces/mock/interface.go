@@ -248,20 +248,6 @@ func (mr *MockAuthMockRecorder) GetToken(ctx interface{}) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetToken", reflect.TypeOf((*MockAuth)(nil).GetToken), ctx)
 }
 
-// GetTokenRefreshingState mocks base method.
-func (m *MockAuth) GetTokenRefreshingState() bool {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetTokenRefreshingState")
-	ret0, _ := ret[0].(bool)
-	return ret0
-}
-
-// GetTokenRefreshingState indicates an expected call of GetTokenRefreshingState.
-func (mr *MockAuthMockRecorder) GetTokenRefreshingState() *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetTokenRefreshingState", reflect.TypeOf((*MockAuth)(nil).GetTokenRefreshingState))
-}
-
 // SetToken mocks base method.
 func (m *MockAuth) SetToken(ctx context.Context, token model.Token) error {
 	m.ctrl.T.Helper()
@@ -274,18 +260,6 @@ func (m *MockAuth) SetToken(ctx context.Context, token model.Token) error {
 func (mr *MockAuthMockRecorder) SetToken(ctx, token interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetToken", reflect.TypeOf((*MockAuth)(nil).SetToken), ctx, token)
-}
-
-// SetTokenRefreshingState mocks base method.
-func (m *MockAuth) SetTokenRefreshingState(state bool) {
-	m.ctrl.T.Helper()
-	m.ctrl.Call(m, "SetTokenRefreshingState", state)
-}
-
-// SetTokenRefreshingState indicates an expected call of SetTokenRefreshingState.
-func (mr *MockAuthMockRecorder) SetTokenRefreshingState(state interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetTokenRefreshingState", reflect.TypeOf((*MockAuth)(nil).SetTokenRefreshingState), state)
 }
 
 // MockAccountService is a mock of AccountService interface.

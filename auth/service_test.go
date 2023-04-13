@@ -140,30 +140,3 @@ func TestAuth_GetToken(t *testing.T) {
 		})
 	}
 }
-
-func TestAuth_SetTokenRefreshingState(t *testing.T) {
-	t.Run("success/true", func(t *testing.T) {
-		a := New(nil)
-		a.SetTokenRefreshingState(true)
-		assert.True(t, a.tokenRefreshingState)
-	})
-	t.Run("success/false", func(t *testing.T) {
-		a := New(nil)
-		a.SetTokenRefreshingState(false)
-		assert.False(t, a.tokenRefreshingState)
-	})
-}
-
-func TestAuth_GetTokenRefreshingState(t *testing.T) {
-	t.Run("success/true", func(t *testing.T) {
-		a := New(nil)
-		a.SetTokenRefreshingState(true)
-		state := a.GetTokenRefreshingState()
-		assert.True(t, state)
-	})
-	t.Run("success/false", func(t *testing.T) {
-		a := New(nil)
-		state := a.GetTokenRefreshingState()
-		assert.False(t, state)
-	})
-}

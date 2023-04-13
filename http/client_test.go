@@ -58,7 +58,6 @@ func TestOrbisClient_Get(t *testing.T) {
 				header.Add(contentTypeHeaderKey, applicationJson)
 				req.Header = header
 
-				auth.EXPECT().GetTokenRefreshingState().Return(false)
 				auth.EXPECT().GetToken(ctx).Return(tkn, nil)
 				httpCli.EXPECT().Do(req).Return(httpResponse, nil)
 
@@ -78,7 +77,6 @@ func TestOrbisClient_Get(t *testing.T) {
 				header.Add(contentTypeHeaderKey, applicationJson)
 				req.Header = header
 
-				auth.EXPECT().GetTokenRefreshingState().Return(false)
 				auth.EXPECT().GetToken(ctx).Return(model.Token{}, testErr)
 				httpCli.EXPECT().Do(req).Return(httpResponse, nil)
 
@@ -99,7 +97,6 @@ func TestOrbisClient_Get(t *testing.T) {
 				header.Add(contentTypeHeaderKey, applicationJson)
 				req.Header = header
 
-				auth.EXPECT().GetTokenRefreshingState().Return(false)
 				auth.EXPECT().GetToken(ctx).Return(tkn, nil)
 				httpCli.EXPECT().Do(req).Return(nil, testErr)
 
@@ -161,7 +158,6 @@ func TestOrbisClient_Post(t *testing.T) {
 				header.Add(contentTypeHeaderKey, applicationJson)
 				req.Header = header
 
-				auth.EXPECT().GetTokenRefreshingState().Return(false)
 				auth.EXPECT().GetToken(ctx).Return(tkn, nil)
 				httpCli.EXPECT().Do(req).Return(httpResponse, nil)
 
@@ -181,7 +177,6 @@ func TestOrbisClient_Post(t *testing.T) {
 				header.Add(contentTypeHeaderKey, applicationJson)
 				req.Header = header
 
-				auth.EXPECT().GetTokenRefreshingState().Return(false)
 				auth.EXPECT().GetToken(ctx).Return(model.Token{}, testErr)
 				httpCli.EXPECT().Do(req).Return(httpResponse, nil)
 
@@ -202,7 +197,6 @@ func TestOrbisClient_Post(t *testing.T) {
 				header.Add(contentTypeHeaderKey, applicationJson)
 				req.Header = header
 
-				auth.EXPECT().GetTokenRefreshingState().Return(false)
 				auth.EXPECT().GetToken(ctx).Return(tkn, nil)
 				httpCli.EXPECT().Do(req).Return(nil, testErr)
 

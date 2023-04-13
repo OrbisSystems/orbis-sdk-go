@@ -26,7 +26,6 @@ type Account struct {
 
 	cli sdk.HTTPClient
 
-	resetTokenRefreshCh    chan int64
 	watchTokenRefreshState bool
 
 	refreshTicker *time.Ticker
@@ -37,8 +36,7 @@ func New(auth sdk.Auth, cli sdk.HTTPClient) *Account {
 		Auth: auth,
 		cli:  cli,
 
-		resetTokenRefreshCh: make(chan int64),
-		refreshTicker:       time.NewTicker(time.Hour * 100), // default
+		refreshTicker: time.NewTicker(time.Hour * 100), // default
 	}
 
 	a.watchTokenRefresh()
@@ -79,9 +77,6 @@ func (a *Account) watchTokenRefresh() {
 				if err != nil {
 					log.Errorf("error while updating token by refresh token: %v", err)
 				}
-			case v := <-a.resetTokenRefreshCh:
-				log.Tracef("resetting token refresh duration... new unix time: %d", v)
-				a.refreshTicker.Reset(getRefreshDuration(v))
 			}
 		}
 	}()
@@ -167,10 +162,6 @@ func (a *Account) CreateAPIKey(ctx context.Context, req model.CreateAPIKeyReques
 func (a *Account) RefreshToken(ctx context.Context) error {
 	log.Trace("RefreshToken called")
 
-	// marking this flag that we are refreshing the token
-	a.SetTokenRefreshingState(true)
-	defer a.SetTokenRefreshingState(false)
-
 	tkn, err := a.GetToken(ctx)
 	if err != nil {
 		return err
@@ -218,7 +209,12 @@ func (a *Account) GetUserByID(ctx context.Context, id int) (model.GetB2BUserByID
 
 func getRefreshDuration(v int64) time.Duration {
 	expTime := time.Unix(v, 0).Add(-time.Minute * 1) // make trigger little-bit earlier than exp time
-	return expTime.UTC().Sub(time.Now())
+	refreshDuration := expTime.UTC().Sub(time.Now())
+	if refreshDuration.Milliseconds() <= 0 { // in case something went wrong -  make refresh in 1 minutes
+		refreshDuration = time.Minute
+	}
+
+	return refreshDuration
 }
 
 func (a *Account) processNewToken(tkn model.Token) {
@@ -228,7 +224,6 @@ func (a *Account) processNewToken(tkn model.Token) {
 
 	time.Sleep(time.Millisecond * 100)
 
-	go func() {
-		a.resetTokenRefreshCh <- tkn.AccessExpiresAt
-	}()
+	log.Tracef("resetting token refresh duration... new unix time: %d", tkn.AccessExpiresAt)
+	a.refreshTicker.Reset(getRefreshDuration(tkn.AccessExpiresAt))
 }
