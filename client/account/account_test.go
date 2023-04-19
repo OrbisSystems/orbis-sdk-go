@@ -28,6 +28,103 @@ func TestNew(t *testing.T) {
 	assert.NotNil(t, New(auth, cli))
 }
 
+func TestAccount_NeedToLogin(t *testing.T) {
+	testCases := []struct {
+		name         string
+		err          error
+		needToUpdate bool
+		fn           func(ctx context.Context) *Account
+	}{
+		{
+			name: "success/need_to_update",
+			err:  nil,
+			fn: func(ctx context.Context) *Account {
+				ctrl := gomock.NewController(t)
+				auth := mock.NewMockAuth(ctrl)
+
+				auth.EXPECT().GetToken(ctx).Return(model.Token{
+					AccessToken:      "QQQ",
+					RefreshToken:     "WWW",
+					AccessExpiresAt:  time.Now().Add(time.Hour).Unix(),
+					RefreshExpiresAt: time.Now().Add(time.Hour).Unix(),
+					PairId:           "123123123",
+				}, nil).MaxTimes(2)
+
+				return New(auth, nil)
+			},
+		},
+		{
+			name:         "success/not_need_to_update",
+			needToUpdate: true,
+			err:          nil,
+			fn: func(ctx context.Context) *Account {
+				ctrl := gomock.NewController(t)
+				auth := mock.NewMockAuth(ctrl)
+
+				auth.EXPECT().GetToken(ctx).Return(model.Token{
+					AccessToken:      "QQQ",
+					RefreshToken:     "WWW",
+					AccessExpiresAt:  time.Now().Add(-time.Hour).Unix(),
+					RefreshExpiresAt: time.Now().Add(-time.Hour).Unix(),
+					PairId:           "123123123",
+				}, nil).MaxTimes(2)
+
+				return New(auth, nil)
+			},
+		},
+		{
+			name:         "success/empty_token",
+			needToUpdate: true,
+			err:          nil,
+			fn: func(ctx context.Context) *Account {
+				ctrl := gomock.NewController(t)
+				auth := mock.NewMockAuth(ctrl)
+
+				auth.EXPECT().GetToken(ctx).Return(model.Token{
+					AccessToken:      "",
+					RefreshToken:     "",
+					AccessExpiresAt:  time.Now().Add(-time.Hour).Unix(),
+					RefreshExpiresAt: time.Now().Add(-time.Hour).Unix(),
+					PairId:           "123123123",
+				}, nil).MaxTimes(2)
+
+				return New(auth, nil)
+			},
+		},
+		{
+			name:         "success/empty_token",
+			needToUpdate: true,
+			err:          errors.New("error"),
+			fn: func(ctx context.Context) *Account {
+				ctrl := gomock.NewController(t)
+				auth := mock.NewMockAuth(ctrl)
+
+				auth.EXPECT().GetToken(ctx).Return(model.Token{}, errors.New("error")).MaxTimes(2)
+
+				return New(auth, nil)
+			},
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			ctx := context.Background()
+			a := tc.fn(ctx)
+
+			need, err := a.NeedToLogin(ctx)
+
+			if tc.err == nil {
+				assert.NoError(t, err)
+			} else {
+				assert.Error(t, err)
+				assert.EqualError(t, err, tc.err.Error())
+			}
+			assert.EqualValues(t, tc.needToUpdate, need)
+		})
+	}
+}
+
 func TestAccount_LoginByEmail(t *testing.T) {
 	var (
 		unixTime = time.Now().Add(time.Minute * 5).Unix()

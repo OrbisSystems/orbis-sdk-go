@@ -36,6 +36,7 @@ type Auth interface {
 }
 
 type AccountService interface {
+	NeedToLogin(ctx context.Context) (bool, error)
 	LoginByEmail(ctx context.Context, req model.LoginByEmailRequest) error
 	LoginByAPIKey(ctx context.Context, req model.LoginByAPIKeyRequest) error
 	CreateAPIKey(ctx context.Context, req model.CreateAPIKeyRequest) (model.CreateAPIKeyResponse, error)

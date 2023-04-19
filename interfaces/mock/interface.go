@@ -343,6 +343,21 @@ func (mr *MockAccountServiceMockRecorder) LoginByEmail(ctx, req interface{}) *go
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "LoginByEmail", reflect.TypeOf((*MockAccountService)(nil).LoginByEmail), ctx, req)
 }
 
+// NeedToLogin mocks base method.
+func (m *MockAccountService) NeedToLogin(ctx context.Context) (bool, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "NeedToLogin", ctx)
+	ret0, _ := ret[0].(bool)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// NeedToLogin indicates an expected call of NeedToLogin.
+func (mr *MockAccountServiceMockRecorder) NeedToLogin(ctx interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "NeedToLogin", reflect.TypeOf((*MockAccountService)(nil).NeedToLogin), ctx)
+}
+
 // RefreshToken mocks base method.
 func (m *MockAccountService) RefreshToken(ctx context.Context) error {
 	m.ctrl.T.Helper()

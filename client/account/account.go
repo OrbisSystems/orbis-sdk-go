@@ -82,6 +82,21 @@ func (a *Account) watchTokenRefresh() {
 	}()
 }
 
+// NeedToLogin tells you do you need to call login API or there is still actual token you can use.
+// True - need to re-login.
+func (a *Account) NeedToLogin(ctx context.Context) (bool, error) {
+	tkn, err := a.Auth.GetToken(ctx)
+	if err != nil {
+		return true, err
+	}
+
+	if tkn.RefreshToken == "" {
+		return true, nil
+	}
+
+	return tkn.RefreshExpiresAt <= time.Now().Unix(), nil
+}
+
 // LoginByEmail uses for getting token if you are a client with the biggest access in you company.
 // After log in, you can create api keys with limited access for you users using CreateAPIKey method.
 // With these api keys your users can log in via SDK using LoginByAPIKey method.
