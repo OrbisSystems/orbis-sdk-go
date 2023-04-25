@@ -9,6 +9,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/pkg/errors"
+	"github.com/redis/go-redis/v9"
 	log "github.com/sirupsen/logrus"
 
 	sdk "github.com/OrbisSystems/orbis-sdk-go/interfaces"
@@ -86,7 +87,7 @@ func (a *Account) watchTokenRefresh() {
 // True - need to re-login.
 func (a *Account) NeedToLogin(ctx context.Context) (bool, error) {
 	tkn, err := a.Auth.GetToken(ctx)
-	if err != nil {
+	if err != nil && !errors.Is(err, redis.Nil) {
 		return true, err
 	}
 
