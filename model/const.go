@@ -153,4 +153,6 @@ const (
 
 	URLInsightHSDailySummary  = "/hs/api/v1/resources/finance/daily"
 	URLInsightHSWeeklySummary = "/hs/api/v1/resources/finance/weekly"
+	URLInsightHSPortfolio     = "/hs/api/v1/resources/finance/article/portfolio"
+	URLInsightHSWatchlist     = "/hs/api/v1/resources/finance/article/watchlist"
 )

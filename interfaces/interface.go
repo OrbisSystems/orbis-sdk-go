@@ -144,7 +144,10 @@ type OptionGreeksService interface {
 }
 
 type HoopsAIService interface {
-	DailySummary(ctx context.Context, req model.HSDailySummaryRequest) (model.HSDailySummaryResponse, error)
+	DailySummary(ctx context.Context, req model.HSDailySummaryRequest) (map[string]interface{}, error)
+	WeeklySummary(ctx context.Context, req model.HSWeeklySummaryRequest) (map[string]interface{}, error)
+	Portfolio(ctx context.Context, req model.HSPortfolioRequest) (map[string]interface{}, error)
+	Watchlist(ctx context.Context, req model.HWatchlistRequest) (map[string]interface{}, error)
 }
 
 type WS interface {
