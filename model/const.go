@@ -146,4 +146,11 @@ const (
 
 	URLInsightOptionGreeksCalculateParams = "/og/calculate-params "
 	URLInsightOptionGreeksCalculateMatrix = "/og/calculate-matrix "
+
+	// *******************************************
+	// 		HS
+	// *******************************************
+
+	URLInsightHSDailySummary  = "/hs/api/v1/resources/finance/daily"
+	URLInsightHSWeeklySummary = "/hs/api/v1/resources/finance/weekly"
 )

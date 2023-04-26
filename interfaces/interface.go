@@ -143,6 +143,10 @@ type OptionGreeksService interface {
 	CalculateMatrix(ctx context.Context, req model.CalculateMatrixParamsRequest) (model.CalculateMatrixResponse, error)
 }
 
+type HoopsAIService interface {
+	DailySummary(ctx context.Context, req model.HSDailySummaryRequest) (model.HSDailySummaryResponse, error)
+}
+
 type WS interface {
 	Subscribe(ctx context.Context, subscriptionType model.SubscriptionType) (chan model.News, error)
 	Close() error
