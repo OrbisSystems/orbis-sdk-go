@@ -54,25 +54,16 @@ type Client struct {
 }
 
 func NewSDK(cfg config.Config, auth sdk.Auth) *Client {
-	log.SetLevel(getLogLevel(cfg.LogLevel))
-	log.SetFormatter(&log.JSONFormatter{})
-	log.SetOutput(os.Stderr)
-
-	httpsURL := wrapHTTPS(cfg.Host)
-	httpClient := http.New(httpsURL, auth)
-
-	return newCli(cfg, auth, httpClient)
-}
-
-func NewSDKWithHTTPClient(cfg config.Config, auth sdk.Auth, httpClient sdk.HTTPClient) *Client {
-	log.SetLevel(getLogLevel(cfg.LogLevel))
-	log.SetFormatter(&log.JSONFormatter{})
-	log.SetOutput(os.Stderr)
+	httpClient := http.New(wrapHTTPS(cfg.Host), auth)
 
 	return newCli(cfg, auth, httpClient)
 }
 
 func newCli(cfg config.Config, auth sdk.Auth, httpClient sdk.HTTPClient) *Client {
+	log.SetLevel(getLogLevel(cfg.LogLevel))
+	log.SetFormatter(&log.JSONFormatter{})
+	log.SetOutput(os.Stderr)
+
 	return &Client{
 		Account:      account.New(auth, httpClient),
 		News:         news.New(httpClient),
