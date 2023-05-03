@@ -8,6 +8,15 @@ import (
 	"github.com/pkg/errors"
 )
 
+const (
+	trueStr = "true"
+
+	inPathTagName  = "inpath"
+	defaultTagName = "default"
+	jsonTagName    = "json"
+	requireTagName = "require"
+)
+
 func BuildURLQueryParams(s interface{}) (string, error) {
 	urlQuery := make(url.Values)
 
@@ -19,12 +28,14 @@ func BuildURLQueryParams(s interface{}) (string, error) {
 
 		// set if value is not zero
 		if !reflect.DeepEqual(fieldValue.Interface(), zeroValue) {
-			if inPathTagValue := field.Tag.Get("inpath"); inPathTagValue == "true" {
-				urlQuery.Set(field.Tag.Get("json"), fmt.Sprintf("%v", fieldValue.Interface()))
+			if inPathTagValue := field.Tag.Get(inPathTagName); inPathTagValue == trueStr {
+				urlQuery.Set(field.Tag.Get(jsonTagName), fmt.Sprintf("%v", fieldValue.Interface()))
 			}
-		} else if defaultTagValue := field.Tag.Get("default"); defaultTagValue != "" { // set if the value is zero, but we have default value
-			urlQuery.Set(field.Tag.Get("json"), fmt.Sprintf("%v", defaultTagValue))
-		} else if requireTagValue := field.Tag.Get("require"); requireTagValue == "true" { //
+			// set if the value is zero, but we have default value
+		} else if defaultTagValue := field.Tag.Get(defaultTagName); defaultTagValue != "" {
+			urlQuery.Set(field.Tag.Get(jsonTagName), defaultTagValue)
+			// also check is there and required fields that not set
+		} else if requireTagValue := field.Tag.Get(requireTagName); requireTagValue == trueStr {
 			return "", errors.New(fmt.Sprintf("required field %s is not set", field.Name))
 		}
 	}

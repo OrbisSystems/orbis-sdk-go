@@ -151,8 +151,13 @@ const (
 	// 		HS
 	// *******************************************
 
-	URLInsightHSDailySummary  = "/hs/api/v1/resources/finance/daily"
-	URLInsightHSWeeklySummary = "/hs/api/v1/resources/finance/weekly"
-	URLInsightHSPortfolio     = "/hs/api/v1/resources/finance/article/portfolio"
-	URLInsightHSWatchlist     = "/hs/api/v1/resources/finance/article/watchlist"
+	URLInsightHSDailySummary   = "/hs/api/v1/resources/finance/daily"
+	URLInsightHSWeeklySummary  = "/hs/api/v1/resources/finance/weekly"
+	URLInsightHSPortfolio      = "/hs/api/v1/resources/finance/article/portfolio"
+	URLInsightHSWatchlist      = "/hs/api/v1/resources/finance/article/watchlist"
+	URLInsightHSTopGainers     = "/hs/api/v1/resources/finance/article/top_gainers"
+	URLInsightHSTopMovers      = "/hs/api/v1/resources/finance/article/top_movers"
+	URLInsightHSDownTrend      = "/hs/api/v1/resources/finance/article/down_trend"
+	URLInsightHSUpTrend        = "/hs/api/v1/resources/finance/article/up_trend"
+	URLInsightHSMarketOverview = "/hs/api/v1/resources/finance/article/market_overview"
 )

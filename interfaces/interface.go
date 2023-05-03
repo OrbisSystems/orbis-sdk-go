@@ -147,7 +147,13 @@ type HoopsAIService interface {
 	DailySummary(ctx context.Context, req model.HSDailySummaryRequest) (map[string]interface{}, error)
 	WeeklySummary(ctx context.Context, req model.HSWeeklySummaryRequest) (map[string]interface{}, error)
 	Portfolio(ctx context.Context, req model.HSPortfolioRequest) (map[string]interface{}, error)
-	Watchlist(ctx context.Context, req model.HWatchlistRequest) (map[string]interface{}, error)
+	Watchlist(ctx context.Context, req model.HSWatchlistRequest) (map[string]interface{}, error)
+	WatchlistByUserAndName(ctx context.Context, req model.HSWatchlistByUserAndNameRequest) (map[string]interface{}, error)
+	TopGainers(ctx context.Context, req model.HSWatchlistTopGainersRequest) (map[string]interface{}, error)
+	TopMovers(ctx context.Context, req model.HSWatchlistTopMoversRequest) (map[string]interface{}, error)
+	DownTrend(ctx context.Context, req model.HSWatchlistDownTrendRequest) (map[string]interface{}, error)
+	UpTrend(ctx context.Context, req model.HSWatchlistUpTrendRequest) (map[string]interface{}, error)
+	MarketOverview(ctx context.Context, req model.HSWatchlistMarketOverviewRequest) (map[string]interface{}, error)
 }
 
 type WS interface {
