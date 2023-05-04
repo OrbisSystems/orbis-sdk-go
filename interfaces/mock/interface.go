@@ -180,6 +180,21 @@ func (m *MockHTTPClient) EXPECT() *MockHTTPClientMockRecorder {
 	return m.recorder
 }
 
+// Delete mocks base method.
+func (m *MockHTTPClient) Delete(ctx context.Context, url string, body io.Reader, headers http.Header) (*http.Response, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Delete", ctx, url, body, headers)
+	ret0, _ := ret[0].(*http.Response)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Delete indicates an expected call of Delete.
+func (mr *MockHTTPClientMockRecorder) Delete(ctx, url, body, headers interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockHTTPClient)(nil).Delete), ctx, url, body, headers)
+}
+
 // Get mocks base method.
 func (m *MockHTTPClient) Get(ctx context.Context, url string, headers http.Header) (*http.Response, error) {
 	m.ctrl.T.Helper()
@@ -1638,6 +1653,36 @@ func (m *MockHoopsAIService) EXPECT() *MockHoopsAIServiceMockRecorder {
 	return m.recorder
 }
 
+// CreateUser mocks base method.
+func (m *MockHoopsAIService) CreateUser(ctx context.Context, customer string) (map[string]interface{}, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateUser", ctx, customer)
+	ret0, _ := ret[0].(map[string]interface{})
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CreateUser indicates an expected call of CreateUser.
+func (mr *MockHoopsAIServiceMockRecorder) CreateUser(ctx, customer interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateUser", reflect.TypeOf((*MockHoopsAIService)(nil).CreateUser), ctx, customer)
+}
+
+// CustomerAssets mocks base method.
+func (m *MockHoopsAIService) CustomerAssets(ctx context.Context, req model.HSMarketResearchRequest) (map[string]interface{}, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CustomerAssets", ctx, req)
+	ret0, _ := ret[0].(map[string]interface{})
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CustomerAssets indicates an expected call of CustomerAssets.
+func (mr *MockHoopsAIServiceMockRecorder) CustomerAssets(ctx, req interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CustomerAssets", reflect.TypeOf((*MockHoopsAIService)(nil).CustomerAssets), ctx, req)
+}
+
 // DailySummary mocks base method.
 func (m *MockHoopsAIService) DailySummary(ctx context.Context, req model.HSDailySummaryRequest) (map[string]interface{}, error) {
 	m.ctrl.T.Helper()
@@ -1653,8 +1698,38 @@ func (mr *MockHoopsAIServiceMockRecorder) DailySummary(ctx, req interface{}) *go
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DailySummary", reflect.TypeOf((*MockHoopsAIService)(nil).DailySummary), ctx, req)
 }
 
+// Data mocks base method.
+func (m *MockHoopsAIService) Data(ctx context.Context, req model.HSMarketResearchRequest) (map[string]interface{}, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Data", ctx, req)
+	ret0, _ := ret[0].(map[string]interface{})
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Data indicates an expected call of Data.
+func (mr *MockHoopsAIServiceMockRecorder) Data(ctx, req interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Data", reflect.TypeOf((*MockHoopsAIService)(nil).Data), ctx, req)
+}
+
+// DeleteUser mocks base method.
+func (m *MockHoopsAIService) DeleteUser(ctx context.Context, customer, userID string) (map[string]interface{}, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeleteUser", ctx, customer, userID)
+	ret0, _ := ret[0].(map[string]interface{})
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// DeleteUser indicates an expected call of DeleteUser.
+func (mr *MockHoopsAIServiceMockRecorder) DeleteUser(ctx, customer, userID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteUser", reflect.TypeOf((*MockHoopsAIService)(nil).DeleteUser), ctx, customer, userID)
+}
+
 // DownTrend mocks base method.
-func (m *MockHoopsAIService) DownTrend(ctx context.Context, req model.HSWatchlistDownTrendRequest) (map[string]interface{}, error) {
+func (m *MockHoopsAIService) DownTrend(ctx context.Context, req model.HSMarketResearchRequest) (map[string]interface{}, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "DownTrend", ctx, req)
 	ret0, _ := ret[0].(map[string]interface{})
@@ -1668,8 +1743,23 @@ func (mr *MockHoopsAIServiceMockRecorder) DownTrend(ctx, req interface{}) *gomoc
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DownTrend", reflect.TypeOf((*MockHoopsAIService)(nil).DownTrend), ctx, req)
 }
 
+// GetUsers mocks base method.
+func (m *MockHoopsAIService) GetUsers(ctx context.Context, customer string) (map[string]interface{}, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetUsers", ctx, customer)
+	ret0, _ := ret[0].(map[string]interface{})
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetUsers indicates an expected call of GetUsers.
+func (mr *MockHoopsAIServiceMockRecorder) GetUsers(ctx, customer interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUsers", reflect.TypeOf((*MockHoopsAIService)(nil).GetUsers), ctx, customer)
+}
+
 // MarketOverview mocks base method.
-func (m *MockHoopsAIService) MarketOverview(ctx context.Context, req model.HSWatchlistMarketOverviewRequest) (map[string]interface{}, error) {
+func (m *MockHoopsAIService) MarketOverview(ctx context.Context, req model.HSMarketResearchRequest) (map[string]interface{}, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "MarketOverview", ctx, req)
 	ret0, _ := ret[0].(map[string]interface{})
@@ -1698,8 +1788,53 @@ func (mr *MockHoopsAIServiceMockRecorder) Portfolio(ctx, req interface{}) *gomoc
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Portfolio", reflect.TypeOf((*MockHoopsAIService)(nil).Portfolio), ctx, req)
 }
 
+// PriceTarget mocks base method.
+func (m *MockHoopsAIService) PriceTarget(ctx context.Context, req model.HSMarketResearchRequest) (map[string]interface{}, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "PriceTarget", ctx, req)
+	ret0, _ := ret[0].(map[string]interface{})
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// PriceTarget indicates an expected call of PriceTarget.
+func (mr *MockHoopsAIServiceMockRecorder) PriceTarget(ctx, req interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "PriceTarget", reflect.TypeOf((*MockHoopsAIService)(nil).PriceTarget), ctx, req)
+}
+
+// RecentEarnings mocks base method.
+func (m *MockHoopsAIService) RecentEarnings(ctx context.Context, req model.HSMarketResearchRequest) (map[string]interface{}, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "RecentEarnings", ctx, req)
+	ret0, _ := ret[0].(map[string]interface{})
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// RecentEarnings indicates an expected call of RecentEarnings.
+func (mr *MockHoopsAIServiceMockRecorder) RecentEarnings(ctx, req interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RecentEarnings", reflect.TypeOf((*MockHoopsAIService)(nil).RecentEarnings), ctx, req)
+}
+
+// RecordHigh mocks base method.
+func (m *MockHoopsAIService) RecordHigh(ctx context.Context, req model.HSMarketResearchRequest) (map[string]interface{}, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "RecordHigh", ctx, req)
+	ret0, _ := ret[0].(map[string]interface{})
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// RecordHigh indicates an expected call of RecordHigh.
+func (mr *MockHoopsAIServiceMockRecorder) RecordHigh(ctx, req interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RecordHigh", reflect.TypeOf((*MockHoopsAIService)(nil).RecordHigh), ctx, req)
+}
+
 // TopGainers mocks base method.
-func (m *MockHoopsAIService) TopGainers(ctx context.Context, req model.HSWatchlistTopGainersRequest) (map[string]interface{}, error) {
+func (m *MockHoopsAIService) TopGainers(ctx context.Context, req model.HSMarketResearchRequest) (map[string]interface{}, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "TopGainers", ctx, req)
 	ret0, _ := ret[0].(map[string]interface{})
@@ -1713,8 +1848,23 @@ func (mr *MockHoopsAIServiceMockRecorder) TopGainers(ctx, req interface{}) *gomo
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "TopGainers", reflect.TypeOf((*MockHoopsAIService)(nil).TopGainers), ctx, req)
 }
 
+// TopLosers mocks base method.
+func (m *MockHoopsAIService) TopLosers(ctx context.Context, req model.HSMarketResearchRequest) (map[string]interface{}, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "TopLosers", ctx, req)
+	ret0, _ := ret[0].(map[string]interface{})
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// TopLosers indicates an expected call of TopLosers.
+func (mr *MockHoopsAIServiceMockRecorder) TopLosers(ctx, req interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "TopLosers", reflect.TypeOf((*MockHoopsAIService)(nil).TopLosers), ctx, req)
+}
+
 // TopMovers mocks base method.
-func (m *MockHoopsAIService) TopMovers(ctx context.Context, req model.HSWatchlistTopMoversRequest) (map[string]interface{}, error) {
+func (m *MockHoopsAIService) TopMovers(ctx context.Context, req model.HSMarketResearchRequest) (map[string]interface{}, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "TopMovers", ctx, req)
 	ret0, _ := ret[0].(map[string]interface{})
@@ -1728,8 +1878,23 @@ func (mr *MockHoopsAIServiceMockRecorder) TopMovers(ctx, req interface{}) *gomoc
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "TopMovers", reflect.TypeOf((*MockHoopsAIService)(nil).TopMovers), ctx, req)
 }
 
+// UnusualHighVolume mocks base method.
+func (m *MockHoopsAIService) UnusualHighVolume(ctx context.Context, req model.HSMarketResearchRequest) (map[string]interface{}, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UnusualHighVolume", ctx, req)
+	ret0, _ := ret[0].(map[string]interface{})
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// UnusualHighVolume indicates an expected call of UnusualHighVolume.
+func (mr *MockHoopsAIServiceMockRecorder) UnusualHighVolume(ctx, req interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UnusualHighVolume", reflect.TypeOf((*MockHoopsAIService)(nil).UnusualHighVolume), ctx, req)
+}
+
 // UpTrend mocks base method.
-func (m *MockHoopsAIService) UpTrend(ctx context.Context, req model.HSWatchlistUpTrendRequest) (map[string]interface{}, error) {
+func (m *MockHoopsAIService) UpTrend(ctx context.Context, req model.HSMarketResearchRequest) (map[string]interface{}, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpTrend", ctx, req)
 	ret0, _ := ret[0].(map[string]interface{})
@@ -1741,6 +1906,21 @@ func (m *MockHoopsAIService) UpTrend(ctx context.Context, req model.HSWatchlistU
 func (mr *MockHoopsAIServiceMockRecorder) UpTrend(ctx, req interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpTrend", reflect.TypeOf((*MockHoopsAIService)(nil).UpTrend), ctx, req)
+}
+
+// UpcomingEarnings mocks base method.
+func (m *MockHoopsAIService) UpcomingEarnings(ctx context.Context, req model.HSMarketResearchRequest) (map[string]interface{}, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpcomingEarnings", ctx, req)
+	ret0, _ := ret[0].(map[string]interface{})
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// UpcomingEarnings indicates an expected call of UpcomingEarnings.
+func (mr *MockHoopsAIServiceMockRecorder) UpcomingEarnings(ctx, req interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpcomingEarnings", reflect.TypeOf((*MockHoopsAIService)(nil).UpcomingEarnings), ctx, req)
 }
 
 // Watchlist mocks base method.

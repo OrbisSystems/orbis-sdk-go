@@ -28,6 +28,7 @@ type HTTPExecutor interface {
 type HTTPClient interface {
 	Get(ctx context.Context, url string, headers http.Header) (*http.Response, error)
 	Post(ctx context.Context, url string, body io.Reader, headers http.Header) (*http.Response, error)
+	Delete(ctx context.Context, url string, body io.Reader, headers http.Header) (*http.Response, error)
 }
 
 type Auth interface {
@@ -149,11 +150,22 @@ type HoopsAIService interface {
 	Portfolio(ctx context.Context, req model.HSPortfolioRequest) (map[string]interface{}, error)
 	Watchlist(ctx context.Context, req model.HSWatchlistRequest) (map[string]interface{}, error)
 	WatchlistByUserAndName(ctx context.Context, req model.HSWatchlistByUserAndNameRequest) (map[string]interface{}, error)
-	TopGainers(ctx context.Context, req model.HSWatchlistTopGainersRequest) (map[string]interface{}, error)
-	TopMovers(ctx context.Context, req model.HSWatchlistTopMoversRequest) (map[string]interface{}, error)
-	DownTrend(ctx context.Context, req model.HSWatchlistDownTrendRequest) (map[string]interface{}, error)
-	UpTrend(ctx context.Context, req model.HSWatchlistUpTrendRequest) (map[string]interface{}, error)
-	MarketOverview(ctx context.Context, req model.HSWatchlistMarketOverviewRequest) (map[string]interface{}, error)
+	TopGainers(ctx context.Context, req model.HSMarketResearchRequest) (map[string]interface{}, error)
+	TopLosers(ctx context.Context, req model.HSMarketResearchRequest) (map[string]interface{}, error)
+	TopMovers(ctx context.Context, req model.HSMarketResearchRequest) (map[string]interface{}, error)
+	DownTrend(ctx context.Context, req model.HSMarketResearchRequest) (map[string]interface{}, error)
+	UpTrend(ctx context.Context, req model.HSMarketResearchRequest) (map[string]interface{}, error)
+	MarketOverview(ctx context.Context, req model.HSMarketResearchRequest) (map[string]interface{}, error)
+	PriceTarget(ctx context.Context, req model.HSMarketResearchRequest) (map[string]interface{}, error)
+	UpcomingEarnings(ctx context.Context, req model.HSMarketResearchRequest) (map[string]interface{}, error)
+	RecentEarnings(ctx context.Context, req model.HSMarketResearchRequest) (map[string]interface{}, error)
+	RecordHigh(ctx context.Context, req model.HSMarketResearchRequest) (map[string]interface{}, error)
+	UnusualHighVolume(ctx context.Context, req model.HSMarketResearchRequest) (map[string]interface{}, error)
+	Data(ctx context.Context, req model.HSMarketResearchRequest) (map[string]interface{}, error)
+	CustomerAssets(ctx context.Context, req model.HSMarketResearchRequest) (map[string]interface{}, error)
+	GetUsers(ctx context.Context, customer string) (map[string]interface{}, error)
+	CreateUser(ctx context.Context, customer string) (map[string]interface{}, error)
+	DeleteUser(ctx context.Context, customer, userID string) (map[string]interface{}, error)
 }
 
 type WS interface {

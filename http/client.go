@@ -76,6 +76,19 @@ func (c *OrbisClient) Post(ctx context.Context, url string, body io.Reader, head
 	return c.do(ctx, request)
 }
 
+// Delete makes an HTTP DELETE request to provided URL and requestBody
+func (c *OrbisClient) Delete(ctx context.Context, url string, body io.Reader, headers http.Header) (*http.Response, error) {
+	var response *http.Response
+	request, err := http.NewRequestWithContext(ctx, http.MethodDelete, fmt.Sprintf("%s%s", c.baseURL, url), body)
+	if err != nil {
+		return response, errors.Wrap(err, "POST - request creation failed")
+	}
+
+	request.Header = headers
+
+	return c.do(ctx, request)
+}
+
 // do makes an HTTP request with the native `http.do` interface
 func (c *OrbisClient) do(ctx context.Context, request *http.Request) (*http.Response, error) {
 	request.Header = c.getTokenHeader(ctx, request.Header)

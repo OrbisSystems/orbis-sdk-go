@@ -2,7 +2,7 @@ GOLINT := golangci-lint
 
 PACKAGES_FOR_TEST := $(shell go list ./... | grep -v config | grep -v bin | grep -v interfaces | grep -v model | grep -v utils)
 
-all: dep dep-update fmt lint test
+all: gen-mock dep dep-update fmt lint test
 
 dep:
 	go mod tidy
