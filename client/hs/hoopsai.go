@@ -425,7 +425,7 @@ func (i *HoopsAI) GetUsers(ctx context.Context, customer string) (map[string]int
 
 	r, err := i.cli.Get(ctx, fmt.Sprintf("%s/%s", model.URLInsightBase+model.URLInsightHSUsers, customer), nil)
 	if err != nil {
-		return nil, errors.Wrap(err, "couldn't get hs get users")
+		return nil, errors.Wrap(err, "couldn't hs get users")
 	}
 
 	var resp map[string]interface{}
@@ -442,7 +442,7 @@ func (i *HoopsAI) CreateUser(ctx context.Context, customer string) (map[string]i
 
 	r, err := i.cli.Post(ctx, fmt.Sprintf("%s/%s", model.URLInsightBase+model.URLInsightHSUsers, customer), nil, nil)
 	if err != nil {
-		return nil, errors.Wrap(err, "couldn't get hs create user")
+		return nil, errors.Wrap(err, "couldn't hs create user")
 	}
 
 	var resp map[string]interface{}
@@ -459,7 +459,135 @@ func (i *HoopsAI) DeleteUser(ctx context.Context, customer, userID string) (map[
 
 	r, err := i.cli.Delete(ctx, fmt.Sprintf("%s/%s/%s", model.URLInsightBase+model.URLInsightHSUsers, customer, userID), nil, nil)
 	if err != nil {
-		return nil, errors.Wrap(err, "couldn't get hs delete user")
+		return nil, errors.Wrap(err, "couldn't hs delete user")
+	}
+
+	var resp map[string]interface{}
+	err = utils.UnmarshalAndCheckOk(&resp, r)
+	if err != nil {
+		return nil, err
+	}
+
+	return resp, err
+}
+
+func (i *HoopsAI) CreateWatchlistByUser(ctx context.Context, customer, userID string) (map[string]interface{}, error) {
+	log.Trace("HS CreateWatchlistByUser called")
+
+	r, err := i.cli.Post(ctx, fmt.Sprintf("%s/%s/%s/watchlists", model.URLInsightBase+model.URLInsightHSUsers, customer, userID), nil, nil)
+	if err != nil {
+		return nil, errors.Wrap(err, "couldn't hs create watchlist by user")
+	}
+
+	var resp map[string]interface{}
+	err = utils.UnmarshalAndCheckOk(&resp, r)
+	if err != nil {
+		return nil, err
+	}
+
+	return resp, err
+}
+
+func (i *HoopsAI) GetWatchlistByUser(ctx context.Context, customer, userID, watchlistName string) (map[string]interface{}, error) {
+	log.Trace("HS GetWatchlistByUser called")
+
+	r, err := i.cli.Get(ctx, fmt.Sprintf("%s/%s/%s/watchlists/%s", model.URLInsightBase+model.URLInsightHSUsers, customer, userID, watchlistName), nil)
+	if err != nil {
+		return nil, errors.Wrap(err, "couldn't hs get watchlist by user")
+	}
+
+	var resp map[string]interface{}
+	err = utils.UnmarshalAndCheckOk(&resp, r)
+	if err != nil {
+		return nil, err
+	}
+
+	return resp, err
+}
+
+func (i *HoopsAI) AddSymbolToWatchlist(ctx context.Context, customer, userID, watchlistName, symbol string) (map[string]interface{}, error) {
+	log.Trace("HS AddSymbolToWatchlist called")
+
+	r, err := i.cli.Post(ctx, fmt.Sprintf("%s/%s/%s/watchlists/%s/%s", model.URLInsightBase+model.URLInsightHSUsers, customer, userID, watchlistName, symbol), nil, nil)
+	if err != nil {
+		return nil, errors.Wrap(err, "couldn't hs add symbol to watchlist")
+	}
+
+	var resp map[string]interface{}
+	err = utils.UnmarshalAndCheckOk(&resp, r)
+	if err != nil {
+		return nil, err
+	}
+
+	return resp, err
+}
+
+func (i *HoopsAI) DeleteSymbolFromWatchlist(ctx context.Context, customer, userID, watchlistName, symbol string) (map[string]interface{}, error) {
+	log.Trace("HS DeleteSymbolFromWatchlist called")
+
+	r, err := i.cli.Delete(ctx, fmt.Sprintf("%s/%s/%s/watchlists/%s/%s", model.URLInsightBase+model.URLInsightHSUsers, customer, userID, watchlistName, symbol), nil, nil)
+	if err != nil {
+		return nil, errors.Wrap(err, "couldn't hs delete symbol from watchlist")
+	}
+
+	var resp map[string]interface{}
+	err = utils.UnmarshalAndCheckOk(&resp, r)
+	if err != nil {
+		return nil, err
+	}
+
+	return resp, err
+}
+
+func (i *HoopsAI) AddSymbolsToWatchlist(ctx context.Context, customer, userID, watchlistName string, symbols []string) (map[string]interface{}, error) {
+	log.Trace("HS AddSymbolToWatchlist called")
+
+	body, err := json.Marshal(struct {
+		SymbolList string `json:"symbol_list"`
+	}{
+		SymbolList: utils.ArrayToJoinedString(symbols),
+	})
+	if err != nil {
+		return nil, errors.Wrap(err, "couldn't marshal input parameters")
+	}
+
+	r, err := i.cli.Post(ctx, fmt.Sprintf("%s/%s/%s/watchlists/%s", model.URLInsightBase+model.URLInsightHSUsers, customer, userID, watchlistName), bytes.NewBuffer(body), nil)
+	if err != nil {
+		return nil, errors.Wrap(err, "couldn't hs add symbols to watchlist")
+	}
+
+	var resp map[string]interface{}
+	err = utils.UnmarshalAndCheckOk(&resp, r)
+	if err != nil {
+		return nil, err
+	}
+
+	return resp, err
+}
+
+func (i *HoopsAI) DeleteWatchlistByName(ctx context.Context, customer, userID, watchlistName string) (map[string]interface{}, error) {
+	log.Trace("HS DeleteWatchlistByName called")
+
+	r, err := i.cli.Delete(ctx, fmt.Sprintf("%s/%s/%s/watchlists/%s", model.URLInsightBase+model.URLInsightHSUsers, customer, userID, watchlistName), nil, nil)
+	if err != nil {
+		return nil, errors.Wrap(err, "couldn't hs delete watchlist by name")
+	}
+
+	var resp map[string]interface{}
+	err = utils.UnmarshalAndCheckOk(&resp, r)
+	if err != nil {
+		return nil, err
+	}
+
+	return resp, err
+}
+
+func (i *HoopsAI) RenameWatchlist(ctx context.Context, customer, userID, oldWatchlistName, newWatchlistName string) (map[string]interface{}, error) {
+	log.Trace("HS RenameWatchlist called")
+
+	r, err := i.cli.Put(ctx, fmt.Sprintf("%s/%s/%s/watchlists/%s/rename/%s", model.URLInsightBase+model.URLInsightHSUsers, customer, userID, oldWatchlistName, newWatchlistName), nil, nil)
+	if err != nil {
+		return nil, errors.Wrap(err, "couldn't hs rename watchlist")
 	}
 
 	var resp map[string]interface{}

@@ -29,6 +29,7 @@ type HTTPClient interface {
 	Get(ctx context.Context, url string, headers http.Header) (*http.Response, error)
 	Post(ctx context.Context, url string, body io.Reader, headers http.Header) (*http.Response, error)
 	Delete(ctx context.Context, url string, body io.Reader, headers http.Header) (*http.Response, error)
+	Put(ctx context.Context, url string, body io.Reader, headers http.Header) (*http.Response, error)
 }
 
 type Auth interface {
@@ -166,6 +167,13 @@ type HoopsAIService interface {
 	GetUsers(ctx context.Context, customer string) (map[string]interface{}, error)
 	CreateUser(ctx context.Context, customer string) (map[string]interface{}, error)
 	DeleteUser(ctx context.Context, customer, userID string) (map[string]interface{}, error)
+	CreateWatchlistByUser(ctx context.Context, customer, userID string) (map[string]interface{}, error)
+	GetWatchlistByUser(ctx context.Context, customer, userID, watchlistName string) (map[string]interface{}, error)
+	AddSymbolToWatchlist(ctx context.Context, customer, userID, watchlistName, symbol string) (map[string]interface{}, error)
+	DeleteSymbolFromWatchlist(ctx context.Context, customer, userID, watchlistName, symbol string) (map[string]interface{}, error)
+	AddSymbolsToWatchlist(ctx context.Context, customer, userID, watchlistName string, symbols []string) (map[string]interface{}, error)
+	DeleteWatchlistByName(ctx context.Context, customer, userID, watchlistName string) (map[string]interface{}, error)
+	RenameWatchlist(ctx context.Context, customer, userID, oldWatchlistName, newWatchlistName string) (map[string]interface{}, error)
 }
 
 type WS interface {

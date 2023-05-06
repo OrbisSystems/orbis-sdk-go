@@ -41,3 +41,20 @@ func BuildURLQueryParams(s interface{}) (string, error) {
 	}
 	return urlQuery.Encode(), nil
 }
+
+func ArrayToJoinedString(value []string) string {
+	res := ""
+	if len(value) == 0 {
+		return res
+	}
+
+	for idx := range value {
+		if idx == len(value)-1 {
+			res += value[idx]
+		} else {
+			res += value[idx] + ","
+		}
+	}
+
+	return res
+}

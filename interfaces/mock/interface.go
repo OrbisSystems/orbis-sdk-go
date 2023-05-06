@@ -225,6 +225,21 @@ func (mr *MockHTTPClientMockRecorder) Post(ctx, url, body, headers interface{}) 
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Post", reflect.TypeOf((*MockHTTPClient)(nil).Post), ctx, url, body, headers)
 }
 
+// Put mocks base method.
+func (m *MockHTTPClient) Put(ctx context.Context, url string, body io.Reader, headers http.Header) (*http.Response, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Put", ctx, url, body, headers)
+	ret0, _ := ret[0].(*http.Response)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Put indicates an expected call of Put.
+func (mr *MockHTTPClientMockRecorder) Put(ctx, url, body, headers interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Put", reflect.TypeOf((*MockHTTPClient)(nil).Put), ctx, url, body, headers)
+}
+
 // MockAuth is a mock of Auth interface.
 type MockAuth struct {
 	ctrl     *gomock.Controller
@@ -1653,6 +1668,36 @@ func (m *MockHoopsAIService) EXPECT() *MockHoopsAIServiceMockRecorder {
 	return m.recorder
 }
 
+// AddSymbolToWatchlist mocks base method.
+func (m *MockHoopsAIService) AddSymbolToWatchlist(ctx context.Context, customer, userID, watchlistName, symbol string) (map[string]interface{}, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "AddSymbolToWatchlist", ctx, customer, userID, watchlistName, symbol)
+	ret0, _ := ret[0].(map[string]interface{})
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// AddSymbolToWatchlist indicates an expected call of AddSymbolToWatchlist.
+func (mr *MockHoopsAIServiceMockRecorder) AddSymbolToWatchlist(ctx, customer, userID, watchlistName, symbol interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddSymbolToWatchlist", reflect.TypeOf((*MockHoopsAIService)(nil).AddSymbolToWatchlist), ctx, customer, userID, watchlistName, symbol)
+}
+
+// AddSymbolsToWatchlist mocks base method.
+func (m *MockHoopsAIService) AddSymbolsToWatchlist(ctx context.Context, customer, userID, watchlistName string, symbols []string) (map[string]interface{}, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "AddSymbolsToWatchlist", ctx, customer, userID, watchlistName, symbols)
+	ret0, _ := ret[0].(map[string]interface{})
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// AddSymbolsToWatchlist indicates an expected call of AddSymbolsToWatchlist.
+func (mr *MockHoopsAIServiceMockRecorder) AddSymbolsToWatchlist(ctx, customer, userID, watchlistName, symbols interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddSymbolsToWatchlist", reflect.TypeOf((*MockHoopsAIService)(nil).AddSymbolsToWatchlist), ctx, customer, userID, watchlistName, symbols)
+}
+
 // CreateUser mocks base method.
 func (m *MockHoopsAIService) CreateUser(ctx context.Context, customer string) (map[string]interface{}, error) {
 	m.ctrl.T.Helper()
@@ -1666,6 +1711,21 @@ func (m *MockHoopsAIService) CreateUser(ctx context.Context, customer string) (m
 func (mr *MockHoopsAIServiceMockRecorder) CreateUser(ctx, customer interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateUser", reflect.TypeOf((*MockHoopsAIService)(nil).CreateUser), ctx, customer)
+}
+
+// CreateWatchlistByUser mocks base method.
+func (m *MockHoopsAIService) CreateWatchlistByUser(ctx context.Context, customer, userID string) (map[string]interface{}, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateWatchlistByUser", ctx, customer, userID)
+	ret0, _ := ret[0].(map[string]interface{})
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CreateWatchlistByUser indicates an expected call of CreateWatchlistByUser.
+func (mr *MockHoopsAIServiceMockRecorder) CreateWatchlistByUser(ctx, customer, userID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateWatchlistByUser", reflect.TypeOf((*MockHoopsAIService)(nil).CreateWatchlistByUser), ctx, customer, userID)
 }
 
 // CustomerAssets mocks base method.
@@ -1713,6 +1773,21 @@ func (mr *MockHoopsAIServiceMockRecorder) Data(ctx, req interface{}) *gomock.Cal
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Data", reflect.TypeOf((*MockHoopsAIService)(nil).Data), ctx, req)
 }
 
+// DeleteSymbolFromWatchlist mocks base method.
+func (m *MockHoopsAIService) DeleteSymbolFromWatchlist(ctx context.Context, customer, userID, watchlistName, symbol string) (map[string]interface{}, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeleteSymbolFromWatchlist", ctx, customer, userID, watchlistName, symbol)
+	ret0, _ := ret[0].(map[string]interface{})
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// DeleteSymbolFromWatchlist indicates an expected call of DeleteSymbolFromWatchlist.
+func (mr *MockHoopsAIServiceMockRecorder) DeleteSymbolFromWatchlist(ctx, customer, userID, watchlistName, symbol interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteSymbolFromWatchlist", reflect.TypeOf((*MockHoopsAIService)(nil).DeleteSymbolFromWatchlist), ctx, customer, userID, watchlistName, symbol)
+}
+
 // DeleteUser mocks base method.
 func (m *MockHoopsAIService) DeleteUser(ctx context.Context, customer, userID string) (map[string]interface{}, error) {
 	m.ctrl.T.Helper()
@@ -1726,6 +1801,21 @@ func (m *MockHoopsAIService) DeleteUser(ctx context.Context, customer, userID st
 func (mr *MockHoopsAIServiceMockRecorder) DeleteUser(ctx, customer, userID interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteUser", reflect.TypeOf((*MockHoopsAIService)(nil).DeleteUser), ctx, customer, userID)
+}
+
+// DeleteWatchlistByName mocks base method.
+func (m *MockHoopsAIService) DeleteWatchlistByName(ctx context.Context, customer, userID, watchlistName string) (map[string]interface{}, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeleteWatchlistByName", ctx, customer, userID, watchlistName)
+	ret0, _ := ret[0].(map[string]interface{})
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// DeleteWatchlistByName indicates an expected call of DeleteWatchlistByName.
+func (mr *MockHoopsAIServiceMockRecorder) DeleteWatchlistByName(ctx, customer, userID, watchlistName interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteWatchlistByName", reflect.TypeOf((*MockHoopsAIService)(nil).DeleteWatchlistByName), ctx, customer, userID, watchlistName)
 }
 
 // DownTrend mocks base method.
@@ -1756,6 +1846,21 @@ func (m *MockHoopsAIService) GetUsers(ctx context.Context, customer string) (map
 func (mr *MockHoopsAIServiceMockRecorder) GetUsers(ctx, customer interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUsers", reflect.TypeOf((*MockHoopsAIService)(nil).GetUsers), ctx, customer)
+}
+
+// GetWatchlistByUser mocks base method.
+func (m *MockHoopsAIService) GetWatchlistByUser(ctx context.Context, customer, userID, watchlistName string) (map[string]interface{}, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetWatchlistByUser", ctx, customer, userID, watchlistName)
+	ret0, _ := ret[0].(map[string]interface{})
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetWatchlistByUser indicates an expected call of GetWatchlistByUser.
+func (mr *MockHoopsAIServiceMockRecorder) GetWatchlistByUser(ctx, customer, userID, watchlistName interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetWatchlistByUser", reflect.TypeOf((*MockHoopsAIService)(nil).GetWatchlistByUser), ctx, customer, userID, watchlistName)
 }
 
 // MarketOverview mocks base method.
@@ -1831,6 +1936,21 @@ func (m *MockHoopsAIService) RecordHigh(ctx context.Context, req model.HSMarketR
 func (mr *MockHoopsAIServiceMockRecorder) RecordHigh(ctx, req interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RecordHigh", reflect.TypeOf((*MockHoopsAIService)(nil).RecordHigh), ctx, req)
+}
+
+// RenameWatchlist mocks base method.
+func (m *MockHoopsAIService) RenameWatchlist(ctx context.Context, customer, userID, oldWatchlistName, newWatchlistName string) (map[string]interface{}, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "RenameWatchlist", ctx, customer, userID, oldWatchlistName, newWatchlistName)
+	ret0, _ := ret[0].(map[string]interface{})
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// RenameWatchlist indicates an expected call of RenameWatchlist.
+func (mr *MockHoopsAIServiceMockRecorder) RenameWatchlist(ctx, customer, userID, oldWatchlistName, newWatchlistName interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RenameWatchlist", reflect.TypeOf((*MockHoopsAIService)(nil).RenameWatchlist), ctx, customer, userID, oldWatchlistName, newWatchlistName)
 }
 
 // TopGainers mocks base method.
