@@ -13,6 +13,8 @@ Then, reference orbis-sdk-go in a Go program with import:
   import "github.com/OrbisSystems/orbis-sdk-go"
 ```
 
+Go version of the SDK is `1.20`
+
 Run any of the normal go commands (build/install/test). The Go toolchain will resolve and fetch the stripe-go module automatically.
 
 Alternatively, you can also explicitly go get the package into a project:
@@ -26,7 +28,7 @@ Below are a few simple examples:
 ### Orbis config
 ```go
 cfg := config.Config{
-    Host:     "host-to-orbis-server",
+    Host:     "host-to-orbis-server", // ask client support. JUST hostname, without setting schema. Example: localhost, NOT https://localhost 
     LogLevel: config.TraceLogLevel,
 }
 ```
