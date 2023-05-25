@@ -116,3 +116,5 @@ if err != nil {
 
 // newsCh is chan model.News
 ```
+
+### Check full list of available [API](./API.md)
