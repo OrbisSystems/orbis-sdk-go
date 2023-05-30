@@ -15,17 +15,23 @@ type NewsResponse struct {
 	Count int64  `json:"count"`
 }
 
+type NewsData struct {
+	Type  string `json:"type"`
+	Value string `json:"value"`
+}
+
 type News struct {
-	ID             uuid.UUID `json:"id"`
-	SourceID       int64     `json:"source_id"`
-	Author         string    `json:"author"`
-	Created        time.Time `json:"created"`
-	Updated        time.Time `json:"updated"`
-	Title          string    `json:"title"`
-	Teaser         string    `json:"teaser"`
-	Body           string    `json:"body"`
-	Url            string    `json:"url"`
-	IsPressRelease bool      `json:"is_press_release"`
+	ID             uuid.UUID        `json:"id"`
+	SourceID       int64            `json:"source_id"`
+	Author         string           `json:"author"`
+	Created        time.Time        `json:"created"`
+	Updated        time.Time        `json:"updated"`
+	Title          string           `json:"title"`
+	Teaser         string           `json:"teaser"`
+	Body           string           `json:"body"`
+	Url            string           `json:"url"`
+	IsPressRelease bool             `json:"is_press_release"`
+	ExtraData      map[int]NewsData `json:"data"`
 
 	Image    []NewsImage   `json:"image"`
 	Channels []NewsChannel `json:"channels"`
