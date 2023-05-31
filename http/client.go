@@ -1,128 +1,134 @@
 package http
 
 import (
-	"github.com/OrbisSystems/orbis-sdk-go/auth"
-	"github.com/OrbisSystems/orbis-sdk-go/storage"
-	"github.com/pkg/errors"
-
+	"context"
+	"fmt"
 	"io"
 	"net/http"
 	"time"
+
+	"github.com/pkg/errors"
+
+	sdk "github.com/OrbisSystems/orbis-sdk-go/interfaces"
 )
 
-const defaultHTTPTimeout = 30 * time.Second
+const (
+	accessTokenHeader    = "Authorization"
+	contentTypeHeaderKey = "Content-Type"
+	applicationJson      = "application/json"
+	defaultTimeout       = time.Minute
+)
 
+// OrbisClient is a wrapper for http client with additional functionality.
 type OrbisClient struct {
-	http.Client
+	cli sdk.HTTPExecutor
 
-	auth    auth.API
-	timeout time.Duration
+	baseURL string
+
+	auth sdk.Auth
 }
 
-var DefaultAuthKey = "defaultOrbisKey"
-var DefaultClient = getDefaultClient(auth.NewAuth(storage.NewInMemory(), DefaultAuthKey))
-
-func getDefaultClient(api auth.API) Client {
-	return NewClient(defaultHTTPTimeout, api)
-}
-
-func NewClient(timeout time.Duration, api auth.API) Client {
-	var a = http.Client{
-		Timeout: timeout,
+// New returns new OrbisClient instance with default http client.
+func New(baseURL string, auth sdk.Auth) sdk.HTTPClient {
+	var httpCli = &http.Client{
+		Timeout: defaultTimeout,
 	}
 
-	orbisClient := OrbisClient{
-		Client:  a,
-		timeout: timeout,
-		auth:    api,
-	}
-
-	return &orbisClient
+	return newCli(baseURL, auth, httpCli)
 }
 
-func NewClientWithHttp(timeout time.Duration, client http.Client) Client {
-	orbisClient := OrbisClient{
-		Client:  client,
-		timeout: timeout,
-	}
-
-	return &orbisClient
+// NewWithHttp returns new OrbisClient instance with http client user defined.
+func NewWithHttp(baseURL string, auth sdk.Auth, client sdk.HTTPExecutor) sdk.HTTPClient {
+	return newCli(baseURL, auth, client)
 }
 
-// Get makes a HTTP GET request to provided URL
-func (c *OrbisClient) Get(url string, headers http.Header) (*http.Response, error) {
+func newCli(baseURL string, auth sdk.Auth, client sdk.HTTPExecutor) sdk.HTTPClient {
+	return &OrbisClient{
+		auth:    auth,
+		baseURL: baseURL,
+		cli:     client,
+	}
+}
+
+// Get makes an HTTP GET request to provided URL
+func (c *OrbisClient) Get(ctx context.Context, url string, headers http.Header) (*http.Response, error) {
 	var response *http.Response
-	request, err := http.NewRequest(http.MethodGet, url, nil)
+	request, err := http.NewRequestWithContext(ctx, http.MethodGet, fmt.Sprintf("%s%s", c.baseURL, url), http.NoBody)
 	if err != nil {
 		return response, errors.Wrap(err, "GET - request creation failed")
 	}
 
 	request.Header = headers
 
-	return c.Do(request)
+	return c.do(ctx, request)
 }
 
-// Post makes a HTTP POST request to provided URL and requestBody
-func (c *OrbisClient) Post(url string, body io.Reader, headers http.Header) (*http.Response, error) {
+// Post makes an HTTP POST request to provided URL and requestBody
+func (c *OrbisClient) Post(ctx context.Context, url string, body io.Reader, headers http.Header) (*http.Response, error) {
 	var response *http.Response
-	request, err := http.NewRequest(http.MethodPost, url, body)
+	request, err := http.NewRequestWithContext(ctx, http.MethodPost, fmt.Sprintf("%s%s", c.baseURL, url), body)
 	if err != nil {
 		return response, errors.Wrap(err, "POST - request creation failed")
 	}
 
 	request.Header = headers
 
-	return c.Do(request)
+	return c.do(ctx, request)
 }
 
-// Put makes a HTTP PUT request to provided URL and requestBody
-func (c *OrbisClient) Put(url string, body io.Reader, headers http.Header) (*http.Response, error) {
+// Delete makes an HTTP DELETE request to provided URL and requestBody
+func (c *OrbisClient) Delete(ctx context.Context, url string, body io.Reader, headers http.Header) (*http.Response, error) {
 	var response *http.Response
-	request, err := http.NewRequest(http.MethodPut, url, body)
+	request, err := http.NewRequestWithContext(ctx, http.MethodDelete, fmt.Sprintf("%s%s", c.baseURL, url), body)
 	if err != nil {
-		return response, errors.Wrap(err, "PUT - request creation failed")
+		return response, errors.Wrap(err, "POST - request creation failed")
 	}
 
 	request.Header = headers
 
-	return c.Do(request)
+	return c.do(ctx, request)
 }
 
-// Patch makes a HTTP PATCH request to provided URL and requestBody
-func (c *OrbisClient) Patch(url string, body io.Reader, headers http.Header) (*http.Response, error) {
+// Put makes an HTTP PUT request to provided URL and requestBody
+func (c *OrbisClient) Put(ctx context.Context, url string, body io.Reader, headers http.Header) (*http.Response, error) {
 	var response *http.Response
-	request, err := http.NewRequest(http.MethodPatch, url, body)
+	request, err := http.NewRequestWithContext(ctx, http.MethodPut, fmt.Sprintf("%s%s", c.baseURL, url), body)
 	if err != nil {
-		return response, errors.Wrap(err, "PATCH - request creation failed")
+		return response, errors.Wrap(err, "POST - request creation failed")
 	}
 
 	request.Header = headers
 
-	return c.Do(request)
+	return c.do(ctx, request)
 }
 
-// Delete makes a HTTP DELETE request with provided URL
-func (c *OrbisClient) Delete(url string, headers http.Header) (*http.Response, error) {
-	var response *http.Response
-	request, err := http.NewRequest(http.MethodDelete, url, nil)
-	if err != nil {
-		return response, errors.Wrap(err, "DELETE - request creation failed")
+// do makes an HTTP request with the native `http.do` interface
+func (c *OrbisClient) do(ctx context.Context, request *http.Request) (*http.Response, error) {
+	request.Header = c.getTokenHeader(ctx, request.Header)
+	if request.Header.Get(contentTypeHeaderKey) == "" {
+		request.Header.Add(contentTypeHeaderKey, applicationJson)
 	}
 
-	request.Header = headers
-
-	return c.Do(request)
-}
-
-// Do makes an HTTP request with the native `http.Do` interface
-func (c *OrbisClient) Do(request *http.Request) (*http.Response, error) {
-	request.Header = c.auth.GetTokenHeader(request.Header)
-	request.Header.Add("Content-Type", "application/json")
-
-	response, err := c.Client.Do(request)
+	response, err := c.cli.Do(request)
 	if err != nil {
 		return nil, err
 	}
 
 	return response, nil
+}
+
+// getTokenHeader sets access token to request header.
+func (c *OrbisClient) getTokenHeader(ctx context.Context, header http.Header) http.Header {
+	if header == nil {
+		header = http.Header{}
+	}
+
+	token, err := c.auth.GetToken(ctx)
+	if err != nil {
+		return http.Header{}
+	}
+
+	header.Add(accessTokenHeader, token.AccessToken)
+
+	return header
 }

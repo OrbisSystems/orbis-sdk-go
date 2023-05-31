@@ -2,185 +2,149 @@ package ws
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
-	"github.com/OrbisSystems/orbis-sdk-go/auth"
-	"github.com/OrbisSystems/orbis-sdk-go/config"
-	"log"
-	"net/url"
-	"sync"
+	"net/http"
 	"time"
 
 	"github.com/gorilla/websocket"
+	"github.com/pkg/errors"
+	log "github.com/sirupsen/logrus"
+
+	"github.com/OrbisSystems/orbis-sdk-go/config"
+	sdk "github.com/OrbisSystems/orbis-sdk-go/interfaces"
+	"github.com/OrbisSystems/orbis-sdk-go/model"
 )
 
-// Send pings to peer with this period
-const pingPeriod = 30 * time.Second
+const (
+	retryAttempts = 5
+)
 
-// WebSocketClient return websocket client connection
-type WebSocketClient struct {
-	configStr string
-	sendBuf   chan []byte
-	msgChan   chan []byte
-	ctx       context.Context
-	ctxCancel context.CancelFunc
+var (
+	ErrUnknownSubscriptionType = errors.New("unknown subscription type")
+)
 
-	mu     sync.RWMutex
-	wsconn *websocket.Conn
+type Client struct {
+	sdk.Auth
+	url string
+
+	newsConn *websocket.Conn
+
+	newsOutputCh chan model.News
+	closeCh      chan struct{}
 }
 
-// NewWebSocketClient create new websocket connection
-func NewWebSocketClient(scheme Scheme,
-	channel Channel,
-	msgChan chan []byte,
-	orbisConfig config.OrbisConfig,
-	auth auth.API) (*WebSocketClient, error) {
-	conn := WebSocketClient{
-		sendBuf: make(chan []byte, 1),
-		msgChan: msgChan,
+func New(cfg config.Config, auth sdk.Auth) *Client {
+	return &Client{
+		url:          wrapWS(cfg.Host),
+		Auth:         auth,
+		newsOutputCh: make(chan model.News, 100),
+		closeCh:      make(chan struct{}),
 	}
-	conn.ctx, conn.ctxCancel = context.WithCancel(context.Background())
-	token, err := auth.GetToken()
+}
+
+func (c *Client) Subscribe(ctx context.Context, subscriptionType model.SubscriptionType) (chan model.News, error) {
+	switch subscriptionType {
+	case model.NewsSubscription:
+		return c.subscribeNews(ctx)
+	default:
+		return nil, ErrUnknownSubscriptionType
+	}
+}
+
+func (c *Client) Close() error {
+	close(c.newsOutputCh)
+	close(c.closeCh)
+
+	return c.newsConn.Close()
+}
+
+func (c *Client) subscribeNews(ctx context.Context) (chan model.News, error) {
+	if c.newsConn == nil {
+		if err := c.connectWithRetry(ctx); err != nil {
+			return nil, err
+		}
+	}
+
+	go c.processNewsFeed(ctx)
+
+	return c.newsOutputCh, nil
+}
+
+func (c *Client) connectWithRetry(ctx context.Context) error {
+	var err error
+	for i := 0; i < retryAttempts; i++ {
+		log.Debugf("trying to connect to ws. Attemp #%d", i+1)
+		if err = c.connect(ctx); err != nil {
+			log.Warnf("cannot connect to ws server. Attempt #%d, err %v", i+1, err)
+			time.Sleep(time.Second * 5)
+			continue
+		}
+		break
+	}
+
 	if err != nil {
-		return nil, err
+		log.Errorf("cannot connect to ws server: %v", err)
 	}
 
-	u := url.URL{
-		Scheme: string(scheme),
-		Host:   orbisConfig.WSHost,
-		Path:   fmt.Sprintf(string(channel), token),
-	}
-	conn.configStr = u.String()
-
-	go conn.listen()
-	go conn.listenWrite()
-	go conn.ping()
-	return &conn, nil
+	return err
 }
 
-func (conn *WebSocketClient) Connect() *websocket.Conn {
-	conn.mu.Lock()
-	defer conn.mu.Unlock()
-	if conn.wsconn != nil {
-		return conn.wsconn
-	}
-
-	ticker := time.NewTicker(time.Second)
-	defer ticker.Stop()
-	for ; ; <-ticker.C {
-		select {
-		case <-conn.ctx.Done():
-			return nil
-		default:
-			ws, _, err := websocket.DefaultDialer.Dial(conn.configStr, nil)
-			if err != nil {
-				log.Println("Cannot connect to websocket: ", conn.configStr, "err:", err)
-				continue
-			}
-			log.Println("connected to websocket to ", conn.configStr)
-			conn.wsconn = ws
-			return conn.wsconn
-		}
-	}
-}
-
-func (conn *WebSocketClient) listen() {
-	log.Println("listen for the messages: ", conn.configStr)
-	ticker := time.NewTicker(time.Second)
-	defer ticker.Stop()
-	for {
-		select {
-		case <-conn.ctx.Done():
-			return
-		case <-ticker.C:
-			for {
-				ws := conn.Connect()
-				if ws == nil {
-					return
-				}
-				_, bytMsg, err := ws.ReadMessage()
-				if err != nil {
-					log.Println("listen:", err, "Cannot read websocket message")
-					conn.closeWs()
-					break
-				}
-				conn.msgChan <- bytMsg
-			}
-		}
-	}
-}
-
-// Write data to the websocket server
-func (conn *WebSocketClient) Write(payload interface{}) error {
-	data, err := json.Marshal(payload)
+func (c *Client) connect(ctx context.Context) error {
+	tkn, err := c.GetToken(ctx)
 	if err != nil {
 		return err
 	}
-	ctx, cancel := context.WithTimeout(context.Background(), time.Millisecond*50)
-	defer cancel()
 
+	headers := http.Header{}
+	headers.Add("Authorization", fmt.Sprintf("Bearer %s", tkn.AccessToken))
+
+	cli, _, err := websocket.DefaultDialer.Dial(c.url+model.WSInsightNews, headers)
+	if err != nil {
+		return err
+	}
+	c.newsConn = cli
+
+	return nil
+}
+
+func (c *Client) processNewsFeed(ctx context.Context) {
 	for {
 		select {
-		case conn.sendBuf <- data:
-			return nil
-		case <-ctx.Done():
-			return fmt.Errorf("context canceled")
-		}
-	}
-}
-
-func (conn *WebSocketClient) listenWrite() {
-	for data := range conn.sendBuf {
-		ws := conn.Connect()
-		if ws == nil {
-			err := fmt.Errorf("conn.ws is nil")
-			log.Println("listenWrite:", err, "No websocket connection")
-			continue
-		}
-
-		if err := ws.WriteMessage(
-			websocket.TextMessage,
-			data,
-		); err != nil {
-			log.Println("listenWrite", nil, "WebSocket Write Error")
-		}
-		log.Println("listenWrite", nil, fmt.Sprintf("send: %s", data))
-	}
-}
-
-// Close will send close message and shutdown websocket connection
-func (conn *WebSocketClient) Stop() {
-	conn.ctxCancel()
-	conn.closeWs()
-}
-
-// Close will send close message and shutdown websocket connection
-func (conn *WebSocketClient) closeWs() {
-	conn.mu.Lock()
-	if conn.wsconn != nil {
-		conn.wsconn.WriteMessage(websocket.CloseMessage, websocket.FormatCloseMessage(websocket.CloseNormalClosure, ""))
-		conn.wsconn.Close()
-		conn.wsconn = nil
-	}
-	conn.mu.Unlock()
-}
-
-func (conn *WebSocketClient) ping() {
-	log.Println("ping", nil, "ping pong started")
-	ticker := time.NewTicker(pingPeriod)
-	defer ticker.Stop()
-	for {
-		select {
-		case <-ticker.C:
-			ws := conn.Connect()
-			if ws == nil {
-				continue
-			}
-			if err := conn.wsconn.WriteControl(websocket.PingMessage, []byte{}, time.Now().Add(pingPeriod/2)); err != nil {
-				conn.closeWs()
-			}
-		case <-conn.ctx.Done():
+		case <-c.closeCh:
 			return
+		default:
+			if err := c.getFeedNews(ctx); err != nil {
+				return
+			}
 		}
 	}
+}
+
+func (c *Client) getFeedNews(ctx context.Context) error {
+	var msg model.News
+	err := c.newsConn.ReadJSON(&msg)
+	if err != nil {
+		if ce, ok := err.(*websocket.CloseError); ok {
+			switch ce.Code {
+			case websocket.CloseProtocolError, websocket.CloseTLSHandshake:
+				log.Errorf("ws error: %v", err)
+				return err
+			default:
+				if err := c.connectWithRetry(ctx); err != nil {
+					log.Errorf("can't reconnect to ws server. Terminating. Err : %v", err)
+					c.Close()
+					return err
+				}
+			}
+		}
+		log.Errorf("error while getting message via ws: %v", err)
+	}
+
+	c.newsOutputCh <- msg
+
+	return nil
+}
+
+func wrapWS(hostname string) string {
+	return fmt.Sprintf("wss://%s", hostname)
 }
