@@ -117,4 +117,98 @@ if err != nil {
 // newsCh is chan model.News
 ```
 
+## Example of working code for using Orbis System
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"time"
+
+	"github.com/OrbisSystems/orbis-sdk-go/auth"
+	"github.com/OrbisSystems/orbis-sdk-go/client"
+	"github.com/OrbisSystems/orbis-sdk-go/config"
+	"github.com/OrbisSystems/orbis-sdk-go/model"
+	"github.com/OrbisSystems/orbis-sdk-go/storage"
+)
+
+func main() {
+	// creating basic context
+	ctx := context.Background()
+
+	// set configs
+	cfg := config.Config{
+		Host:     "host-to-orbis-server",
+		LogLevel: config.InfoLogLevel,
+	}
+
+	// init token storage using REDIS
+	tokenStorage, err := storage.NewRedisStorage(storage.Config{
+		Host: "localhost",
+		Port: 6379,
+	})
+	if err != nil {
+		panic(err)
+	}
+
+	// init auth system
+	authSys := auth.New(tokenStorage)
+
+	// create SDK Client
+	cli := client.NewSDK(cfg, authSys)
+
+	// check do we need to call Log In flow
+	needToLogin, err := cli.Account.NeedToLogin(ctx)
+	if err != nil {
+		return
+	}
+
+	if needToLogin {
+		// if we need to Log In - do it using email and password
+		if err := cli.Account.LoginByEmail(ctx, model.LoginByEmailRequest{
+			Email:      "some-email@loca.com",
+			Password:   "strong_password",
+			DeviceID:   "qwqeqweq",
+			RememberMe: true,
+		}); err != nil {
+			fmt.Println("login error")
+		}
+	}
+
+	// get some latest news
+	news, err := cli.News.GetByFilter(ctx, model.NewsFilterRequest{
+		Paging: model.Paging{
+			Limit: 10,
+		},
+	})
+	fmt.Println(err)
+	fmt.Println(news)
+
+	// get some fund details for specific symbol
+	fundDetails, err := cli.Funds.GetFundDetails(ctx, "AAPL")
+	fmt.Println(err)
+	fmt.Println(fundDetails)
+
+	// create web socket subscription for getting news in realtime
+	newsCh, err := cli.WS.Subscribe(ctx, model.NewsSubscription)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	go func() {
+		for {
+			select {
+			// reading news from web socket
+			case wsNews := <-newsCh:
+				fmt.Println(wsNews)
+			}
+		}
+	}()
+
+	time.Sleep(time.Hour * 48)
+}
+```
+
 ### Check full list of available [API](./API.md)
