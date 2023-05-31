@@ -18,6 +18,7 @@ type NewsResponse struct {
 type NewsData struct {
 	Type  string `json:"type"`
 	Value string `json:"value"`
+	Title string `json:"title,omitempty"`
 }
 
 type News struct {
