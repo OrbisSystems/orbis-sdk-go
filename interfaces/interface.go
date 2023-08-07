@@ -44,6 +44,7 @@ type AccountService interface {
 	CreateAPIKey(ctx context.Context, req model.CreateAPIKeyRequest) (model.CreateAPIKeyResponse, error)
 	RefreshToken(ctx context.Context) error
 	GetUserByID(ctx context.Context, id int) (model.GetB2BUserByIDResponse, error)
+	GetB2BUsersV2(ctx context.Context, req model.GetB2BUsersV2Request) (model.GetB2BUsersV2Response, error)
 }
 
 type NewsService interface {

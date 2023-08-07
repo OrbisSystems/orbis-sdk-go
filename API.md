@@ -6,7 +6,8 @@
 *  LoginByAPIKey 
 *  CreateAPIKey 
 *  RefreshToken 
-*  GetUserByID 
+*  GetUserByID
+*  GetB2BUsersV2 
 
 ## News
 *  GetByFilter 
