@@ -83,23 +83,6 @@ type GetB2BUsersV2Response struct {
 				LocaleID      int  `json:"locale_id"`
 				MfaEnabled    bool `json:"mfa_enabled"`
 				Microservices []struct {
-					Entities struct {
-						AdditionalProp1 struct {
-							AdditionalProp1 bool `json:"additionalProp1"`
-							AdditionalProp2 bool `json:"additionalProp2"`
-							AdditionalProp3 bool `json:"additionalProp3"`
-						} `json:"additionalProp1"`
-						AdditionalProp2 struct {
-							AdditionalProp1 bool `json:"additionalProp1"`
-							AdditionalProp2 bool `json:"additionalProp2"`
-							AdditionalProp3 bool `json:"additionalProp3"`
-						} `json:"additionalProp2"`
-						AdditionalProp3 struct {
-							AdditionalProp1 bool `json:"additionalProp1"`
-							AdditionalProp2 bool `json:"additionalProp2"`
-							AdditionalProp3 bool `json:"additionalProp3"`
-						} `json:"additionalProp3"`
-					} `json:"entities"`
 					ID                      int    `json:"id"`
 					IsActive                bool   `json:"is_active"`
 					IsVisibleOnAdminSidebar bool   `json:"is_visible_on_admin_sidebar"`
@@ -154,8 +137,6 @@ type GetB2BUsersV2Response struct {
 			CreatedAt       string `json:"created_at"`
 			ID              int    `json:"id"`
 			Metadata        struct {
-				Entities struct {
-				} `json:"entities"`
 				IsMicroserviceGlobal bool `json:"is_microservice_global"`
 			} `json:"metadata"`
 			Microservice struct {
@@ -215,23 +196,6 @@ type GetB2BUsersV2Response struct {
 					LocaleID      int  `json:"locale_id"`
 					MfaEnabled    bool `json:"mfa_enabled"`
 					Microservices []struct {
-						Entities struct {
-							AdditionalProp1 struct {
-								AdditionalProp1 bool `json:"additionalProp1"`
-								AdditionalProp2 bool `json:"additionalProp2"`
-								AdditionalProp3 bool `json:"additionalProp3"`
-							} `json:"additionalProp1"`
-							AdditionalProp2 struct {
-								AdditionalProp1 bool `json:"additionalProp1"`
-								AdditionalProp2 bool `json:"additionalProp2"`
-								AdditionalProp3 bool `json:"additionalProp3"`
-							} `json:"additionalProp2"`
-							AdditionalProp3 struct {
-								AdditionalProp1 bool `json:"additionalProp1"`
-								AdditionalProp2 bool `json:"additionalProp2"`
-								AdditionalProp3 bool `json:"additionalProp3"`
-							} `json:"additionalProp3"`
-						} `json:"entities"`
 						ID                      int    `json:"id"`
 						IsActive                bool   `json:"is_active"`
 						IsVisibleOnAdminSidebar bool   `json:"is_visible_on_admin_sidebar"`
@@ -279,8 +243,6 @@ type GetB2BUsersV2Response struct {
 				CreatedAt       string `json:"created_at"`
 				ID              int    `json:"id"`
 				Metadata        struct {
-					Entities struct {
-					} `json:"entities"`
 					IsMicroserviceGlobal bool `json:"is_microservice_global"`
 				} `json:"metadata"`
 				Microservice struct {
