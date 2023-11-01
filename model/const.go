@@ -177,6 +177,6 @@ const (
 	//		Fixed Income
 	// *******************************************
 
-	URLInsightFixedIncome           = "/fixed-income/"
+	URLInsightFixedIncome           = "/fixed-income"
 	URLInsightFixedIncomeHistorical = "/fixed-income/historical"
 )

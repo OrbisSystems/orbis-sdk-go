@@ -75,7 +75,7 @@ func TestFunds_GetFixedIncomeEntryByID(t *testing.T) {
 					Body:       r,
 				}
 
-				cli.EXPECT().Get(ctx, fmt.Sprintf("%s%s", model.URLInsightBase+model.URLInsightFixedIncome, id), nil).Return(httpResponse, nil)
+				cli.EXPECT().Get(ctx, fmt.Sprintf("%s/%s", model.URLInsightBase+model.URLInsightFixedIncome, id), nil).Return(httpResponse, nil)
 
 				return &FixedIncome{
 					cli: cli,
@@ -97,7 +97,7 @@ func TestFunds_GetFixedIncomeEntryByID(t *testing.T) {
 					Body:       r,
 				}
 
-				cli.EXPECT().Get(ctx, fmt.Sprintf("%s%s", model.URLInsightBase+model.URLInsightFixedIncome, id), nil).Return(httpResponse, nil)
+				cli.EXPECT().Get(ctx, fmt.Sprintf("%s/%s", model.URLInsightBase+model.URLInsightFixedIncome, id), nil).Return(httpResponse, nil)
 
 				return &FixedIncome{
 					cli: cli,
@@ -112,7 +112,7 @@ func TestFunds_GetFixedIncomeEntryByID(t *testing.T) {
 				ctrl := gomock.NewController(t)
 				cli := mock.NewMockHTTPClient(ctrl)
 
-				cli.EXPECT().Get(ctx, fmt.Sprintf("%s%s", model.URLInsightBase+model.URLInsightFixedIncome, id), nil).Return(nil, testErr)
+				cli.EXPECT().Get(ctx, fmt.Sprintf("%s/%s", model.URLInsightBase+model.URLInsightFixedIncome, id), nil).Return(nil, testErr)
 
 				return &FixedIncome{
 					cli: cli,
