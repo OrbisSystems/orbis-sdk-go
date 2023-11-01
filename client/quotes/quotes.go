@@ -85,3 +85,20 @@ func (q *Quotes) GetIntradayQuotes(ctx context.Context, req model.IntradayReques
 
 	return resp, err
 }
+
+func (q *Quotes) GetSingleHistoricalQuote(ctx context.Context, symbols, date string) (model.HistoricalQuote, error) {
+	log.Trace("GetSingleHistoricalQuote called")
+
+	r, err := q.cli.Get(ctx, fmt.Sprintf("%s?symbols=%s&date=%s", model.URLInsightBase+model.URLInsightHistoricalQuote, symbols, date), nil)
+	if err != nil {
+		return model.HistoricalQuote{}, errors.Wrap(err, "couldn't get historical quote")
+	}
+
+	var resp model.HistoricalQuote
+	err = utils.UnmarshalAndCheckOk(&resp, r)
+	if err != nil {
+		return model.HistoricalQuote{}, err
+	}
+
+	return resp, err
+}

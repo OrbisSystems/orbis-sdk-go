@@ -88,9 +88,10 @@ const (
 	// 		Quotes
 	// *******************************************
 
-	URLInsightQuotesEquity   = "/quotes/equity"
-	URLInsightQuoteHistory   = "/quote-history"
-	URLInsightIntradayQuotes = "/intraday/quotes"
+	URLInsightQuotesEquity    = "/quotes/equity"
+	URLInsightQuoteHistory    = "/quote-history"
+	URLInsightIntradayQuotes  = "/intraday/quotes"
+	URLInsightHistoricalQuote = "/historical/quote"
 
 	// *******************************************
 	// 		Funds
@@ -101,6 +102,7 @@ const (
 	URLInsightFundsScreener        = "/funds/screener"
 	URLInsightFundsSectorScreener  = "/funds/sector-screener"
 	URLInsightFundsTop             = "/funds/top"
+	URLInsightFundsForHolding      = "/funds/funds-for-holding"
 
 	// *******************************************
 	// 		Research
@@ -170,4 +172,11 @@ const (
 	URLInsightHSAssets            = "/hs/api/v1/resources/finance/assets"
 	URLInsightHSCustomerAssets    = "/hs/api/v1/resources/finance/customer_assets"
 	URLInsightHSUsers             = "/hs/api/v1/users"
+
+	// *******************************************
+	//		Fixed Income
+	// *******************************************
+
+	URLInsightFixedIncome           = "/fixed-income/"
+	URLInsightFixedIncomeHistorical = "/fixed-income/historical"
 )

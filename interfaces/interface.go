@@ -100,6 +100,7 @@ type QuoteService interface {
 	GetQuotesEquityData(ctx context.Context, symbols, quoteType string) ([]model.QuoteEquityDataResponse, error)
 	GetQuoteHistory(ctx context.Context, req model.QuoteHistoryRequest) (model.QuoteHistoryResponse, error)
 	GetIntradayQuotes(ctx context.Context, req model.IntradayRequest) ([]model.IntradayResponse, error)
+	GetSingleHistoricalQuote(ctx context.Context, symbols, date string) (model.HistoricalQuote, error)
 }
 
 type FundsService interface {
@@ -108,6 +109,7 @@ type FundsService interface {
 	ScreenFunds(ctx context.Context, req model.FundScreenerRequest) (model.FundScreenerResponse, error)
 	ScreenSectorFunds(ctx context.Context, req model.FundSectorScreenerRequest) (model.FundScreenerResponse, error)
 	GetTopFunds(ctx context.Context, req model.GetTopFundsRequest) ([]string, error)
+	GetFundsForHolding(ctx context.Context, req model.GetFundsForHoldingRequest) (model.GetFundsForHoldingResponse, error)
 }
 
 type ResearchService interface {
@@ -175,6 +177,12 @@ type HoopsAIService interface {
 	AddSymbolsToWatchlist(ctx context.Context, customer, userID, watchlistName string, symbols []string) (map[string]interface{}, error)
 	DeleteWatchlistByName(ctx context.Context, customer, userID, watchlistName string) (map[string]interface{}, error)
 	RenameWatchlist(ctx context.Context, customer, userID, oldWatchlistName, newWatchlistName string) (map[string]interface{}, error)
+}
+
+type FixedIncomeService interface {
+	GetFixedIncomeEntryByID(ctx context.Context, id string) (model.FixedIncome, error)
+	GetFixedIncomeEntries(ctx context.Context, req model.GetFixedIncomeEntriesRequest) (model.GetFixedIncomeEntriesResponse, error)
+	GetFixedIncomeHistorical(ctx context.Context, req model.GetFixedIncomeHistoricalRequest) (model.GetFixedIncomeHistoricalResponse, error)
 }
 
 type WS interface {

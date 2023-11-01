@@ -9,11 +9,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/OrbisSystems/orbis-sdk-go/interfaces/mock"
-	"github.com/OrbisSystems/orbis-sdk-go/model"
-	"github.com/golang/mock/gomock"
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/assert"
+	"go.uber.org/mock/gomock"
+
+	"github.com/OrbisSystems/orbis-sdk-go/interfaces/mock"
+	"github.com/OrbisSystems/orbis-sdk-go/model"
 )
 
 func TestAccount_GetB2BUsersV2(t *testing.T) {

@@ -8,6 +8,7 @@ import (
 
 	"github.com/OrbisSystems/orbis-sdk-go/client/account"
 	"github.com/OrbisSystems/orbis-sdk-go/client/dates"
+	"github.com/OrbisSystems/orbis-sdk-go/client/fi"
 	"github.com/OrbisSystems/orbis-sdk-go/client/funds"
 	"github.com/OrbisSystems/orbis-sdk-go/client/hs"
 	"github.com/OrbisSystems/orbis-sdk-go/client/ipo"
@@ -50,6 +51,7 @@ type Client struct {
 	MarketDates  sdk.MarketDatesService
 	OptionGreeks sdk.OptionGreeksService
 	HoopsAI      sdk.HoopsAIService
+	FixedIncome  sdk.FixedIncomeService
 	WS           sdk.WS
 }
 
@@ -78,6 +80,7 @@ func newCli(cfg config.Config, auth sdk.Auth, httpClient sdk.HTTPClient) *Client
 		MarketDates:  dates.New(httpClient),
 		OptionGreeks: og.New(httpClient),
 		HoopsAI:      hs.New(httpClient),
+		FixedIncome:  fi.New(httpClient),
 		WS:           ws.New(cfg, auth),
 	}
 }

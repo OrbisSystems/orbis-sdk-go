@@ -147,3 +147,13 @@ type IntradayResponse struct {
 	Sma                float32   `json:"sma"`
 	Ema                float32   `json:"ema"`
 }
+
+type HistoricalQuote struct {
+	Symbol string    `json:"symbol"`
+	Date   time.Time `json:"date"`
+	Open   float64   `json:"open"`
+	Close  float64   `json:"close"`
+	High   float64   `json:"high"`
+	Low    float64   `json:"low"`
+	Volume int64     `json:"volume"`
+}

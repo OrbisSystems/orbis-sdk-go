@@ -124,3 +124,25 @@ func (f *Funds) GetTopFunds(ctx context.Context, req model.GetTopFundsRequest) (
 
 	return resp, err
 }
+
+func (f *Funds) GetFundsForHolding(ctx context.Context, req model.GetFundsForHoldingRequest) (model.GetFundsForHoldingResponse, error) {
+	log.Trace("GetFundsForHolding called")
+
+	body, err := json.Marshal(req)
+	if err != nil {
+		return model.GetFundsForHoldingResponse{}, errors.Wrap(err, "couldn't marshal input parameters")
+	}
+
+	r, err := f.cli.Post(ctx, model.URLInsightBase+model.URLInsightFundsForHolding, bytes.NewBuffer(body), nil)
+	if err != nil {
+		return model.GetFundsForHoldingResponse{}, errors.Wrap(err, "couldn't get funds for holding")
+	}
+
+	var resp model.GetFundsForHoldingResponse
+	err = utils.UnmarshalAndCheckOk(&resp, r)
+	if err != nil {
+		return model.GetFundsForHoldingResponse{}, err
+	}
+
+	return resp, err
+}

@@ -60,6 +60,7 @@
 *  GetQuotesEquityData 
 *  GetQuoteHistory 
 *  GetIntradayQuotes 
+*  GetSingleHistoricalQuote 
 
 ## Funds
 *  GetFundDetails
@@ -67,6 +68,7 @@
 *  ScreenFunds
 *  ScreenSectorFunds
 *  GetTopFunds
+*  GetFundsForHolding
 
 ## Research
 *  GetCompanyProfile
@@ -128,3 +130,8 @@
 *  AddSymbolsToWatchlist
 *  DeleteWatchlistByName
 *  RenameWatchlist
+
+## Fixed Income
+* GetFixedIncomeEntryByID
+* GetFixedIncomeEntries
+* GetFixedIncomeHistorical
