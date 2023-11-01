@@ -158,3 +158,31 @@ type GetTopFundsRequest struct {
 
 	Paging *Paging `json:"paging,omitempty"`
 }
+
+type GetFundsForHoldingRequest struct {
+	Symbol          string          `json:"symbol"`
+	Leverage        string          `json:"leverage"`
+	QuoteAccessType QuoteAccessType `json:"quote_access_type"`
+
+	Ordering *Ordering `json:"order,omitempty"`
+	Paging   *Paging   `json:"paging"`
+}
+
+type GetFundsForHoldingResponse struct {
+	Data  []FundForHoldingWithQuote `json:"data"`
+	Count int                       `json:"count"`
+}
+
+type FundForHoldingWithQuote struct {
+	Leverage       float64 `json:"leverage"`
+	Inverse        bool    `json:"inverse"`
+	Symbol         string  `json:"symbol"`
+	Name           string  `json:"name"`
+	HoldingPercent float64 `json:"holding_percent"`
+	LastPrice      float64 `json:"last_price"`
+	PriceChange    float64 `json:"price_change"`
+	Volume         float64 `json:"volume"`
+	Sponsor        string  `json:"sponsor"`
+	MarketCap      float64 `json:"market_cap"`
+	FundType       string  `json:"fund_type"`
+}

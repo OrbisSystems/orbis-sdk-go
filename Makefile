@@ -21,7 +21,7 @@ test: gen-mock
 	@go test -tags=unit -cover -race -count=1 -timeout=60s $(PACKAGES_FOR_TEST)
 
 check-lint:
-	@which $(GOLINT) || curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.51.1
+	@which $(GOLINT) || curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.55.1
 
 dc-up:
 	docker-compose up -d
