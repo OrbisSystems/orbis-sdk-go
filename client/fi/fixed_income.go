@@ -28,7 +28,7 @@ func New(cli sdk.HTTPClient) *FixedIncome {
 func (f *FixedIncome) GetFixedIncomeEntryByID(ctx context.Context, id string) (model.FixedIncome, error) {
 	log.Trace("GetFixedIncomeEntryByID called")
 
-	r, err := f.cli.Get(ctx, fmt.Sprintf("%s%s", model.URLInsightBase+model.URLInsightFixedIncome, id), nil)
+	r, err := f.cli.Get(ctx, fmt.Sprintf("%s/%s", model.URLInsightBase+model.URLInsightFixedIncome, id), nil)
 	if err != nil {
 		return model.FixedIncome{}, errors.Wrap(err, "couldn't get fixed income by id")
 	}
