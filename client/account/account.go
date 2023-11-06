@@ -29,7 +29,8 @@ type Account struct {
 
 	watchTokenRefreshState bool
 
-	refreshTicker *time.Ticker
+	refreshTicker      *time.Ticker
+	monitorTokenTicker *time.Ticker
 }
 
 func New(auth sdk.Auth, cli sdk.HTTPClient) *Account {
@@ -37,7 +38,8 @@ func New(auth sdk.Auth, cli sdk.HTTPClient) *Account {
 		Auth: auth,
 		cli:  cli,
 
-		refreshTicker: time.NewTicker(time.Hour * 100), // default
+		refreshTicker:      time.NewTicker(time.Hour * 100), // default
+		monitorTokenTicker: time.NewTicker(time.Minute),     // default
 	}
 
 	a.watchTokenRefresh()
@@ -46,41 +48,47 @@ func New(auth sdk.Auth, cli sdk.HTTPClient) *Account {
 }
 
 func (a *Account) watchTokenRefresh() {
-	// run background routing for token refreshing
 	go func() {
-		log.Trace("watchTokenRefresh started")
-		a.watchTokenRefreshState = true
-
-		defer func() {
-			log.Trace("watchTokenRefresh stopped")
-			a.watchTokenRefreshState = false
-		}()
-
-		var refreshDuration time.Duration
-
-		tkn, err := a.GetToken(context.Background())
-
-		// if no error from storage
-		// and token is presented in storage
-		// and access token is not expired
-		// -> make a ticker
-		if err == nil && tkn.AccessExpiresAt != 0 && tkn.AccessExpiresAt > time.Now().Unix() {
-			refreshDuration = getRefreshDuration(tkn.AccessExpiresAt)
-			a.refreshTicker = time.NewTicker(refreshDuration)
-		}
-
 		for {
 			select {
 			case <-a.refreshTicker.C:
-				log.Trace("refreshing token...")
-				rCtx, _ := context.WithTimeout(context.Background(), time.Minute)
-				err := a.RefreshToken(rCtx)
+				err := a.RefreshToken(context.Background())
 				if err != nil {
 					log.Errorf("error while updating token by refresh token: %v", err)
 				}
+				a.updateRefreshTicker()
+			case <-a.monitorTokenTicker.C:
+				a.updateRefreshTicker()
 			}
 		}
 	}()
+}
+
+func (a *Account) updateRefreshTicker() {
+	log.Trace("updating refresh ticker...")
+
+	ctx, _ := context.WithTimeout(context.Background(), time.Minute)
+	tkn, err := a.GetToken(ctx)
+	if err != nil {
+		log.Errorf("watchTokenRefresh -> error while getting token from auth: %v", err)
+		return
+	}
+
+	if tkn.RefreshToken == "" {
+		log.Errorf("watchTokenRefresh -> %v", ErrEmptyRefreshToken)
+		return
+	}
+
+	var refreshDuration time.Duration
+	// if no error from storage
+	// and token is presented in storage
+	// and access token is not expired
+	// -> make a ticker
+	if tkn.AccessExpiresAt != 0 && tkn.AccessExpiresAt > time.Now().Unix() {
+		refreshDuration = getRefreshDuration(tkn.AccessExpiresAt)
+		a.monitorTokenTicker.Stop()
+		a.refreshTicker = time.NewTicker(refreshDuration)
+	}
 }
 
 // NeedToLogin tells you do you need to call login API or there is still actual token you can use.
@@ -124,8 +132,6 @@ func (a *Account) LoginByEmail(ctx context.Context, req model.LoginByEmailReques
 		return err
 	}
 
-	a.processNewToken(resp.LoginBasic.Tokens)
-
 	return a.SetToken(ctx, resp.LoginBasic.Tokens)
 }
 
@@ -149,8 +155,6 @@ func (a *Account) LoginByAPIKey(ctx context.Context, req model.LoginByAPIKeyRequ
 	if err != nil {
 		return err
 	}
-
-	a.processNewToken(resp.ApiKeysLogin.Tokens)
 
 	return a.SetToken(ctx, resp.ApiKeysLogin.Tokens)
 }
@@ -204,8 +208,6 @@ func (a *Account) RefreshToken(ctx context.Context) error {
 		return err
 	}
 
-	a.processNewToken(resp.LoginBasic.Tokens)
-
 	return a.SetToken(ctx, resp.LoginBasic.Tokens)
 }
 
@@ -224,22 +226,11 @@ func (a *Account) GetUserByID(ctx context.Context, id int) (model.GetB2BUserByID
 }
 
 func getRefreshDuration(v int64) time.Duration {
-	expTime := time.Unix(v, 0).Add(-time.Minute * 1) // make trigger little-bit earlier than exp time
+	expTime := time.Unix(v, 0).Add(-time.Hour * 1) // make trigger little-bit earlier than exp time
 	refreshDuration := expTime.UTC().Sub(time.Now())
-	if refreshDuration.Milliseconds() <= 0 { // in case something went wrong -  make refresh in 1 minutes
-		refreshDuration = time.Minute
+	if refreshDuration.Milliseconds() <= 0 { // in case something went wrong -  make refresh in 10 sec
+		refreshDuration = time.Second * 10
 	}
 
 	return refreshDuration
-}
-
-func (a *Account) processNewToken(tkn model.Token) {
-	if !a.watchTokenRefreshState {
-		a.watchTokenRefresh()
-	}
-
-	time.Sleep(time.Millisecond * 100)
-
-	log.Tracef("resetting token refresh duration... new unix time: %d", tkn.AccessExpiresAt)
-	a.refreshTicker.Reset(getRefreshDuration(tkn.AccessExpiresAt))
 }
