@@ -551,3 +551,125 @@ func TestFunds_GetTopFunds(t *testing.T) {
 		})
 	}
 }
+
+func TestFunds_GetFundsForHolding(t *testing.T) {
+	var (
+		expResp = model.GetFundsForHoldingResponse{
+			Data: []model.FundForHoldingWithQuote{
+				{
+					Leverage:       1,
+					Inverse:        true,
+					Symbol:         "AAPL",
+					Name:           "Apple",
+					HoldingPercent: 12,
+					LastPrice:      123,
+					PriceChange:    2,
+					Volume:         123123,
+					Sponsor:        "Aq",
+					MarketCap:      4,
+					FundType:       "ER",
+				},
+			},
+			Count: 1,
+		}
+		rawReq      = `{"symbol":"","leverage":"1.12","quote_access_type":"","paging":null}`
+		rawResponse = `{"data":[{"leverage":1,"inverse":true,"symbol":"AAPL","name":"Apple","holding_percent":12,"last_price":123,"price_change":2,"volume":123123,"sponsor":"Aq","market_cap":4,"fund_type":"ER"}],"count":1}`
+
+		testErr = errors.New("process error")
+	)
+
+	testCases := []struct {
+		name   string
+		hasErr bool
+		input  model.GetFundsForHoldingRequest
+		fn     func(ctx context.Context) *Funds
+	}{
+		{
+			name:   "success",
+			hasErr: false,
+			input: model.GetFundsForHoldingRequest{
+				Leverage: "1.12",
+			},
+			fn: func(ctx context.Context) *Funds {
+				ctrl := gomock.NewController(t)
+				cli := mock.NewMockHTTPClient(ctrl)
+
+				bb := []byte(rawReq)
+
+				r := io.NopCloser(strings.NewReader(rawResponse))
+				httpResponse := &http.Response{
+					StatusCode: http.StatusOK,
+					Body:       r,
+				}
+
+				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightFundsForHolding, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
+
+				return &Funds{
+					cli: cli,
+				}
+			},
+		},
+		{
+			name:   "err/unmarshal",
+			hasErr: true,
+			input: model.GetFundsForHoldingRequest{
+				Leverage: "1.12",
+			},
+			fn: func(ctx context.Context) *Funds {
+				ctrl := gomock.NewController(t)
+				cli := mock.NewMockHTTPClient(ctrl)
+
+				bb := []byte(rawReq)
+
+				r := io.NopCloser(strings.NewReader("x"))
+
+				httpResponse := &http.Response{
+					StatusCode: http.StatusOK,
+					Body:       r,
+				}
+
+				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightFundsForHolding, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
+
+				return &Funds{
+					cli: cli,
+				}
+			},
+		},
+		{
+			name:   "err/cli",
+			hasErr: true,
+			input: model.GetFundsForHoldingRequest{
+				Leverage: "1.12",
+			},
+			fn: func(ctx context.Context) *Funds {
+				ctrl := gomock.NewController(t)
+				cli := mock.NewMockHTTPClient(ctrl)
+
+				bb := []byte(rawReq)
+
+				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightFundsForHolding, bytes.NewBuffer(bb), nil).Return(nil, testErr)
+
+				return &Funds{
+					cli: cli,
+				}
+			},
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			ctx := context.Background()
+			f := tc.fn(ctx)
+			resp, err := f.GetFundsForHolding(ctx, tc.input)
+
+			if tc.hasErr {
+				assert.Error(t, err)
+				assert.Empty(t, resp)
+			} else {
+				assert.NoError(t, err)
+				assert.EqualValues(t, expResp, resp)
+			}
+		})
+	}
+}
