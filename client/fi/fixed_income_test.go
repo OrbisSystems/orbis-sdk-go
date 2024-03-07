@@ -10,6 +10,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/mock/gomock"
 
@@ -22,7 +23,7 @@ func toPointer[T any](val T) *T {
 }
 
 func TestNew(t *testing.T) {
-	assert.NotNil(t, New(nil))
+	assert.NotNil(t, New(nil, nil))
 }
 
 func TestFunds_GetFixedIncomeEntryByID(t *testing.T) {
@@ -78,7 +79,8 @@ func TestFunds_GetFixedIncomeEntryByID(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s/%s", model.URLInsightBase+model.URLInsightFixedIncome, id), nil).Return(httpResponse, nil)
 
 				return &FixedIncome{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -100,7 +102,8 @@ func TestFunds_GetFixedIncomeEntryByID(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s/%s", model.URLInsightBase+model.URLInsightFixedIncome, id), nil).Return(httpResponse, nil)
 
 				return &FixedIncome{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -115,7 +118,8 @@ func TestFunds_GetFixedIncomeEntryByID(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s/%s", model.URLInsightBase+model.URLInsightFixedIncome, id), nil).Return(nil, testErr)
 
 				return &FixedIncome{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -200,7 +204,8 @@ func TestFunds_GetFixedIncomeEntries(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightFixedIncome, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &FixedIncome{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -226,7 +231,8 @@ func TestFunds_GetFixedIncomeEntries(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightFixedIncome, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &FixedIncome{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -245,7 +251,8 @@ func TestFunds_GetFixedIncomeEntries(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightFixedIncome, bytes.NewBuffer(bb), nil).Return(nil, testErr)
 
 				return &FixedIncome{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -316,7 +323,8 @@ func TestFunds_GetFixedIncomeHistorical(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightFixedIncomeHistorical, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &FixedIncome{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -342,7 +350,8 @@ func TestFunds_GetFixedIncomeHistorical(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightFixedIncomeHistorical, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &FixedIncome{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -361,7 +370,8 @@ func TestFunds_GetFixedIncomeHistorical(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightFixedIncomeHistorical, bytes.NewBuffer(bb), nil).Return(nil, testErr)
 
 				return &FixedIncome{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},

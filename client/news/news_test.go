@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/mock/gomock"
 
@@ -19,7 +20,7 @@ import (
 )
 
 func TestNew(t *testing.T) {
-	assert.NotNil(t, New(nil))
+	assert.NotNil(t, New(nil, nil))
 }
 
 func TestNews_GetByFilter(t *testing.T) {
@@ -77,7 +78,8 @@ func TestNews_GetByFilter(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightNewsFilter, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &News{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -100,7 +102,8 @@ func TestNews_GetByFilter(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightNewsFilter, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &News{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -117,7 +120,8 @@ func TestNews_GetByFilter(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightNewsFilter, bytes.NewBuffer(bb), nil).Return(nil, testErr)
 
 				return &News{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -191,7 +195,8 @@ func TestNews_GetByID(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightNewsByID, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &News{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -214,7 +219,8 @@ func TestNews_GetByID(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightNewsByID, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &News{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -231,7 +237,8 @@ func TestNews_GetByID(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightNewsByID, bytes.NewBuffer(bb), nil).Return(nil, testErr)
 
 				return &News{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -285,7 +292,8 @@ func TestNews_GetAvailableSymbols(t *testing.T) {
 				cli.EXPECT().Get(ctx, model.URLInsightBase+model.URLInsightNewsSymbols, nil).Return(httpResponse, nil)
 
 				return &News{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -305,7 +313,8 @@ func TestNews_GetAvailableSymbols(t *testing.T) {
 				cli.EXPECT().Get(ctx, model.URLInsightBase+model.URLInsightNewsSymbols, nil).Return(httpResponse, nil)
 
 				return &News{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -319,7 +328,8 @@ func TestNews_GetAvailableSymbols(t *testing.T) {
 				cli.EXPECT().Get(ctx, model.URLInsightBase+model.URLInsightNewsSymbols, nil).Return(nil, testErr)
 
 				return &News{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -381,7 +391,8 @@ func TestNews_GetAvailableAuthors(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightNewsAuthors, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &News{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -402,7 +413,8 @@ func TestNews_GetAvailableAuthors(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightNewsAuthors, nil, nil).Return(httpResponse, nil)
 
 				return &News{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -425,7 +437,8 @@ func TestNews_GetAvailableAuthors(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightNewsAuthors, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &News{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -442,7 +455,8 @@ func TestNews_GetAvailableAuthors(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightNewsAuthors, bytes.NewBuffer(bb), nil).Return(nil, testErr)
 
 				return &News{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -504,7 +518,8 @@ func TestNews_GetAvailableChannels(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightNewsChannels, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &News{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -525,7 +540,8 @@ func TestNews_GetAvailableChannels(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightNewsChannels, nil, nil).Return(httpResponse, nil)
 
 				return &News{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -548,7 +564,8 @@ func TestNews_GetAvailableChannels(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightNewsChannels, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &News{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -565,7 +582,8 @@ func TestNews_GetAvailableChannels(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightNewsChannels, bytes.NewBuffer(bb), nil).Return(nil, testErr)
 
 				return &News{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -627,7 +645,8 @@ func TestNews_GetAvailableTags(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightNewsTags, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &News{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -648,7 +667,8 @@ func TestNews_GetAvailableTags(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightNewsTags, nil, nil).Return(httpResponse, nil)
 
 				return &News{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -671,7 +691,8 @@ func TestNews_GetAvailableTags(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightNewsTags, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &News{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -688,7 +709,8 @@ func TestNews_GetAvailableTags(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightNewsTags, bytes.NewBuffer(bb), nil).Return(nil, testErr)
 
 				return &News{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},

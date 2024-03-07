@@ -25,16 +25,18 @@ var (
 type Account struct {
 	sdk.Auth
 
-	cli sdk.HTTPClient
+	cli    sdk.HTTPClient
+	logger *log.Logger
 
 	refreshTicker      *time.Ticker
 	monitorTokenTicker *time.Ticker
 }
 
-func New(auth sdk.Auth, cli sdk.HTTPClient) *Account {
+func New(auth sdk.Auth, cli sdk.HTTPClient, logger *log.Logger) *Account {
 	a := &Account{
-		Auth: auth,
-		cli:  cli,
+		Auth:   auth,
+		cli:    cli,
+		logger: logger,
 
 		refreshTicker:      time.NewTicker(time.Hour * 100), // default
 		monitorTokenTicker: time.NewTicker(time.Minute),     // default
@@ -52,7 +54,7 @@ func (a *Account) watchTokenRefresh() {
 			case <-a.refreshTicker.C:
 				err := a.RefreshToken(context.Background())
 				if err != nil {
-					log.Errorf("error while updating token by refresh token: %v", err)
+					a.logger.Errorf("error while updating token by refresh token: %v", err)
 				}
 				a.updateRefreshTicker()
 			case <-a.monitorTokenTicker.C:
@@ -63,17 +65,17 @@ func (a *Account) watchTokenRefresh() {
 }
 
 func (a *Account) updateRefreshTicker() {
-	log.Trace("updating refresh ticker...")
+	a.logger.Trace("updating refresh ticker...")
 
 	ctx, _ := context.WithTimeout(context.Background(), time.Minute)
 	tkn, err := a.GetToken(ctx)
 	if err != nil {
-		log.Errorf("watchTokenRefresh -> error while getting token from auth: %v", err)
+		a.logger.Errorf("watchTokenRefresh -> error while getting token from auth: %v", err)
 		return
 	}
 
 	if tkn.RefreshToken == "" {
-		log.Errorf("watchTokenRefresh -> %v", ErrEmptyRefreshToken)
+		a.logger.Errorf("watchTokenRefresh -> %v", ErrEmptyRefreshToken)
 		return
 	}
 
@@ -108,7 +110,7 @@ func (a *Account) NeedToLogin(ctx context.Context) (bool, error) {
 // After log in, you can create api keys with limited access for you users using CreateAPIKey method.
 // With these api keys your users can log in via SDK using LoginByAPIKey method.
 func (a *Account) LoginByEmail(ctx context.Context, req model.LoginByEmailRequest) error {
-	log.Trace("LoginByEmail called")
+	a.logger.Trace("LoginByEmail called")
 
 	if req.DeviceID == "" {
 		req.DeviceID = uuid.New().String()
@@ -136,7 +138,7 @@ func (a *Account) LoginByEmail(ctx context.Context, req model.LoginByEmailReques
 // LoginByAPIKey allows lo log in into the system for users with limited access.
 // See LoginByEmail and CreateAPIKey for more information.
 func (a *Account) LoginByAPIKey(ctx context.Context, req model.LoginByAPIKeyRequest) error {
-	log.Trace("LoginByAPIKey called")
+	a.logger.Trace("LoginByAPIKey called")
 
 	body, err := json.Marshal(req)
 	if err != nil {
@@ -159,7 +161,7 @@ func (a *Account) LoginByAPIKey(ctx context.Context, req model.LoginByAPIKeyRequ
 
 // CreateAPIKey provides creating api keys with limited access to branches, microservices, specific roles and permissions.
 func (a *Account) CreateAPIKey(ctx context.Context, req model.CreateAPIKeyRequest) (model.CreateAPIKeyResponse, error) {
-	log.Trace("CreateAPIKey called")
+	a.logger.Trace("CreateAPIKey called")
 
 	body, err := json.Marshal(req)
 	if err != nil {
@@ -178,7 +180,7 @@ func (a *Account) CreateAPIKey(ctx context.Context, req model.CreateAPIKeyReques
 }
 
 func (a *Account) RefreshToken(ctx context.Context) error {
-	log.Trace("RefreshToken called")
+	a.logger.Trace("RefreshToken called")
 
 	tkn, err := a.GetToken(ctx)
 	if err != nil {
@@ -210,7 +212,7 @@ func (a *Account) RefreshToken(ctx context.Context) error {
 }
 
 func (a *Account) GetUserByID(ctx context.Context, id int) (model.GetB2BUserByIDResponse, error) {
-	log.Trace("GetUserByID called")
+	a.logger.Trace("GetUserByID called")
 
 	r, err := a.cli.Get(ctx, fmt.Sprintf("%s/%d", model.URLB2BGetUserByID, id), nil)
 	if err != nil {

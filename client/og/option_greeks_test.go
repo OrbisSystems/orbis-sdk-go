@@ -9,6 +9,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/mock/gomock"
 
@@ -17,7 +18,7 @@ import (
 )
 
 func TestNew(t *testing.T) {
-	assert.NotNil(t, New(nil))
+	assert.NotNil(t, New(nil, nil))
 }
 
 func TestOptionGreeks_CalculateParams(t *testing.T) {
@@ -83,7 +84,8 @@ func TestOptionGreeks_CalculateParams(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightOptionGreeksCalculateParams, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &OptionGreeks{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -106,7 +108,8 @@ func TestOptionGreeks_CalculateParams(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightOptionGreeksCalculateParams, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &OptionGreeks{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -123,7 +126,8 @@ func TestOptionGreeks_CalculateParams(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightOptionGreeksCalculateParams, bytes.NewBuffer(bb), nil).Return(nil, testErr)
 
 				return &OptionGreeks{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -221,7 +225,8 @@ func TestOptionGreeks_CalculateMatrix(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightOptionGreeksCalculateMatrix, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &OptionGreeks{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -244,7 +249,8 @@ func TestOptionGreeks_CalculateMatrix(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightOptionGreeksCalculateMatrix, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &OptionGreeks{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -261,7 +267,8 @@ func TestOptionGreeks_CalculateMatrix(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightOptionGreeksCalculateMatrix, bytes.NewBuffer(bb), nil).Return(nil, testErr)
 
 				return &OptionGreeks{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},

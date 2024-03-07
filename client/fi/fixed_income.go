@@ -16,17 +16,19 @@ import (
 
 // FixedIncome service provides information about fixed income
 type FixedIncome struct {
-	cli sdk.HTTPClient
+	cli    sdk.HTTPClient
+	logger *log.Logger
 }
 
-func New(cli sdk.HTTPClient) *FixedIncome {
+func New(cli sdk.HTTPClient, logger *log.Logger) *FixedIncome {
 	return &FixedIncome{
-		cli: cli,
+		cli:    cli,
+		logger: logger,
 	}
 }
 
 func (f *FixedIncome) GetFixedIncomeEntryByID(ctx context.Context, id string) (model.FixedIncome, error) {
-	log.Trace("GetFixedIncomeEntryByID called")
+	f.logger.Trace("GetFixedIncomeEntryByID called")
 
 	r, err := f.cli.Get(ctx, fmt.Sprintf("%s/%s", model.URLInsightBase+model.URLInsightFixedIncome, id), nil)
 	if err != nil {
@@ -43,7 +45,7 @@ func (f *FixedIncome) GetFixedIncomeEntryByID(ctx context.Context, id string) (m
 }
 
 func (f *FixedIncome) GetFixedIncomeEntries(ctx context.Context, req model.GetFixedIncomeEntriesRequest) (model.GetFixedIncomeEntriesResponse, error) {
-	log.Trace("GetFixedIncomeEntries called")
+	f.logger.Trace("GetFixedIncomeEntries called")
 
 	body, err := json.Marshal(req)
 	if err != nil {
@@ -65,7 +67,7 @@ func (f *FixedIncome) GetFixedIncomeEntries(ctx context.Context, req model.GetFi
 }
 
 func (f *FixedIncome) GetFixedIncomeHistorical(ctx context.Context, req model.GetFixedIncomeHistoricalRequest) (model.GetFixedIncomeHistoricalResponse, error) {
-	log.Trace("GetFixedIncomeHistorical called")
+	f.logger.Trace("GetFixedIncomeHistorical called")
 
 	body, err := json.Marshal(req)
 	if err != nil {

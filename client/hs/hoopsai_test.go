@@ -11,6 +11,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/mock/gomock"
 
@@ -30,7 +31,7 @@ var (
 )
 
 func TestNew(t *testing.T) {
-	assert.NotNil(t, New(nil))
+	assert.NotNil(t, New(nil, nil))
 }
 
 func TestHoopsAI_DailySummary(t *testing.T) {
@@ -57,7 +58,8 @@ func TestHoopsAI_DailySummary(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s/%s?doc_group=%s&enable_html=true&use_customer_assets=%v", model.URLInsightBase+model.URLInsightHSDailySummary, req.Asset, req.DocGroup, req.UseCustomerAssets), nil).Return(httpResponse, nil)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -66,7 +68,9 @@ func TestHoopsAI_DailySummary(t *testing.T) {
 			req:    model.HSDailySummaryRequest{Asset: "FB", UseCustomerAssets: true},
 			hasErr: true,
 			fn: func(ctx context.Context, req model.HSDailySummaryRequest) *HoopsAI {
-				return &HoopsAI{}
+				return &HoopsAI{
+					logger: logrus.New(),
+				}
 			},
 		},
 		{
@@ -86,7 +90,8 @@ func TestHoopsAI_DailySummary(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s/%s?doc_group=%s&enable_html=true&use_customer_assets=%v", model.URLInsightBase+model.URLInsightHSDailySummary, req.Asset, req.DocGroup, req.UseCustomerAssets), nil).Return(httpResponse, nil)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -101,7 +106,8 @@ func TestHoopsAI_DailySummary(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s/%s?doc_group=%s&enable_html=true&use_customer_assets=%v", model.URLInsightBase+model.URLInsightHSDailySummary, req.Asset, req.DocGroup, req.UseCustomerAssets), nil).Return(nil, hsTestErr)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -149,7 +155,8 @@ func TestHoopsAI_WeeklySummary(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s/%s?doc_group=%s&enable_html=true&use_customer_assets=%v", model.URLInsightBase+model.URLInsightHSWeeklySummary, req.Asset, req.DocGroup, req.UseCustomerAssets), nil).Return(httpResponse, nil)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -158,7 +165,9 @@ func TestHoopsAI_WeeklySummary(t *testing.T) {
 			req:    model.HSWeeklySummaryRequest{Asset: "FB", UseCustomerAssets: true},
 			hasErr: true,
 			fn: func(ctx context.Context, req model.HSWeeklySummaryRequest) *HoopsAI {
-				return &HoopsAI{}
+				return &HoopsAI{
+					logger: logrus.New(),
+				}
 			},
 		},
 		{
@@ -178,7 +187,8 @@ func TestHoopsAI_WeeklySummary(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s/%s?doc_group=%s&enable_html=true&use_customer_assets=%v", model.URLInsightBase+model.URLInsightHSWeeklySummary, req.Asset, req.DocGroup, req.UseCustomerAssets), nil).Return(httpResponse, nil)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -193,7 +203,8 @@ func TestHoopsAI_WeeklySummary(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s/%s?doc_group=%s&enable_html=true&use_customer_assets=%v", model.URLInsightBase+model.URLInsightHSWeeklySummary, req.Asset, req.DocGroup, req.UseCustomerAssets), nil).Return(nil, hsTestErr)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -243,7 +254,8 @@ func TestHoopsAI_Portfolio(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightHSPortfolio, bytes.NewBuffer(body), nil).Return(httpResponse, nil)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -266,7 +278,8 @@ func TestHoopsAI_Portfolio(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightHSPortfolio, bytes.NewBuffer(body), nil).Return(httpResponse, nil)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -283,7 +296,8 @@ func TestHoopsAI_Portfolio(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightHSPortfolio, bytes.NewBuffer(body), nil).Return(nil, hsTestErr)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -331,7 +345,8 @@ func TestHoopsAI_Watchlist(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s/%s?doc_group=%s&enable_html=true&use_customer_assets=%v", model.URLInsightBase+model.URLInsightHSWatchlist, req.Asset, req.DocGroup, req.UseCustomerAssets), nil).Return(httpResponse, nil)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -340,7 +355,9 @@ func TestHoopsAI_Watchlist(t *testing.T) {
 			req:    model.HSWatchlistRequest{Asset: "FB", UseCustomerAssets: true},
 			hasErr: true,
 			fn: func(ctx context.Context, req model.HSWatchlistRequest) *HoopsAI {
-				return &HoopsAI{}
+				return &HoopsAI{
+					logger: logrus.New(),
+				}
 			},
 		},
 		{
@@ -360,7 +377,8 @@ func TestHoopsAI_Watchlist(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s/%s?doc_group=%s&enable_html=true&use_customer_assets=%v", model.URLInsightBase+model.URLInsightHSWatchlist, req.Asset, req.DocGroup, req.UseCustomerAssets), nil).Return(httpResponse, nil)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -375,7 +393,8 @@ func TestHoopsAI_Watchlist(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s/%s?doc_group=%s&enable_html=true&use_customer_assets=%v", model.URLInsightBase+model.URLInsightHSWatchlist, req.Asset, req.DocGroup, req.UseCustomerAssets), nil).Return(nil, hsTestErr)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -423,7 +442,8 @@ func TestHoopsAI_WatchlistByUserAndName(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s/%s/%s?doc_group=%s&enable_html=true", model.URLInsightBase+model.URLInsightHSWatchlist, req.UserID, req.WatchlistName, req.DocGroup), nil).Return(httpResponse, nil)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -432,7 +452,9 @@ func TestHoopsAI_WatchlistByUserAndName(t *testing.T) {
 			req:    model.HSWatchlistByUserAndNameRequest{WatchlistName: "FB", UserID: "123"},
 			hasErr: true,
 			fn: func(ctx context.Context, req model.HSWatchlistByUserAndNameRequest) *HoopsAI {
-				return &HoopsAI{}
+				return &HoopsAI{
+					logger: logrus.New(),
+				}
 			},
 		},
 		{
@@ -452,7 +474,8 @@ func TestHoopsAI_WatchlistByUserAndName(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s/%s/%s?doc_group=%s&enable_html=true", model.URLInsightBase+model.URLInsightHSWatchlist, req.UserID, req.WatchlistName, req.DocGroup), nil).Return(httpResponse, nil)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -467,7 +490,8 @@ func TestHoopsAI_WatchlistByUserAndName(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s/%s/%s?doc_group=%s&enable_html=true", model.URLInsightBase+model.URLInsightHSWatchlist, req.UserID, req.WatchlistName, req.DocGroup), nil).Return(nil, hsTestErr)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -515,7 +539,8 @@ func TestHoopsAI_TopGainers(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?doc_group=%s&enable_html=true", model.URLInsightBase+model.URLInsightHSTopGainers, req.DocGroup), nil).Return(httpResponse, nil)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -536,7 +561,8 @@ func TestHoopsAI_TopGainers(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?doc_group=%s&enable_html=true", model.URLInsightBase+model.URLInsightHSTopGainers, req.DocGroup), nil).Return(httpResponse, nil)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -551,7 +577,8 @@ func TestHoopsAI_TopGainers(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?doc_group=%s&enable_html=true", model.URLInsightBase+model.URLInsightHSTopGainers, req.DocGroup), nil).Return(nil, hsTestErr)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -599,7 +626,8 @@ func TestHoopsAI_TopLosers(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?doc_group=%s&enable_html=true", model.URLInsightBase+model.URLInsightHSTopLosers, req.DocGroup), nil).Return(httpResponse, nil)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -620,7 +648,8 @@ func TestHoopsAI_TopLosers(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?doc_group=%s&enable_html=true", model.URLInsightBase+model.URLInsightHSTopLosers, req.DocGroup), nil).Return(httpResponse, nil)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -635,7 +664,8 @@ func TestHoopsAI_TopLosers(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?doc_group=%s&enable_html=true", model.URLInsightBase+model.URLInsightHSTopLosers, req.DocGroup), nil).Return(nil, hsTestErr)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -683,7 +713,8 @@ func TestHoopsAI_TopMovers(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?doc_group=%s&enable_html=true", model.URLInsightBase+model.URLInsightHSTopMovers, req.DocGroup), nil).Return(httpResponse, nil)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -704,7 +735,8 @@ func TestHoopsAI_TopMovers(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?doc_group=%s&enable_html=true", model.URLInsightBase+model.URLInsightHSTopMovers, req.DocGroup), nil).Return(httpResponse, nil)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -719,7 +751,8 @@ func TestHoopsAI_TopMovers(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?doc_group=%s&enable_html=true", model.URLInsightBase+model.URLInsightHSTopMovers, req.DocGroup), nil).Return(nil, hsTestErr)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -767,7 +800,8 @@ func TestHoopsAI_DownTrend(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?doc_group=%s&enable_html=true", model.URLInsightBase+model.URLInsightHSDownTrend, req.DocGroup), nil).Return(httpResponse, nil)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -788,7 +822,8 @@ func TestHoopsAI_DownTrend(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?doc_group=%s&enable_html=true", model.URLInsightBase+model.URLInsightHSDownTrend, req.DocGroup), nil).Return(httpResponse, nil)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -803,7 +838,8 @@ func TestHoopsAI_DownTrend(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?doc_group=%s&enable_html=true", model.URLInsightBase+model.URLInsightHSDownTrend, req.DocGroup), nil).Return(nil, hsTestErr)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -851,7 +887,8 @@ func TestHoopsAI_UpTrend(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?doc_group=%s&enable_html=true", model.URLInsightBase+model.URLInsightHSUpTrend, req.DocGroup), nil).Return(httpResponse, nil)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -872,7 +909,8 @@ func TestHoopsAI_UpTrend(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?doc_group=%s&enable_html=true", model.URLInsightBase+model.URLInsightHSUpTrend, req.DocGroup), nil).Return(httpResponse, nil)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -887,7 +925,8 @@ func TestHoopsAI_UpTrend(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?doc_group=%s&enable_html=true", model.URLInsightBase+model.URLInsightHSUpTrend, req.DocGroup), nil).Return(nil, hsTestErr)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -935,7 +974,8 @@ func TestHoopsAI_MarketOverview(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?doc_group=%s&enable_html=true", model.URLInsightBase+model.URLInsightHSMarketOverview, req.DocGroup), nil).Return(httpResponse, nil)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -956,7 +996,8 @@ func TestHoopsAI_MarketOverview(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?doc_group=%s&enable_html=true", model.URLInsightBase+model.URLInsightHSMarketOverview, req.DocGroup), nil).Return(httpResponse, nil)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -971,7 +1012,8 @@ func TestHoopsAI_MarketOverview(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?doc_group=%s&enable_html=true", model.URLInsightBase+model.URLInsightHSMarketOverview, req.DocGroup), nil).Return(nil, hsTestErr)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -1019,7 +1061,8 @@ func TestHoopsAI_PriceTarget(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?doc_group=%s&enable_html=true", model.URLInsightBase+model.URLInsightHSPriceTarget, req.DocGroup), nil).Return(httpResponse, nil)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -1040,7 +1083,8 @@ func TestHoopsAI_PriceTarget(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?doc_group=%s&enable_html=true", model.URLInsightBase+model.URLInsightHSPriceTarget, req.DocGroup), nil).Return(httpResponse, nil)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -1055,7 +1099,8 @@ func TestHoopsAI_PriceTarget(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?doc_group=%s&enable_html=true", model.URLInsightBase+model.URLInsightHSPriceTarget, req.DocGroup), nil).Return(nil, hsTestErr)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -1103,7 +1148,8 @@ func TestHoopsAI_UpcomingEarnings(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?doc_group=%s&enable_html=true", model.URLInsightBase+model.URLInsightHSUpcomingEarnings, req.DocGroup), nil).Return(httpResponse, nil)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -1124,7 +1170,8 @@ func TestHoopsAI_UpcomingEarnings(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?doc_group=%s&enable_html=true", model.URLInsightBase+model.URLInsightHSUpcomingEarnings, req.DocGroup), nil).Return(httpResponse, nil)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -1139,7 +1186,8 @@ func TestHoopsAI_UpcomingEarnings(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?doc_group=%s&enable_html=true", model.URLInsightBase+model.URLInsightHSUpcomingEarnings, req.DocGroup), nil).Return(nil, hsTestErr)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -1187,7 +1235,8 @@ func TestHoopsAI_RecentEarnings(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?doc_group=%s&enable_html=true", model.URLInsightBase+model.URLInsightHSRecentEarnings, req.DocGroup), nil).Return(httpResponse, nil)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -1208,7 +1257,8 @@ func TestHoopsAI_RecentEarnings(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?doc_group=%s&enable_html=true", model.URLInsightBase+model.URLInsightHSRecentEarnings, req.DocGroup), nil).Return(httpResponse, nil)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -1223,7 +1273,8 @@ func TestHoopsAI_RecentEarnings(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?doc_group=%s&enable_html=true", model.URLInsightBase+model.URLInsightHSRecentEarnings, req.DocGroup), nil).Return(nil, hsTestErr)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -1271,7 +1322,8 @@ func TestHoopsAI_RecordHigh(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?doc_group=%s&enable_html=true", model.URLInsightBase+model.URLInsightHSRecordHigh, req.DocGroup), nil).Return(httpResponse, nil)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -1292,7 +1344,8 @@ func TestHoopsAI_RecordHigh(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?doc_group=%s&enable_html=true", model.URLInsightBase+model.URLInsightHSRecordHigh, req.DocGroup), nil).Return(httpResponse, nil)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -1307,7 +1360,8 @@ func TestHoopsAI_RecordHigh(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?doc_group=%s&enable_html=true", model.URLInsightBase+model.URLInsightHSRecordHigh, req.DocGroup), nil).Return(nil, hsTestErr)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -1355,7 +1409,8 @@ func TestHoopsAI_UnusualHighVolume(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?doc_group=%s&enable_html=true", model.URLInsightBase+model.URLInsightHSUnusualHighVolume, req.DocGroup), nil).Return(httpResponse, nil)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -1376,7 +1431,8 @@ func TestHoopsAI_UnusualHighVolume(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?doc_group=%s&enable_html=true", model.URLInsightBase+model.URLInsightHSUnusualHighVolume, req.DocGroup), nil).Return(httpResponse, nil)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -1391,7 +1447,8 @@ func TestHoopsAI_UnusualHighVolume(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?doc_group=%s&enable_html=true", model.URLInsightBase+model.URLInsightHSUnusualHighVolume, req.DocGroup), nil).Return(nil, hsTestErr)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -1439,7 +1496,8 @@ func TestHoopsAI_Data(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?doc_group=%s&enable_html=true", model.URLInsightBase+model.URLInsightHSAssets, req.DocGroup), nil).Return(httpResponse, nil)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -1460,7 +1518,8 @@ func TestHoopsAI_Data(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?doc_group=%s&enable_html=true", model.URLInsightBase+model.URLInsightHSAssets, req.DocGroup), nil).Return(httpResponse, nil)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -1475,7 +1534,8 @@ func TestHoopsAI_Data(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?doc_group=%s&enable_html=true", model.URLInsightBase+model.URLInsightHSAssets, req.DocGroup), nil).Return(nil, hsTestErr)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -1523,7 +1583,8 @@ func TestHoopsAI_CustomerAssets(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?doc_group=%s&enable_html=true", model.URLInsightBase+model.URLInsightHSCustomerAssets, req.DocGroup), nil).Return(httpResponse, nil)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -1544,7 +1605,8 @@ func TestHoopsAI_CustomerAssets(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?doc_group=%s&enable_html=true", model.URLInsightBase+model.URLInsightHSCustomerAssets, req.DocGroup), nil).Return(httpResponse, nil)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -1559,7 +1621,8 @@ func TestHoopsAI_CustomerAssets(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?doc_group=%s&enable_html=true", model.URLInsightBase+model.URLInsightHSCustomerAssets, req.DocGroup), nil).Return(nil, hsTestErr)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -1607,7 +1670,8 @@ func TestHoopsAI_GetUsers(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s/%s", model.URLInsightBase+model.URLInsightHSUsers, req), nil).Return(httpResponse, nil)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -1628,7 +1692,8 @@ func TestHoopsAI_GetUsers(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s/%s", model.URLInsightBase+model.URLInsightHSUsers, req), nil).Return(httpResponse, nil)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -1643,7 +1708,8 @@ func TestHoopsAI_GetUsers(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s/%s", model.URLInsightBase+model.URLInsightHSUsers, req), nil).Return(nil, hsTestErr)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -1691,7 +1757,8 @@ func TestHoopsAI_CreateUser(t *testing.T) {
 				cli.EXPECT().Post(ctx, fmt.Sprintf("%s/%s", model.URLInsightBase+model.URLInsightHSUsers, customer), nil, nil).Return(httpResponse, nil)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -1712,7 +1779,8 @@ func TestHoopsAI_CreateUser(t *testing.T) {
 				cli.EXPECT().Post(ctx, fmt.Sprintf("%s/%s", model.URLInsightBase+model.URLInsightHSUsers, customer), nil, nil).Return(httpResponse, nil)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -1727,7 +1795,8 @@ func TestHoopsAI_CreateUser(t *testing.T) {
 				cli.EXPECT().Post(ctx, fmt.Sprintf("%s/%s", model.URLInsightBase+model.URLInsightHSUsers, customer), nil, nil).Return(nil, hsTestErr)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -1775,7 +1844,8 @@ func TestHoopsAI_DeleteUser(t *testing.T) {
 				cli.EXPECT().Delete(ctx, fmt.Sprintf("%s/%s/%s", model.URLInsightBase+model.URLInsightHSUsers, customer, userID), nil, nil).Return(httpResponse, nil)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -1796,7 +1866,8 @@ func TestHoopsAI_DeleteUser(t *testing.T) {
 				cli.EXPECT().Delete(ctx, fmt.Sprintf("%s/%s/%s", model.URLInsightBase+model.URLInsightHSUsers, customer, userID), nil, nil).Return(httpResponse, nil)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -1811,7 +1882,8 @@ func TestHoopsAI_DeleteUser(t *testing.T) {
 				cli.EXPECT().Delete(ctx, fmt.Sprintf("%s/%s/%s", model.URLInsightBase+model.URLInsightHSUsers, customer, userID), nil, nil).Return(nil, hsTestErr)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -1859,7 +1931,8 @@ func TestHoopsAI_CreateWatchlistByUser(t *testing.T) {
 				cli.EXPECT().Post(ctx, fmt.Sprintf("%s/%s/%s/watchlists", model.URLInsightBase+model.URLInsightHSUsers, customer, userID), nil, nil).Return(httpResponse, nil)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -1880,7 +1953,8 @@ func TestHoopsAI_CreateWatchlistByUser(t *testing.T) {
 				cli.EXPECT().Post(ctx, fmt.Sprintf("%s/%s/%s/watchlists", model.URLInsightBase+model.URLInsightHSUsers, customer, userID), nil, nil).Return(httpResponse, nil)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -1895,7 +1969,8 @@ func TestHoopsAI_CreateWatchlistByUser(t *testing.T) {
 				cli.EXPECT().Post(ctx, fmt.Sprintf("%s/%s/%s/watchlists", model.URLInsightBase+model.URLInsightHSUsers, customer, userID), nil, nil).Return(nil, hsTestErr)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -1945,7 +2020,8 @@ func TestHoopsAI_GetWatchlistByUser(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s/%s/%s/watchlists/%s", model.URLInsightBase+model.URLInsightHSUsers, customer, userID, watchlistName), nil).Return(httpResponse, nil)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -1968,7 +2044,8 @@ func TestHoopsAI_GetWatchlistByUser(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s/%s/%s/watchlists/%s", model.URLInsightBase+model.URLInsightHSUsers, customer, userID, watchlistName), nil).Return(httpResponse, nil)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -1985,7 +2062,8 @@ func TestHoopsAI_GetWatchlistByUser(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s/%s/%s/watchlists/%s", model.URLInsightBase+model.URLInsightHSUsers, customer, userID, watchlistName), nil).Return(nil, hsTestErr)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -2035,7 +2113,8 @@ func TestHoopsAI_AddSymbolToWatchlist(t *testing.T) {
 				cli.EXPECT().Post(ctx, fmt.Sprintf("%s/%s/%s/watchlists/%s/%s", model.URLInsightBase+model.URLInsightHSUsers, customer, userID, watchlistName, symbol), nil, nil).Return(httpResponse, nil)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -2058,7 +2137,8 @@ func TestHoopsAI_AddSymbolToWatchlist(t *testing.T) {
 				cli.EXPECT().Post(ctx, fmt.Sprintf("%s/%s/%s/watchlists/%s/%s", model.URLInsightBase+model.URLInsightHSUsers, customer, userID, watchlistName, symbol), nil, nil).Return(httpResponse, nil)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -2075,7 +2155,8 @@ func TestHoopsAI_AddSymbolToWatchlist(t *testing.T) {
 				cli.EXPECT().Post(ctx, fmt.Sprintf("%s/%s/%s/watchlists/%s/%s", model.URLInsightBase+model.URLInsightHSUsers, customer, userID, watchlistName, symbol), nil, nil).Return(nil, hsTestErr)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -2123,7 +2204,8 @@ func TestHoopsAI_DeleteSymbolFromWatchlist(t *testing.T) {
 				cli.EXPECT().Delete(ctx, fmt.Sprintf("%s/%s/%s/watchlists/%s/%s", model.URLInsightBase+model.URLInsightHSUsers, customer, userID, watchlistName, symbol), nil, nil).Return(httpResponse, nil)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -2144,7 +2226,8 @@ func TestHoopsAI_DeleteSymbolFromWatchlist(t *testing.T) {
 				cli.EXPECT().Delete(ctx, fmt.Sprintf("%s/%s/%s/watchlists/%s/%s", model.URLInsightBase+model.URLInsightHSUsers, customer, userID, watchlistName, symbol), nil, nil).Return(httpResponse, nil)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -2159,7 +2242,8 @@ func TestHoopsAI_DeleteSymbolFromWatchlist(t *testing.T) {
 				cli.EXPECT().Delete(ctx, fmt.Sprintf("%s/%s/%s/watchlists/%s/%s", model.URLInsightBase+model.URLInsightHSUsers, customer, userID, watchlistName, symbol), nil, nil).Return(nil, hsTestErr)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -2216,7 +2300,8 @@ func TestHoopsAI_AddSymbolsToWatchlist(t *testing.T) {
 				cli.EXPECT().Post(ctx, fmt.Sprintf("%s/%s/%s/watchlists/%s", model.URLInsightBase+model.URLInsightHSUsers, customer, userID, watchlistName), bytes.NewBuffer(body), nil).Return(httpResponse, nil)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -2245,7 +2330,8 @@ func TestHoopsAI_AddSymbolsToWatchlist(t *testing.T) {
 				cli.EXPECT().Post(ctx, fmt.Sprintf("%s/%s/%s/watchlists/%s", model.URLInsightBase+model.URLInsightHSUsers, customer, userID, watchlistName), bytes.NewBuffer(body), nil).Return(httpResponse, nil)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -2268,7 +2354,8 @@ func TestHoopsAI_AddSymbolsToWatchlist(t *testing.T) {
 				cli.EXPECT().Post(ctx, fmt.Sprintf("%s/%s/%s/watchlists/%s", model.URLInsightBase+model.URLInsightHSUsers, customer, userID, watchlistName), bytes.NewBuffer(body), nil).Return(nil, hsTestErr)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -2316,7 +2403,8 @@ func TestHoopsAI_DeleteWatchlistByName(t *testing.T) {
 				cli.EXPECT().Delete(ctx, fmt.Sprintf("%s/%s/%s/watchlists/%s", model.URLInsightBase+model.URLInsightHSUsers, customer, userID, watchlistName), nil, nil).Return(httpResponse, nil)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -2337,7 +2425,8 @@ func TestHoopsAI_DeleteWatchlistByName(t *testing.T) {
 				cli.EXPECT().Delete(ctx, fmt.Sprintf("%s/%s/%s/watchlists/%s", model.URLInsightBase+model.URLInsightHSUsers, customer, userID, watchlistName), nil, nil).Return(httpResponse, nil)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -2352,7 +2441,8 @@ func TestHoopsAI_DeleteWatchlistByName(t *testing.T) {
 				cli.EXPECT().Delete(ctx, fmt.Sprintf("%s/%s/%s/watchlists/%s", model.URLInsightBase+model.URLInsightHSUsers, customer, userID, watchlistName), nil, nil).Return(nil, hsTestErr)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -2400,7 +2490,8 @@ func TestHoopsAI_RenameWatchlist(t *testing.T) {
 				cli.EXPECT().Put(ctx, fmt.Sprintf("%s/%s/%s/watchlists/%s/rename/%s", model.URLInsightBase+model.URLInsightHSUsers, customer, userID, oldWatchlistName, newWatchlistName), nil, nil).Return(httpResponse, nil)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -2421,7 +2512,8 @@ func TestHoopsAI_RenameWatchlist(t *testing.T) {
 				cli.EXPECT().Put(ctx, fmt.Sprintf("%s/%s/%s/watchlists/%s/rename/%s", model.URLInsightBase+model.URLInsightHSUsers, customer, userID, oldWatchlistName, newWatchlistName), nil, nil).Return(httpResponse, nil)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -2436,7 +2528,8 @@ func TestHoopsAI_RenameWatchlist(t *testing.T) {
 				cli.EXPECT().Put(ctx, fmt.Sprintf("%s/%s/%s/watchlists/%s/rename/%s", model.URLInsightBase+model.URLInsightHSUsers, customer, userID, oldWatchlistName, newWatchlistName), nil, nil).Return(nil, hsTestErr)
 
 				return &HoopsAI{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},

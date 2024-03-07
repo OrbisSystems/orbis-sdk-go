@@ -9,6 +9,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/mock/gomock"
 
@@ -17,7 +18,7 @@ import (
 )
 
 func TestNew(t *testing.T) {
-	assert.NotNil(t, New(nil))
+	assert.NotNil(t, New(nil, nil))
 }
 
 func TestWorldMarket_GetContinents(t *testing.T) {
@@ -62,7 +63,8 @@ func TestWorldMarket_GetContinents(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?limit=%d&offset=%d", model.URLInsightBase+model.URLInsightContinents, limit, offset), nil).Return(httpResponse, nil)
 
 				return &WorldMarket{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -84,7 +86,8 @@ func TestWorldMarket_GetContinents(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?limit=%d&offset=%d", model.URLInsightBase+model.URLInsightContinents, limit, offset), nil).Return(httpResponse, nil)
 
 				return &WorldMarket{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -100,7 +103,8 @@ func TestWorldMarket_GetContinents(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?limit=%d&offset=%d", model.URLInsightBase+model.URLInsightContinents, limit, offset), nil).Return(nil, testErr)
 
 				return &WorldMarket{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -166,7 +170,8 @@ func TestWorldMarket_GetRegions(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?limit=%d&offset=%d", model.URLInsightBase+model.URLInsightRegions, limit, offset), nil).Return(httpResponse, nil)
 
 				return &WorldMarket{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -188,7 +193,8 @@ func TestWorldMarket_GetRegions(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?limit=%d&offset=%d", model.URLInsightBase+model.URLInsightRegions, limit, offset), nil).Return(httpResponse, nil)
 
 				return &WorldMarket{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -204,7 +210,8 @@ func TestWorldMarket_GetRegions(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?limit=%d&offset=%d", model.URLInsightBase+model.URLInsightRegions, limit, offset), nil).Return(nil, testErr)
 
 				return &WorldMarket{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -269,7 +276,8 @@ func TestWorldMarket_GetCountryCodes(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?limit=%d&offset=%d", model.URLInsightBase+model.URLInsightCountryCodes, limit, offset), nil).Return(httpResponse, nil)
 
 				return &WorldMarket{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -291,7 +299,8 @@ func TestWorldMarket_GetCountryCodes(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?limit=%d&offset=%d", model.URLInsightBase+model.URLInsightCountryCodes, limit, offset), nil).Return(httpResponse, nil)
 
 				return &WorldMarket{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -307,7 +316,8 @@ func TestWorldMarket_GetCountryCodes(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?limit=%d&offset=%d", model.URLInsightBase+model.URLInsightCountryCodes, limit, offset), nil).Return(nil, testErr)
 
 				return &WorldMarket{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -373,7 +383,8 @@ func TestWorldMarket_GetGlobalIndexes(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?limit=%d&offset=%d&continent=%s&quoteType=%s", model.URLInsightBase+model.URLInsightGlobalIndexes, limit, offset, continent, quoteType), nil).Return(httpResponse, nil)
 
 				return &WorldMarket{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -397,7 +408,8 @@ func TestWorldMarket_GetGlobalIndexes(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?limit=%d&offset=%d&continent=%s&quoteType=%s", model.URLInsightBase+model.URLInsightGlobalIndexes, limit, offset, continent, quoteType), nil).Return(httpResponse, nil)
 
 				return &WorldMarket{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -415,7 +427,8 @@ func TestWorldMarket_GetGlobalIndexes(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?limit=%d&offset=%d&continent=%s&quoteType=%s", model.URLInsightBase+model.URLInsightGlobalIndexes, limit, offset, continent, quoteType), nil).Return(nil, testErr)
 
 				return &WorldMarket{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},

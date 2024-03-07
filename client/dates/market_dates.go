@@ -15,17 +15,19 @@ import (
 )
 
 type MarketDates struct {
-	cli sdk.HTTPClient
+	cli    sdk.HTTPClient
+	logger *log.Logger
 }
 
-func New(cli sdk.HTTPClient) *MarketDates {
+func New(cli sdk.HTTPClient, logger *log.Logger) *MarketDates {
 	return &MarketDates{
-		cli: cli,
+		cli:    cli,
+		logger: logger,
 	}
 }
 
 func (m *MarketDates) GetMarketDatesHistory(ctx context.Context, req model.GetMarketDatesRequest) (model.GetMarketDatesResponse, error) {
-	log.Trace("GetMarketDatesHistory called")
+	m.logger.Trace("GetMarketDatesHistory called")
 
 	body, err := json.Marshal(req)
 	if err != nil {
@@ -47,7 +49,7 @@ func (m *MarketDates) GetMarketDatesHistory(ctx context.Context, req model.GetMa
 }
 
 func (m *MarketDates) GetTodayMarketHours(ctx context.Context, market string) (model.GetMarketHoursResponse, error) {
-	log.Trace("GetTodayMarketHours called")
+	m.logger.Trace("GetTodayMarketHours called")
 
 	r, err := m.cli.Get(ctx, fmt.Sprintf("%s?market=%s", model.URLInsightBase+model.URLInsightMarketDatesToday, market), nil)
 	if err != nil {

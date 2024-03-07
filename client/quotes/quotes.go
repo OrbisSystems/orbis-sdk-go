@@ -16,17 +16,19 @@ import (
 
 // Quotes service returns quotes data.
 type Quotes struct {
-	cli sdk.HTTPClient
+	cli    sdk.HTTPClient
+	logger *log.Logger
 }
 
-func New(cli sdk.HTTPClient) *Quotes {
+func New(cli sdk.HTTPClient, logger *log.Logger) *Quotes {
 	return &Quotes{
-		cli: cli,
+		cli:    cli,
+		logger: logger,
 	}
 }
 
 func (q *Quotes) GetQuotesEquityData(ctx context.Context, symbols, quoteType string) ([]model.QuoteEquityDataResponse, error) {
-	log.Trace("GetQuotesEquityData called")
+	q.logger.Trace("GetQuotesEquityData called")
 
 	r, err := q.cli.Get(ctx, fmt.Sprintf("%s?symbols=%s&quote_type=%s", model.URLInsightBase+model.URLInsightQuotesEquity, symbols, quoteType), nil)
 	if err != nil {
@@ -43,7 +45,7 @@ func (q *Quotes) GetQuotesEquityData(ctx context.Context, symbols, quoteType str
 }
 
 func (q *Quotes) GetQuoteHistory(ctx context.Context, req model.QuoteHistoryRequest) (model.QuoteHistoryResponse, error) {
-	log.Trace("GetQuoteHistory called")
+	q.logger.Trace("GetQuoteHistory called")
 
 	body, err := json.Marshal(req)
 	if err != nil {
@@ -65,7 +67,7 @@ func (q *Quotes) GetQuoteHistory(ctx context.Context, req model.QuoteHistoryRequ
 }
 
 func (q *Quotes) GetIntradayQuotes(ctx context.Context, req model.IntradayRequest) ([]model.IntradayResponse, error) {
-	log.Trace("GetIntradayQuotes called")
+	q.logger.Trace("GetIntradayQuotes called")
 
 	body, err := json.Marshal(req)
 	if err != nil {
@@ -87,7 +89,7 @@ func (q *Quotes) GetIntradayQuotes(ctx context.Context, req model.IntradayReques
 }
 
 func (q *Quotes) GetSingleHistoricalQuote(ctx context.Context, symbols, date string) (model.HistoricalQuote, error) {
-	log.Trace("GetSingleHistoricalQuote called")
+	q.logger.Trace("GetSingleHistoricalQuote called")
 
 	r, err := q.cli.Get(ctx, fmt.Sprintf("%s?symbols=%s&date=%s", model.URLInsightBase+model.URLInsightHistoricalQuote, symbols, date), nil)
 	if err != nil {

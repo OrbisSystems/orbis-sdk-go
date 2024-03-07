@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/pkg/errors"
+	"github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/mock/gomock"
 
@@ -25,7 +26,7 @@ func TestNew(t *testing.T) {
 
 	auth.EXPECT().GetToken(gomock.Any()).Return(model.Token{}, nil).AnyTimes()
 
-	assert.NotNil(t, New(auth, cli))
+	assert.NotNil(t, New(auth, cli, logrus.New()))
 }
 
 func TestAccount_NeedToLogin(t *testing.T) {
@@ -50,7 +51,7 @@ func TestAccount_NeedToLogin(t *testing.T) {
 					PairId:           "123123123",
 				}, nil).MaxTimes(2)
 
-				return New(auth, nil)
+				return New(auth, nil, logrus.New())
 			},
 		},
 		{
@@ -69,7 +70,7 @@ func TestAccount_NeedToLogin(t *testing.T) {
 					PairId:           "123123123",
 				}, nil).MaxTimes(2)
 
-				return New(auth, nil)
+				return New(auth, nil, logrus.New())
 			},
 		},
 		{
@@ -88,7 +89,7 @@ func TestAccount_NeedToLogin(t *testing.T) {
 					PairId:           "123123123",
 				}, nil).MaxTimes(2)
 
-				return New(auth, nil)
+				return New(auth, nil, logrus.New())
 			},
 		},
 		{
@@ -101,7 +102,7 @@ func TestAccount_NeedToLogin(t *testing.T) {
 
 				auth.EXPECT().GetToken(ctx).Return(model.Token{}, errors.New("error")).MaxTimes(2)
 
-				return New(auth, nil)
+				return New(auth, nil, logrus.New())
 			},
 		},
 	}
@@ -181,8 +182,9 @@ func TestAccount_LoginByEmail(t *testing.T) {
 				auth.EXPECT().SetToken(ctx, token.LoginBasic.Tokens).Return(nil)
 
 				return &Account{
-					Auth: auth,
-					cli:  cli,
+					Auth:   auth,
+					cli:    cli,
+					logger: logrus.New(),
 
 					refreshTicker: time.NewTicker(time.Hour * 100),
 				}
@@ -210,8 +212,9 @@ func TestAccount_LoginByEmail(t *testing.T) {
 				auth.EXPECT().SetToken(ctx, token.LoginBasic.Tokens).Return(testErr)
 
 				return &Account{
-					Auth: auth,
-					cli:  cli,
+					Auth:   auth,
+					cli:    cli,
+					logger: logrus.New(),
 
 					refreshTicker: time.NewTicker(time.Hour * 100),
 				}
@@ -237,7 +240,8 @@ func TestAccount_LoginByEmail(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLB2BLoginByEmail, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &Account{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 
 					refreshTicker: time.NewTicker(time.Hour * 100),
 				}
@@ -256,7 +260,8 @@ func TestAccount_LoginByEmail(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLB2BLoginByEmail, bytes.NewBuffer(bb), nil).Return(nil, testErr)
 
 				return &Account{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 
 					refreshTicker: time.NewTicker(time.Hour * 100),
 				}
@@ -335,8 +340,9 @@ func TestAccount_LoginByAPIKey(t *testing.T) {
 				auth.EXPECT().SetToken(ctx, token.ApiKeysLogin.Tokens).Return(nil)
 
 				return &Account{
-					Auth: auth,
-					cli:  cli,
+					Auth:   auth,
+					cli:    cli,
+					logger: logrus.New(),
 
 					refreshTicker: time.NewTicker(time.Hour * 100),
 				}
@@ -364,8 +370,9 @@ func TestAccount_LoginByAPIKey(t *testing.T) {
 				auth.EXPECT().SetToken(ctx, token.ApiKeysLogin.Tokens).Return(testErr)
 
 				return &Account{
-					Auth: auth,
-					cli:  cli,
+					Auth:   auth,
+					cli:    cli,
+					logger: logrus.New(),
 
 					refreshTicker: time.NewTicker(time.Hour * 100),
 				}
@@ -391,7 +398,8 @@ func TestAccount_LoginByAPIKey(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLB2BLoginByAPIKey, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &Account{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 
 					refreshTicker: time.NewTicker(time.Hour * 100),
 				}
@@ -410,7 +418,8 @@ func TestAccount_LoginByAPIKey(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLB2BLoginByAPIKey, bytes.NewBuffer(bb), nil).Return(nil, testErr)
 
 				return &Account{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 
 					refreshTicker: time.NewTicker(time.Hour * 100),
 				}
@@ -478,7 +487,8 @@ func TestAccount_CreateAPIKey(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLB2BCreateAPIKey, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &Account{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 
 					refreshTicker: time.NewTicker(time.Hour * 100),
 				}
@@ -504,7 +514,8 @@ func TestAccount_CreateAPIKey(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLB2BCreateAPIKey, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &Account{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 
 					refreshTicker: time.NewTicker(time.Hour * 100),
 				}
@@ -523,7 +534,8 @@ func TestAccount_CreateAPIKey(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLB2BCreateAPIKey, bytes.NewBuffer(bb), nil).Return(nil, testErr)
 
 				return &Account{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 
 					refreshTicker: time.NewTicker(time.Hour * 100),
 				}
@@ -600,8 +612,9 @@ func TestAccount_RefreshToken(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLB2BRefreshToken, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &Account{
-					Auth: auth,
-					cli:  cli,
+					Auth:   auth,
+					cli:    cli,
+					logger: logrus.New(),
 
 					refreshTicker: time.NewTicker(time.Hour * 100),
 				}
@@ -630,8 +643,9 @@ func TestAccount_RefreshToken(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLB2BRefreshToken, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &Account{
-					Auth: auth,
-					cli:  cli,
+					Auth:   auth,
+					cli:    cli,
+					logger: logrus.New(),
 
 					refreshTicker: time.NewTicker(time.Hour * 100),
 				}
@@ -659,8 +673,9 @@ func TestAccount_RefreshToken(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLB2BRefreshToken, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &Account{
-					Auth: auth,
-					cli:  cli,
+					Auth:   auth,
+					cli:    cli,
+					logger: logrus.New(),
 
 					refreshTicker: time.NewTicker(time.Hour * 100),
 				}
@@ -681,8 +696,9 @@ func TestAccount_RefreshToken(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLB2BRefreshToken, bytes.NewBuffer(bb), nil).Return(nil, testErr)
 
 				return &Account{
-					Auth: auth,
-					cli:  cli,
+					Auth:   auth,
+					cli:    cli,
+					logger: logrus.New(),
 
 					refreshTicker: time.NewTicker(time.Hour * 100),
 				}
@@ -698,7 +714,8 @@ func TestAccount_RefreshToken(t *testing.T) {
 				auth.EXPECT().GetToken(ctx).Return(model.Token{}, testErr)
 
 				return &Account{
-					Auth: auth,
+					Auth:   auth,
+					logger: logrus.New(),
 
 					refreshTicker: time.NewTicker(time.Hour * 100),
 				}
@@ -714,7 +731,8 @@ func TestAccount_RefreshToken(t *testing.T) {
 				auth.EXPECT().GetToken(ctx).Return(model.Token{}, nil)
 
 				return &Account{
-					Auth: auth,
+					Auth:   auth,
+					logger: logrus.New(),
 
 					refreshTicker: time.NewTicker(time.Hour * 100),
 				}
@@ -775,7 +793,8 @@ func TestAccount_GetUserByID(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s/%d", model.URLB2BGetUserByID, id), nil).Return(httpResponse, nil)
 
 				return &Account{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 
 					refreshTicker: time.NewTicker(time.Hour * 100),
 				}
@@ -799,7 +818,8 @@ func TestAccount_GetUserByID(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s/%d", model.URLB2BGetUserByID, id), nil).Return(httpResponse, nil)
 
 				return &Account{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 
 					refreshTicker: time.NewTicker(time.Hour * 100),
 				}
@@ -816,7 +836,8 @@ func TestAccount_GetUserByID(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s/%d", model.URLB2BGetUserByID, id), nil).Return(nil, testErr)
 
 				return &Account{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 
 					refreshTicker: time.NewTicker(time.Hour * 100),
 				}

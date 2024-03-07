@@ -10,6 +10,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/mock/gomock"
 
@@ -18,7 +19,7 @@ import (
 )
 
 func TestNew(t *testing.T) {
-	assert.NotNil(t, New(nil))
+	assert.NotNil(t, New(nil, nil))
 }
 
 func TestFunds_GetFundDetails(t *testing.T) {
@@ -59,7 +60,8 @@ func TestFunds_GetFundDetails(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?symbol=%s", model.URLInsightBase+model.URLInsightFundsDetails, symbol), nil).Return(httpResponse, nil)
 
 				return &Funds{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -81,7 +83,8 @@ func TestFunds_GetFundDetails(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?symbol=%s", model.URLInsightBase+model.URLInsightFundsDetails, symbol), nil).Return(httpResponse, nil)
 
 				return &Funds{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -96,7 +99,8 @@ func TestFunds_GetFundDetails(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?symbol=%s", model.URLInsightBase+model.URLInsightFundsDetails, symbol), nil).Return(nil, testErr)
 
 				return &Funds{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -158,7 +162,8 @@ func TestFunds_GetFundScreenerFilters(t *testing.T) {
 				cli.EXPECT().Get(ctx, model.URLInsightBase+model.URLInsightFundsScreenerFilters, nil).Return(httpResponse, nil)
 
 				return &Funds{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -179,7 +184,8 @@ func TestFunds_GetFundScreenerFilters(t *testing.T) {
 				cli.EXPECT().Get(ctx, model.URLInsightBase+model.URLInsightFundsScreenerFilters, nil).Return(httpResponse, nil)
 
 				return &Funds{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -193,7 +199,8 @@ func TestFunds_GetFundScreenerFilters(t *testing.T) {
 				cli.EXPECT().Get(ctx, model.URLInsightBase+model.URLInsightFundsScreenerFilters, nil).Return(nil, testErr)
 
 				return &Funds{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -263,7 +270,8 @@ func TestFunds_ScreenFunds(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightFundsScreener, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &Funds{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -289,7 +297,8 @@ func TestFunds_ScreenFunds(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightFundsScreener, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &Funds{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -308,7 +317,8 @@ func TestFunds_ScreenFunds(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightFundsScreener, bytes.NewBuffer(bb), nil).Return(nil, testErr)
 
 				return &Funds{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -378,7 +388,8 @@ func TestFunds_ScreenSectorFunds(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightFundsSectorScreener, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &Funds{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -404,7 +415,8 @@ func TestFunds_ScreenSectorFunds(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightFundsSectorScreener, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &Funds{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -423,7 +435,8 @@ func TestFunds_ScreenSectorFunds(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightFundsSectorScreener, bytes.NewBuffer(bb), nil).Return(nil, testErr)
 
 				return &Funds{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -483,7 +496,8 @@ func TestFunds_GetTopFunds(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightFundsTop, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &Funds{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -509,7 +523,8 @@ func TestFunds_GetTopFunds(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightFundsTop, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &Funds{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -528,7 +543,8 @@ func TestFunds_GetTopFunds(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightFundsTop, bytes.NewBuffer(bb), nil).Return(nil, testErr)
 
 				return &Funds{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -605,7 +621,8 @@ func TestFunds_GetFundsForHolding(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightFundsForHolding, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &Funds{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -631,7 +648,8 @@ func TestFunds_GetFundsForHolding(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightFundsForHolding, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &Funds{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -650,7 +668,8 @@ func TestFunds_GetFundsForHolding(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightFundsForHolding, bytes.NewBuffer(bb), nil).Return(nil, testErr)
 
 				return &Funds{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},

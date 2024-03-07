@@ -15,17 +15,19 @@ import (
 )
 
 type Research struct {
-	cli sdk.HTTPClient
+	cli    sdk.HTTPClient
+	logger *log.Logger
 }
 
-func New(cli sdk.HTTPClient) *Research {
+func New(cli sdk.HTTPClient, logger *log.Logger) *Research {
 	return &Research{
-		cli: cli,
+		cli:    cli,
+		logger: logger,
 	}
 }
 
 func (s *Research) GetCompanyProfile(ctx context.Context, symbol string) (model.CompanyProfile, error) {
-	log.Trace("GetCompanyProfile called")
+	s.logger.Trace("GetCompanyProfile called")
 
 	r, err := s.cli.Get(ctx, fmt.Sprintf("%s?symbol=%s", model.URLInsightBase+model.URLInsightCompanyProfile, symbol), nil)
 	if err != nil {
@@ -42,7 +44,7 @@ func (s *Research) GetCompanyProfile(ctx context.Context, symbol string) (model.
 }
 
 func (s *Research) GetCombinedProfile(ctx context.Context, symbol string) (model.CompanyProfile, error) {
-	log.Trace("GetCombinedProfile called")
+	s.logger.Trace("GetCombinedProfile called")
 
 	r, err := s.cli.Get(ctx, fmt.Sprintf("%s?symbol=%s", model.URLInsightBase+model.URLInsightQuoteProfile, symbol), nil)
 	if err != nil {
@@ -59,7 +61,7 @@ func (s *Research) GetCombinedProfile(ctx context.Context, symbol string) (model
 }
 
 func (s *Research) GetOwnershipsBySymbol(ctx context.Context, req model.GetOwnershipsBySymbolRequest) (model.GetOwnershipsBySymbolResponse, error) {
-	log.Trace("GetOwnershipsBySymbol called")
+	s.logger.Trace("GetOwnershipsBySymbol called")
 
 	body, err := json.Marshal(req)
 	if err != nil {
@@ -81,7 +83,7 @@ func (s *Research) GetOwnershipsBySymbol(ctx context.Context, req model.GetOwner
 }
 
 func (s *Research) GetOwnershipsByID(ctx context.Context, req model.GetOwnershipsByIDRequest) (model.GetOwnershipsBySymbolResponse, error) {
-	log.Trace("GetOwnershipsByID called")
+	s.logger.Trace("GetOwnershipsByID called")
 
 	body, err := json.Marshal(req)
 	if err != nil {
@@ -103,7 +105,7 @@ func (s *Research) GetOwnershipsByID(ctx context.Context, req model.GetOwnership
 }
 
 func (s *Research) GetEarningReleases(ctx context.Context, req model.EarningReleasesRequest) (model.EarningReleasesResponse, error) {
-	log.Trace("GetEarningReleases called")
+	s.logger.Trace("GetEarningReleases called")
 
 	body, err := json.Marshal(req)
 	if err != nil {
@@ -125,7 +127,7 @@ func (s *Research) GetEarningReleases(ctx context.Context, req model.EarningRele
 }
 
 func (s *Research) GetSymbolFundamentals(ctx context.Context, req model.GetSymbolFundamentalsRequest) (model.GetSymbolFundamentalsResponse, error) {
-	log.Trace("GetSymbolFundamentals called")
+	s.logger.Trace("GetSymbolFundamentals called")
 
 	body, err := json.Marshal(req)
 	if err != nil {
@@ -147,7 +149,7 @@ func (s *Research) GetSymbolFundamentals(ctx context.Context, req model.GetSymbo
 }
 
 func (s *Research) Screener(ctx context.Context, req model.StockScreenerRequest) (model.StockScreenerResponse, error) {
-	log.Trace("Screener called")
+	s.logger.Trace("Screener called")
 
 	body, err := json.Marshal(req)
 	if err != nil {
@@ -169,7 +171,7 @@ func (s *Research) Screener(ctx context.Context, req model.StockScreenerRequest)
 }
 
 func (s *Research) StockMarketHeatmap(ctx context.Context, heatmapName, quoteType string) (model.StockMarketHeatmapResponse, error) {
-	log.Trace("StockMarketHeatmap called")
+	s.logger.Trace("StockMarketHeatmap called")
 
 	r, err := s.cli.Get(ctx, fmt.Sprintf("%s?heatmapName=%s&quoteType=%s", model.URLInsightBase+model.URLInsightHeatmaps, heatmapName, quoteType), nil)
 	if err != nil {
@@ -186,7 +188,7 @@ func (s *Research) StockMarketHeatmap(ctx context.Context, heatmapName, quoteTyp
 }
 
 func (s *Research) GetIndustriesPerformance(ctx context.Context, req model.GetIndustriesPerformanceRequest) (model.GetIndustriesPerformanceResponse, error) {
-	log.Trace("GetIndustriesPerformance called")
+	s.logger.Trace("GetIndustriesPerformance called")
 
 	body, err := json.Marshal(req)
 	if err != nil {
@@ -208,7 +210,7 @@ func (s *Research) GetIndustriesPerformance(ctx context.Context, req model.GetIn
 }
 
 func (s *Research) GetMomentumRatioGraph(ctx context.Context, req model.MomentumRatioGraphRequest) (model.MomentumRatioGraphResponse, error) {
-	log.Trace("GetMomentumRatioGraph called")
+	s.logger.Trace("GetMomentumRatioGraph called")
 
 	body, err := json.Marshal(req)
 	if err != nil {
@@ -230,7 +232,7 @@ func (s *Research) GetMomentumRatioGraph(ctx context.Context, req model.Momentum
 }
 
 func (s *Research) GetSeasonality(ctx context.Context, req model.SeasonalityRequest) (model.SeasonalityResponse, error) {
-	log.Trace("GetSeasonality called")
+	s.logger.Trace("GetSeasonality called")
 
 	body, err := json.Marshal(req)
 	if err != nil {

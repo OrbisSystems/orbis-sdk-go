@@ -4,8 +4,6 @@ import (
 	"context"
 	"encoding/json"
 
-	log "github.com/sirupsen/logrus"
-
 	sdk "github.com/OrbisSystems/orbis-sdk-go/interfaces"
 	"github.com/OrbisSystems/orbis-sdk-go/model"
 )
@@ -21,7 +19,6 @@ func New(storage sdk.Storage) *Auth {
 
 // SetToken store token to the storage.
 func (a *Auth) SetToken(ctx context.Context, token model.Token) error {
-	log.Trace("setting token to storage")
 	bb, err := json.Marshal(token)
 	if err != nil {
 		return err
@@ -31,7 +28,6 @@ func (a *Auth) SetToken(ctx context.Context, token model.Token) error {
 
 // GetToken returns token from the storage.
 func (a *Auth) GetToken(ctx context.Context) (model.Token, error) {
-	log.Tracef("getting token from storage")
 	data, err := a.storage.Get(ctx)
 	if err != nil {
 		return model.Token{}, err

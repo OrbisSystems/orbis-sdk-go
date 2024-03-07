@@ -13,17 +13,19 @@ import (
 )
 
 type WorldMarket struct {
-	cli sdk.HTTPClient
+	cli    sdk.HTTPClient
+	logger *log.Logger
 }
 
-func New(cli sdk.HTTPClient) *WorldMarket {
+func New(cli sdk.HTTPClient, logger *log.Logger) *WorldMarket {
 	return &WorldMarket{
-		cli: cli,
+		cli:    cli,
+		logger: logger,
 	}
 }
 
 func (wm *WorldMarket) GetContinents(ctx context.Context, limit, offset int) ([]model.Continent, error) {
-	log.Trace("GetContinents called")
+	wm.logger.Trace("GetContinents called")
 
 	r, err := wm.cli.Get(ctx, fmt.Sprintf("%s?limit=%d&offset=%d", model.URLInsightBase+model.URLInsightContinents, limit, offset), nil)
 	if err != nil {
@@ -40,7 +42,7 @@ func (wm *WorldMarket) GetContinents(ctx context.Context, limit, offset int) ([]
 }
 
 func (wm *WorldMarket) GetRegions(ctx context.Context, limit, offset int) ([]model.Region, error) {
-	log.Trace("GetRegions called")
+	wm.logger.Trace("GetRegions called")
 
 	r, err := wm.cli.Get(ctx, fmt.Sprintf("%s?limit=%d&offset=%d", model.URLInsightBase+model.URLInsightRegions, limit, offset), nil)
 	if err != nil {
@@ -57,7 +59,7 @@ func (wm *WorldMarket) GetRegions(ctx context.Context, limit, offset int) ([]mod
 }
 
 func (wm *WorldMarket) GetCountryCodes(ctx context.Context, limit, offset int) ([]model.CountryCode, error) {
-	log.Trace("GetCountryCodes called")
+	wm.logger.Trace("GetCountryCodes called")
 
 	r, err := wm.cli.Get(ctx, fmt.Sprintf("%s?limit=%d&offset=%d", model.URLInsightBase+model.URLInsightCountryCodes, limit, offset), nil)
 	if err != nil {
@@ -74,7 +76,7 @@ func (wm *WorldMarket) GetCountryCodes(ctx context.Context, limit, offset int) (
 }
 
 func (wm *WorldMarket) GetGlobalIndexes(ctx context.Context, limit, offset int, continent, quoteType string) ([]model.GlobalIndexFull, error) {
-	log.Trace("GetGlobalIndexes called")
+	wm.logger.Trace("GetGlobalIndexes called")
 
 	r, err := wm.cli.Get(ctx, fmt.Sprintf("%s?limit=%d&offset=%d&continent=%s&quoteType=%s", model.URLInsightBase+model.URLInsightGlobalIndexes, limit, offset, continent, quoteType), nil)
 	if err != nil {
