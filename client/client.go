@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/sirupsen/logrus"
 	log "github.com/sirupsen/logrus"
 
 	"github.com/OrbisSystems/orbis-sdk-go/client/account"
@@ -62,25 +63,26 @@ func NewSDK(cfg config.Config, auth sdk.Auth) *Client {
 }
 
 func newCli(cfg config.Config, auth sdk.Auth, httpClient sdk.HTTPClient) *Client {
-	log.SetLevel(getLogLevel(cfg.LogLevel))
-	log.SetFormatter(&log.JSONFormatter{})
-	log.SetOutput(os.Stderr)
+	logger := logrus.New()
+	logger.SetFormatter(&log.JSONFormatter{})
+	logger.SetOutput(os.Stderr)
+	logger.SetLevel(getLogLevel(cfg.LogLevel))
 
 	return &Client{
-		Account:      account.New(auth, httpClient),
-		News:         news.New(httpClient),
-		Logos:        logos.New(httpClient),
-		Passport:     passport.New(httpClient),
-		TipRank:      tiprank.New(httpClient),
-		Quote:        quotes.New(httpClient),
-		Funds:        funds.New(httpClient),
-		Research:     research.New(httpClient),
-		IPO:          ipo.New(httpClient),
-		WorldMarket:  market.New(httpClient),
-		MarketDates:  dates.New(httpClient),
-		OptionGreeks: og.New(httpClient),
-		HoopsAI:      hs.New(httpClient),
-		FixedIncome:  fi.New(httpClient),
+		Account:      account.New(auth, httpClient, logger),
+		News:         news.New(httpClient, logger),
+		Logos:        logos.New(httpClient, logger),
+		Passport:     passport.New(httpClient, logger),
+		TipRank:      tiprank.New(httpClient, logger),
+		Quote:        quotes.New(httpClient, logger),
+		Funds:        funds.New(httpClient, logger),
+		Research:     research.New(httpClient, logger),
+		IPO:          ipo.New(httpClient, logger),
+		WorldMarket:  market.New(httpClient, logger),
+		MarketDates:  dates.New(httpClient, logger),
+		OptionGreeks: og.New(httpClient, logger),
+		HoopsAI:      hs.New(httpClient, logger),
+		FixedIncome:  fi.New(httpClient, logger),
 		WS:           ws.New(cfg, auth),
 	}
 }

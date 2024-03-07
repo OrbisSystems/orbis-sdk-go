@@ -17,18 +17,20 @@ import (
 
 // Logos service provides API for getting different information about symbol's logo etc.
 type Logos struct {
-	cli sdk.HTTPClient
+	cli    sdk.HTTPClient
+	logger *log.Logger
 }
 
-func New(cli sdk.HTTPClient) *Logos {
+func New(cli sdk.HTTPClient, logger *log.Logger) *Logos {
 	return &Logos{
-		cli: cli,
+		cli:    cli,
+		logger: logger,
 	}
 }
 
 // SymbolLogos returns logos info for symbol.
 func (l *Logos) SymbolLogos(ctx context.Context, symbol string) (model.SymbolLogosResponse, error) {
-	log.Trace("SymbolLogos called")
+	l.logger.Trace("SymbolLogos called")
 
 	r, err := l.cli.Get(ctx, fmt.Sprintf("%s?symbol=%s", model.URLInsightBase+model.URLInsightLogosSymbolLogos, symbol), nil)
 	if err != nil {
@@ -46,7 +48,7 @@ func (l *Logos) SymbolLogos(ctx context.Context, symbol string) (model.SymbolLog
 
 // SocialSymbolLogos returns urls of social network logos for symbol.
 func (l *Logos) SocialSymbolLogos(ctx context.Context, symbol string) (model.SymbolSocialsResponse, error) {
-	log.Trace("SocialSymbolLogos called")
+	l.logger.Trace("SocialSymbolLogos called")
 
 	r, err := l.cli.Get(ctx, fmt.Sprintf("%s?symbol=%s", model.URLInsightBase+model.URLInsightLogosSocialSymbolLogos, symbol), nil)
 	if err != nil {
@@ -64,7 +66,7 @@ func (l *Logos) SocialSymbolLogos(ctx context.Context, symbol string) (model.Sym
 
 // DirectSymbolLogo returns symbol logo as file.
 func (l *Logos) DirectSymbolLogo(ctx context.Context, symbol string) (io.ReadCloser, error) {
-	log.Trace("DirectSymbolLogo called")
+	l.logger.Trace("DirectSymbolLogo called")
 
 	r, err := l.cli.Get(ctx, fmt.Sprintf("%s?symbol=%s", model.URLInsightBase+model.URLInsightLogosDirectSymbolLogos, symbol), nil)
 	if err != nil {
@@ -76,7 +78,7 @@ func (l *Logos) DirectSymbolLogo(ctx context.Context, symbol string) (io.ReadClo
 
 // CryptoSymbolLogo returns crypto logos info for symbol
 func (l *Logos) CryptoSymbolLogo(ctx context.Context, symbol string) (model.SymbolLogosResponse, error) {
-	log.Trace("CryptoSymbolLogo called")
+	l.logger.Trace("CryptoSymbolLogo called")
 
 	r, err := l.cli.Get(ctx, fmt.Sprintf("%s?symbol=%s", model.URLInsightBase+model.URLInsightLogosCryptoSymbolLogo, symbol), nil)
 	if err != nil {
@@ -94,7 +96,7 @@ func (l *Logos) CryptoSymbolLogo(ctx context.Context, symbol string) (model.Symb
 
 // DirectCryptoSymbolLogo returns crypto symbol logo as file.
 func (l *Logos) DirectCryptoSymbolLogo(ctx context.Context, symbol string) (io.ReadCloser, error) {
-	log.Trace("DirectCryptoSymbolLogo called")
+	l.logger.Trace("DirectCryptoSymbolLogo called")
 
 	r, err := l.cli.Get(ctx, fmt.Sprintf("%s?symbol=%s", model.URLInsightBase+model.URLInsightLogosDirectCryptoSymbolLogos, symbol), nil)
 	if err != nil {
@@ -106,7 +108,7 @@ func (l *Logos) DirectCryptoSymbolLogo(ctx context.Context, symbol string) (io.R
 
 // MultiSymbolLogos returns logos details for many symbols.
 func (l *Logos) MultiSymbolLogos(ctx context.Context, req model.MultipleSymbolLogosRequest) ([]model.SymbolLogosResponse, error) {
-	log.Trace("MultiSymbolLogos called")
+	l.logger.Trace("MultiSymbolLogos called")
 
 	body, err := json.Marshal(req)
 	if err != nil {
@@ -129,7 +131,7 @@ func (l *Logos) MultiSymbolLogos(ctx context.Context, req model.MultipleSymbolLo
 
 // ConvertedSymbolLogo returns converted logo as file.
 func (l *Logos) ConvertedSymbolLogo(ctx context.Context, req model.SymbolLogoConvertedRequest) (io.ReadCloser, error) {
-	log.Trace("ConvertedSymbolLogo called")
+	l.logger.Trace("ConvertedSymbolLogo called")
 
 	body, err := json.Marshal(req)
 	if err != nil {
@@ -146,7 +148,7 @@ func (l *Logos) ConvertedSymbolLogo(ctx context.Context, req model.SymbolLogoCon
 
 // MultipleCryptoSymbolLogo returns logos details for many crypto symbols.
 func (l *Logos) MultipleCryptoSymbolLogo(ctx context.Context, req model.MultipleCryptoLogosRequest) ([]model.SymbolLogosResponse, error) {
-	log.Trace("MultipleCryptoSymbolLogo called")
+	l.logger.Trace("MultipleCryptoSymbolLogo called")
 
 	body, err := json.Marshal(req)
 	if err != nil {
@@ -169,7 +171,7 @@ func (l *Logos) MultipleCryptoSymbolLogo(ctx context.Context, req model.Multiple
 
 // ConvertedCryptoSymbolLogo returns converted crypto logo as file.
 func (l *Logos) ConvertedCryptoSymbolLogo(ctx context.Context, req model.SymbolLogoConvertedRequest) (io.ReadCloser, error) {
-	log.Trace("ConvertedCryptoSymbolLogo called")
+	l.logger.Trace("ConvertedCryptoSymbolLogo called")
 
 	body, err := json.Marshal(req)
 	if err != nil {

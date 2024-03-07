@@ -15,17 +15,19 @@ import (
 )
 
 type IPO struct {
-	cli sdk.HTTPClient
+	cli    sdk.HTTPClient
+	logger *log.Logger
 }
 
-func New(cli sdk.HTTPClient) *IPO {
+func New(cli sdk.HTTPClient, logger *log.Logger) *IPO {
 	return &IPO{
-		cli: cli,
+		cli:    cli,
+		logger: logger,
 	}
 }
 
 func (i *IPO) GetUpcomingIPOs(ctx context.Context, limit, offset int) (model.IPOResponse, error) {
-	log.Trace("GetUpcomingIPOs called")
+	i.logger.Trace("GetUpcomingIPOs called")
 
 	r, err := i.cli.Get(ctx, fmt.Sprintf("%s?limit=%d&offset=%d", model.URLInsightBase+model.URLInsightIPOsUpcoming, limit, offset), nil)
 	if err != nil {
@@ -42,7 +44,7 @@ func (i *IPO) GetUpcomingIPOs(ctx context.Context, limit, offset int) (model.IPO
 }
 
 func (i *IPO) GetRecentIPOs(ctx context.Context, req model.RecentIPORequest) (model.IPOResponse, error) {
-	log.Trace("GetRecentIPOs called")
+	i.logger.Trace("GetRecentIPOs called")
 
 	body, err := json.Marshal(req)
 	if err != nil {

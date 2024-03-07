@@ -15,17 +15,19 @@ import (
 )
 
 type TipRank struct {
-	cli sdk.HTTPClient
+	cli    sdk.HTTPClient
+	logger *log.Logger
 }
 
-func New(cli sdk.HTTPClient) *TipRank {
+func New(cli sdk.HTTPClient, logger *log.Logger) *TipRank {
 	return &TipRank{
-		cli: cli,
+		cli:    cli,
+		logger: logger,
 	}
 }
 
 func (t *TipRank) AnalystConsensus(ctx context.Context, req model.AnalystConsensusRequest) ([]model.AnalystConsensusResponse, error) {
-	log.Trace("AnalystConsensus called")
+	t.logger.Trace("AnalystConsensus called")
 
 	body, err := json.Marshal(req)
 	if err != nil {
@@ -47,7 +49,7 @@ func (t *TipRank) AnalystConsensus(ctx context.Context, req model.AnalystConsens
 }
 
 func (t *TipRank) LatestAnalystRatingsOnStock(ctx context.Context, req model.LatestAnalystRatingsOnStockRequest) ([]model.LatestAnalystRatingsOnStockResponse, error) {
-	log.Trace("LatestAnalystRatingsOnStock called")
+	t.logger.Trace("LatestAnalystRatingsOnStock called")
 
 	body, err := json.Marshal(req)
 	if err != nil {
@@ -69,7 +71,7 @@ func (t *TipRank) LatestAnalystRatingsOnStock(ctx context.Context, req model.Lat
 }
 
 func (t *TipRank) LiveFeed(ctx context.Context, req model.LiveFeedRequest) ([]model.LiveFeedResponse, error) {
-	log.Trace("LiveFeed called")
+	t.logger.Trace("LiveFeed called")
 
 	body, err := json.Marshal(req)
 	if err != nil {
@@ -91,7 +93,7 @@ func (t *TipRank) LiveFeed(ctx context.Context, req model.LiveFeedRequest) ([]mo
 }
 
 func (t *TipRank) TrendingStocks(ctx context.Context, req model.TrendingStocksRequest) ([]model.TrendingStocksResponse, error) {
-	log.Trace("TrendingStocks called")
+	t.logger.Trace("TrendingStocks called")
 
 	body, err := json.Marshal(req)
 	if err != nil {
@@ -113,7 +115,7 @@ func (t *TipRank) TrendingStocks(ctx context.Context, req model.TrendingStocksRe
 }
 
 func (t *TipRank) AnalystPortfolios(ctx context.Context, req model.PortfoliosRequest) ([]model.PortfoliosResponse, error) {
-	log.Trace("AnalystPortfolios called")
+	t.logger.Trace("AnalystPortfolios called")
 
 	body, err := json.Marshal(req)
 	if err != nil {
@@ -135,7 +137,7 @@ func (t *TipRank) AnalystPortfolios(ctx context.Context, req model.PortfoliosReq
 }
 
 func (t *TipRank) AnalystProfile(ctx context.Context, id string) (model.AnalystProfileResponse, error) {
-	log.Trace("AnalystProfile called")
+	t.logger.Trace("AnalystProfile called")
 
 	r, err := t.cli.Get(ctx, fmt.Sprintf("%s?id=%s", model.URLInsightBase+model.URLInsightTipRankAnalystProfile, id), nil)
 	if err != nil {
@@ -152,7 +154,7 @@ func (t *TipRank) AnalystProfile(ctx context.Context, id string) (model.AnalystP
 }
 
 func (t *TipRank) SectorConsensus(ctx context.Context) (model.SectorConsensusResponse, error) {
-	log.Trace("SectorConsensus called")
+	t.logger.Trace("SectorConsensus called")
 
 	r, err := t.cli.Get(ctx, model.URLInsightBase+model.URLInsightTipRankSectorConsensus, nil)
 	if err != nil {
@@ -169,7 +171,7 @@ func (t *TipRank) SectorConsensus(ctx context.Context) (model.SectorConsensusRes
 }
 
 func (t *TipRank) BestPerformingExperts(ctx context.Context, num int) ([]model.BestPerformingExpertsResponse, error) {
-	log.Trace("BestPerformingExperts called")
+	t.logger.Trace("BestPerformingExperts called")
 
 	r, err := t.cli.Get(ctx, fmt.Sprintf("%s?num=%d", model.URLInsightBase+model.URLInsightTipRankBestPerformingExperts, num), nil)
 	if err != nil {
@@ -186,7 +188,7 @@ func (t *TipRank) BestPerformingExperts(ctx context.Context, num int) ([]model.B
 }
 
 func (t *TipRank) StocksSimilarStocks(ctx context.Context, ticker string) ([]string, error) {
-	log.Trace("StocksSimilarStocks called")
+	t.logger.Trace("StocksSimilarStocks called")
 
 	r, err := t.cli.Get(ctx, fmt.Sprintf("%s?ticker=%s", model.URLInsightBase+model.URLInsightTipRankStocksSimilarStocks, ticker), nil)
 	if err != nil {
@@ -203,7 +205,7 @@ func (t *TipRank) StocksSimilarStocks(ctx context.Context, ticker string) ([]str
 }
 
 func (t *TipRank) AnalystsExpertPictureStore(ctx context.Context) (model.AnalystsExpertPictureStoreResponse, error) {
-	log.Trace("AnalystsExpertPictureStore called")
+	t.logger.Trace("AnalystsExpertPictureStore called")
 
 	r, err := t.cli.Get(ctx, model.URLInsightBase+model.URLInsightTipRankAnalystsExpertPictureStore, nil)
 	if err != nil {
@@ -220,7 +222,7 @@ func (t *TipRank) AnalystsExpertPictureStore(ctx context.Context) (model.Analyst
 }
 
 func (t *TipRank) SupportedTickers(ctx context.Context) (model.SupportedTickersResponse, error) {
-	log.Trace("SupportedTickers called")
+	t.logger.Trace("SupportedTickers called")
 
 	r, err := t.cli.Get(ctx, model.URLInsightBase+model.URLInsightTipRankSupportedTickers, nil)
 	if err != nil {
@@ -237,7 +239,7 @@ func (t *TipRank) SupportedTickers(ctx context.Context) (model.SupportedTickersR
 }
 
 func (t *TipRank) GeneralStockUpdates(ctx context.Context, utcTime, details string) (model.GeneralStockUpdatesResponse, error) {
-	log.Trace("GeneralStockUpdates called")
+	t.logger.Trace("GeneralStockUpdates called")
 
 	r, err := t.cli.Get(ctx, fmt.Sprintf("%s?utc_time=%s&details=%s", model.URLInsightBase+model.URLInsightTipRankGeneralStockUpdates, utcTime, details), nil)
 	if err != nil {
@@ -254,7 +256,7 @@ func (t *TipRank) GeneralStockUpdates(ctx context.Context, utcTime, details stri
 }
 
 func (t *TipRank) InsidersOverview(ctx context.Context, expertUID string) (model.InsidersOverviewResponse, error) {
-	log.Trace("InsidersOverview called")
+	t.logger.Trace("InsidersOverview called")
 
 	r, err := t.cli.Get(ctx, fmt.Sprintf("%s?expert_uid=%s", model.URLInsightBase+model.URLInsightTipRankInsidersOverview, expertUID), nil)
 	if err != nil {
@@ -271,7 +273,7 @@ func (t *TipRank) InsidersOverview(ctx context.Context, expertUID string) (model
 }
 
 func (t *TipRank) InsidersBestPerformingExperts(ctx context.Context, num int) ([]model.InsidersBestPerformingExpertsResponse, error) {
-	log.Trace("InsidersBestPerformingExperts called")
+	t.logger.Trace("InsidersBestPerformingExperts called")
 
 	r, err := t.cli.Get(ctx, fmt.Sprintf("%s?num=%d", model.URLInsightBase+model.URLInsightTipRankInsidersBestPerformingExperts, num), nil)
 	if err != nil {
@@ -288,7 +290,7 @@ func (t *TipRank) InsidersBestPerformingExperts(ctx context.Context, num int) ([
 }
 
 func (t *TipRank) InsidersLiveFeed(ctx context.Context, num int, sort string) ([]model.InsidersLiveFeedResponse, error) {
-	log.Trace("InsidersLiveFeed called")
+	t.logger.Trace("InsidersLiveFeed called")
 
 	r, err := t.cli.Get(ctx, fmt.Sprintf("%s?num=%d&sort=%s", model.URLInsightBase+model.URLInsightTipRankInsidersLiveFeed, num, sort), nil)
 	if err != nil {
@@ -305,7 +307,7 @@ func (t *TipRank) InsidersLiveFeed(ctx context.Context, num int, sort string) ([
 }
 
 func (t *TipRank) HedgeFundsBestPerformingExperts(ctx context.Context, num int) ([]model.HedgeFundsBestPerformingExpertsResponse, error) {
-	log.Trace("HedgeFundsBestPerformingExperts called")
+	t.logger.Trace("HedgeFundsBestPerformingExperts called")
 
 	r, err := t.cli.Get(ctx, fmt.Sprintf("%s?num=%d", model.URLInsightBase+model.URLInsightTipRankHedgefundsBestPerformingExperts, num), nil)
 	if err != nil {

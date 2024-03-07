@@ -10,6 +10,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/mock/gomock"
 
@@ -18,7 +19,7 @@ import (
 )
 
 func TestNew(t *testing.T) {
-	assert.NotNil(t, New(nil))
+	assert.NotNil(t, New(nil, nil))
 }
 
 func TestResearch_GetCompanyProfile(t *testing.T) {
@@ -59,7 +60,8 @@ func TestResearch_GetCompanyProfile(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?symbol=%s", model.URLInsightBase+model.URLInsightCompanyProfile, symbol), nil).Return(httpResponse, nil)
 
 				return &Research{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -80,7 +82,8 @@ func TestResearch_GetCompanyProfile(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?symbol=%s", model.URLInsightBase+model.URLInsightCompanyProfile, symbol), nil).Return(httpResponse, nil)
 
 				return &Research{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -95,7 +98,8 @@ func TestResearch_GetCompanyProfile(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?symbol=%s", model.URLInsightBase+model.URLInsightCompanyProfile, symbol), nil).Return(nil, testErr)
 
 				return &Research{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -157,7 +161,8 @@ func TestResearch_GetCombinedProfile(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?symbol=%s", model.URLInsightBase+model.URLInsightQuoteProfile, symbol), nil).Return(httpResponse, nil)
 
 				return &Research{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -178,7 +183,8 @@ func TestResearch_GetCombinedProfile(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?symbol=%s", model.URLInsightBase+model.URLInsightQuoteProfile, symbol), nil).Return(httpResponse, nil)
 
 				return &Research{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -193,7 +199,8 @@ func TestResearch_GetCombinedProfile(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?symbol=%s", model.URLInsightBase+model.URLInsightQuoteProfile, symbol), nil).Return(nil, testErr)
 
 				return &Research{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -271,7 +278,8 @@ func TestResearch_GetOwnershipsBySymbol(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightSymbolOwnerships, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &Research{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -296,7 +304,8 @@ func TestResearch_GetOwnershipsBySymbol(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightSymbolOwnerships, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &Research{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -315,7 +324,8 @@ func TestResearch_GetOwnershipsBySymbol(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightSymbolOwnerships, bytes.NewBuffer(bb), nil).Return(nil, testErr)
 
 				return &Research{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -393,7 +403,8 @@ func TestResearch_GetOwnershipsByID(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightOwnerships, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &Research{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -418,7 +429,8 @@ func TestResearch_GetOwnershipsByID(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightOwnerships, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &Research{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -437,7 +449,8 @@ func TestResearch_GetOwnershipsByID(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightOwnerships, bytes.NewBuffer(bb), nil).Return(nil, testErr)
 
 				return &Research{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -515,7 +528,8 @@ func TestResearch_GetEarningReleases(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightEarningsCalendar, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &Research{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -540,7 +554,8 @@ func TestResearch_GetEarningReleases(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightEarningsCalendar, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &Research{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -559,7 +574,8 @@ func TestResearch_GetEarningReleases(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightEarningsCalendar, bytes.NewBuffer(bb), nil).Return(nil, testErr)
 
 				return &Research{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -623,7 +639,8 @@ func TestResearch_GetSymbolFundamentals(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightFundamentals, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &Research{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -648,7 +665,8 @@ func TestResearch_GetSymbolFundamentals(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightFundamentals, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &Research{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -667,7 +685,8 @@ func TestResearch_GetSymbolFundamentals(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightFundamentals, bytes.NewBuffer(bb), nil).Return(nil, testErr)
 
 				return &Research{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -739,7 +758,8 @@ func TestResearch_Screener(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightStockScreener, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &Research{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -764,7 +784,8 @@ func TestResearch_Screener(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightStockScreener, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &Research{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -783,7 +804,8 @@ func TestResearch_Screener(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightStockScreener, bytes.NewBuffer(bb), nil).Return(nil, testErr)
 
 				return &Research{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -855,7 +877,8 @@ func TestResearch_StockMarketHeatmap(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?heatmapName=%s&quoteType=%s", model.URLInsightBase+model.URLInsightHeatmaps, heatmapName, quoteType), nil).Return(httpResponse, nil)
 
 				return &Research{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -877,7 +900,8 @@ func TestResearch_StockMarketHeatmap(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?heatmapName=%s&quoteType=%s", model.URLInsightBase+model.URLInsightHeatmaps, heatmapName, quoteType), nil).Return(httpResponse, nil)
 
 				return &Research{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -893,7 +917,8 @@ func TestResearch_StockMarketHeatmap(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?heatmapName=%s&quoteType=%s", model.URLInsightBase+model.URLInsightHeatmaps, heatmapName, quoteType), nil).Return(nil, testErr)
 
 				return &Research{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -969,7 +994,8 @@ func TestResearch_GetIndustriesPerformance(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightIndustriesPerformance, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &Research{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -996,7 +1022,8 @@ func TestResearch_GetIndustriesPerformance(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightIndustriesPerformance, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &Research{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -1017,7 +1044,8 @@ func TestResearch_GetIndustriesPerformance(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightIndustriesPerformance, bytes.NewBuffer(bb), nil).Return(nil, testErr)
 
 				return &Research{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -1094,7 +1122,8 @@ func TestResearch_GetMomentumRatioGraph(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightGetMomentumRatioGraph, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &Research{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -1119,7 +1148,8 @@ func TestResearch_GetMomentumRatioGraph(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightGetMomentumRatioGraph, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &Research{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -1138,7 +1168,8 @@ func TestResearch_GetMomentumRatioGraph(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightGetMomentumRatioGraph, bytes.NewBuffer(bb), nil).Return(nil, testErr)
 
 				return &Research{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -1207,7 +1238,8 @@ func TestResearch_GetSeasonality(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightSeasonality, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &Research{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -1232,7 +1264,8 @@ func TestResearch_GetSeasonality(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightSeasonality, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &Research{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -1251,7 +1284,8 @@ func TestResearch_GetSeasonality(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightSeasonality, bytes.NewBuffer(bb), nil).Return(nil, testErr)
 
 				return &Research{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},

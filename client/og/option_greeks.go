@@ -14,17 +14,19 @@ import (
 )
 
 type OptionGreeks struct {
-	cli sdk.HTTPClient
+	cli    sdk.HTTPClient
+	logger *log.Logger
 }
 
-func New(cli sdk.HTTPClient) *OptionGreeks {
+func New(cli sdk.HTTPClient, logger *log.Logger) *OptionGreeks {
 	return &OptionGreeks{
-		cli: cli,
+		cli:    cli,
+		logger: logger,
 	}
 }
 
 func (og *OptionGreeks) CalculateParams(ctx context.Context, req model.CalculateParamsRequest) (model.CalculateParamsResponse, error) {
-	log.Trace("CalculateParams called")
+	og.logger.Trace("CalculateParams called")
 
 	body, err := json.Marshal(req)
 	if err != nil {
@@ -46,7 +48,7 @@ func (og *OptionGreeks) CalculateParams(ctx context.Context, req model.Calculate
 }
 
 func (og *OptionGreeks) CalculateMatrix(ctx context.Context, req model.CalculateMatrixParamsRequest) (model.CalculateMatrixResponse, error) {
-	log.Trace("CalculateMatrix called")
+	og.logger.Trace("CalculateMatrix called")
 
 	body, err := json.Marshal(req)
 	if err != nil {

@@ -10,6 +10,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/mock/gomock"
 
@@ -18,7 +19,7 @@ import (
 )
 
 func TestNew(t *testing.T) {
-	assert.NotNil(t, New(nil))
+	assert.NotNil(t, New(nil, nil))
 }
 
 func TestMarketDates_GetMarketDatesHistory(t *testing.T) {
@@ -69,7 +70,8 @@ func TestMarketDates_GetMarketDatesHistory(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightMarketDatesHistory, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &MarketDates{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -97,7 +99,8 @@ func TestMarketDates_GetMarketDatesHistory(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightMarketDatesHistory, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &MarketDates{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -118,7 +121,8 @@ func TestMarketDates_GetMarketDatesHistory(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightMarketDatesHistory, bytes.NewBuffer(bb), nil).Return(nil, testErr)
 
 				return &MarketDates{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -178,7 +182,8 @@ func TestMarketDates_GetTodayMarketHours(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?market=%s", model.URLInsightBase+model.URLInsightMarketDatesToday, market), nil).Return(httpResponse, nil)
 
 				return &MarketDates{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -200,7 +205,8 @@ func TestMarketDates_GetTodayMarketHours(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?market=%s", model.URLInsightBase+model.URLInsightMarketDatesToday, market), nil).Return(httpResponse, nil)
 
 				return &MarketDates{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -215,7 +221,8 @@ func TestMarketDates_GetTodayMarketHours(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?market=%s", model.URLInsightBase+model.URLInsightMarketDatesToday, market), nil).Return(nil, testErr)
 
 				return &MarketDates{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},

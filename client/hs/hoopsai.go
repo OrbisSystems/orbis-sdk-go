@@ -15,17 +15,19 @@ import (
 )
 
 type HoopsAI struct {
-	cli sdk.HTTPClient
+	cli    sdk.HTTPClient
+	logger *log.Logger
 }
 
-func New(cli sdk.HTTPClient) *HoopsAI {
+func New(cli sdk.HTTPClient, logger *log.Logger) *HoopsAI {
 	return &HoopsAI{
-		cli: cli,
+		cli:    cli,
+		logger: logger,
 	}
 }
 
 func (i *HoopsAI) DailySummary(ctx context.Context, req model.HSDailySummaryRequest) (map[string]interface{}, error) {
-	log.Trace("HS DailySummary called")
+	i.logger.Trace("HS DailySummary called")
 
 	urlQuery, err := utils.BuildURLQueryParams(req)
 	if err != nil {
@@ -47,7 +49,7 @@ func (i *HoopsAI) DailySummary(ctx context.Context, req model.HSDailySummaryRequ
 }
 
 func (i *HoopsAI) WeeklySummary(ctx context.Context, req model.HSWeeklySummaryRequest) (map[string]interface{}, error) {
-	log.Trace("HS WeeklySummary called")
+	i.logger.Trace("HS WeeklySummary called")
 
 	urlQuery, err := utils.BuildURLQueryParams(req)
 	if err != nil {
@@ -69,7 +71,7 @@ func (i *HoopsAI) WeeklySummary(ctx context.Context, req model.HSWeeklySummaryRe
 }
 
 func (i *HoopsAI) Portfolio(ctx context.Context, req model.HSPortfolioRequest) (map[string]interface{}, error) {
-	log.Trace("HS Portfolio called")
+	i.logger.Trace("HS Portfolio called")
 
 	body, err := json.Marshal(req)
 	if err != nil {
@@ -91,7 +93,7 @@ func (i *HoopsAI) Portfolio(ctx context.Context, req model.HSPortfolioRequest) (
 }
 
 func (i *HoopsAI) Watchlist(ctx context.Context, req model.HSWatchlistRequest) (map[string]interface{}, error) {
-	log.Trace("HS Watchlist called")
+	i.logger.Trace("HS Watchlist called")
 
 	urlQuery, err := utils.BuildURLQueryParams(req)
 	if err != nil {
@@ -113,7 +115,7 @@ func (i *HoopsAI) Watchlist(ctx context.Context, req model.HSWatchlistRequest) (
 }
 
 func (i *HoopsAI) WatchlistByUserAndName(ctx context.Context, req model.HSWatchlistByUserAndNameRequest) (map[string]interface{}, error) {
-	log.Trace("HS WatchlistByUserAndName called")
+	i.logger.Trace("HS WatchlistByUserAndName called")
 
 	urlQuery, err := utils.BuildURLQueryParams(req)
 	if err != nil {
@@ -135,7 +137,7 @@ func (i *HoopsAI) WatchlistByUserAndName(ctx context.Context, req model.HSWatchl
 }
 
 func (i *HoopsAI) TopGainers(ctx context.Context, req model.HSMarketResearchRequest) (map[string]interface{}, error) {
-	log.Trace("HS TopGainers called")
+	i.logger.Trace("HS TopGainers called")
 
 	urlQuery, err := utils.BuildURLQueryParams(req)
 	if err != nil {
@@ -157,7 +159,7 @@ func (i *HoopsAI) TopGainers(ctx context.Context, req model.HSMarketResearchRequ
 }
 
 func (i *HoopsAI) TopLosers(ctx context.Context, req model.HSMarketResearchRequest) (map[string]interface{}, error) {
-	log.Trace("HS TopLosers called")
+	i.logger.Trace("HS TopLosers called")
 
 	urlQuery, err := utils.BuildURLQueryParams(req)
 	if err != nil {
@@ -179,7 +181,7 @@ func (i *HoopsAI) TopLosers(ctx context.Context, req model.HSMarketResearchReque
 }
 
 func (i *HoopsAI) TopMovers(ctx context.Context, req model.HSMarketResearchRequest) (map[string]interface{}, error) {
-	log.Trace("HS TopMovers called")
+	i.logger.Trace("HS TopMovers called")
 
 	urlQuery, err := utils.BuildURLQueryParams(req)
 	if err != nil {
@@ -201,7 +203,7 @@ func (i *HoopsAI) TopMovers(ctx context.Context, req model.HSMarketResearchReque
 }
 
 func (i *HoopsAI) DownTrend(ctx context.Context, req model.HSMarketResearchRequest) (map[string]interface{}, error) {
-	log.Trace("HS DownTrend called")
+	i.logger.Trace("HS DownTrend called")
 
 	urlQuery, err := utils.BuildURLQueryParams(req)
 	if err != nil {
@@ -223,7 +225,7 @@ func (i *HoopsAI) DownTrend(ctx context.Context, req model.HSMarketResearchReque
 }
 
 func (i *HoopsAI) UpTrend(ctx context.Context, req model.HSMarketResearchRequest) (map[string]interface{}, error) {
-	log.Trace("HS UpTrend called")
+	i.logger.Trace("HS UpTrend called")
 
 	urlQuery, err := utils.BuildURLQueryParams(req)
 	if err != nil {
@@ -245,7 +247,7 @@ func (i *HoopsAI) UpTrend(ctx context.Context, req model.HSMarketResearchRequest
 }
 
 func (i *HoopsAI) MarketOverview(ctx context.Context, req model.HSMarketResearchRequest) (map[string]interface{}, error) {
-	log.Trace("HS MarketOverview called")
+	i.logger.Trace("HS MarketOverview called")
 
 	urlQuery, err := utils.BuildURLQueryParams(req)
 	if err != nil {
@@ -267,7 +269,7 @@ func (i *HoopsAI) MarketOverview(ctx context.Context, req model.HSMarketResearch
 }
 
 func (i *HoopsAI) PriceTarget(ctx context.Context, req model.HSMarketResearchRequest) (map[string]interface{}, error) {
-	log.Trace("HS PriceTarget called")
+	i.logger.Trace("HS PriceTarget called")
 
 	urlQuery, err := utils.BuildURLQueryParams(req)
 	if err != nil {
@@ -289,7 +291,7 @@ func (i *HoopsAI) PriceTarget(ctx context.Context, req model.HSMarketResearchReq
 }
 
 func (i *HoopsAI) UpcomingEarnings(ctx context.Context, req model.HSMarketResearchRequest) (map[string]interface{}, error) {
-	log.Trace("HS UpcomingEarnings called")
+	i.logger.Trace("HS UpcomingEarnings called")
 
 	urlQuery, err := utils.BuildURLQueryParams(req)
 	if err != nil {
@@ -311,7 +313,7 @@ func (i *HoopsAI) UpcomingEarnings(ctx context.Context, req model.HSMarketResear
 }
 
 func (i *HoopsAI) RecentEarnings(ctx context.Context, req model.HSMarketResearchRequest) (map[string]interface{}, error) {
-	log.Trace("HS RecentEarnings called")
+	i.logger.Trace("HS RecentEarnings called")
 
 	urlQuery, err := utils.BuildURLQueryParams(req)
 	if err != nil {
@@ -333,7 +335,7 @@ func (i *HoopsAI) RecentEarnings(ctx context.Context, req model.HSMarketResearch
 }
 
 func (i *HoopsAI) RecordHigh(ctx context.Context, req model.HSMarketResearchRequest) (map[string]interface{}, error) {
-	log.Trace("HS RecordHigh called")
+	i.logger.Trace("HS RecordHigh called")
 
 	urlQuery, err := utils.BuildURLQueryParams(req)
 	if err != nil {
@@ -355,7 +357,7 @@ func (i *HoopsAI) RecordHigh(ctx context.Context, req model.HSMarketResearchRequ
 }
 
 func (i *HoopsAI) UnusualHighVolume(ctx context.Context, req model.HSMarketResearchRequest) (map[string]interface{}, error) {
-	log.Trace("HS UnusualHighVolume called")
+	i.logger.Trace("HS UnusualHighVolume called")
 
 	urlQuery, err := utils.BuildURLQueryParams(req)
 	if err != nil {
@@ -377,7 +379,7 @@ func (i *HoopsAI) UnusualHighVolume(ctx context.Context, req model.HSMarketResea
 }
 
 func (i *HoopsAI) Data(ctx context.Context, req model.HSMarketResearchRequest) (map[string]interface{}, error) {
-	log.Trace("HS Data called")
+	i.logger.Trace("HS Data called")
 
 	urlQuery, err := utils.BuildURLQueryParams(req)
 	if err != nil {
@@ -399,7 +401,7 @@ func (i *HoopsAI) Data(ctx context.Context, req model.HSMarketResearchRequest) (
 }
 
 func (i *HoopsAI) CustomerAssets(ctx context.Context, req model.HSMarketResearchRequest) (map[string]interface{}, error) {
-	log.Trace("HS CustomerAssets called")
+	i.logger.Trace("HS CustomerAssets called")
 
 	urlQuery, err := utils.BuildURLQueryParams(req)
 	if err != nil {
@@ -421,7 +423,7 @@ func (i *HoopsAI) CustomerAssets(ctx context.Context, req model.HSMarketResearch
 }
 
 func (i *HoopsAI) GetUsers(ctx context.Context, customer string) (map[string]interface{}, error) {
-	log.Trace("HS GetUsers called")
+	i.logger.Trace("HS GetUsers called")
 
 	r, err := i.cli.Get(ctx, fmt.Sprintf("%s/%s", model.URLInsightBase+model.URLInsightHSUsers, customer), nil)
 	if err != nil {
@@ -438,7 +440,7 @@ func (i *HoopsAI) GetUsers(ctx context.Context, customer string) (map[string]int
 }
 
 func (i *HoopsAI) CreateUser(ctx context.Context, customer string) (map[string]interface{}, error) {
-	log.Trace("HS CreateUser called")
+	i.logger.Trace("HS CreateUser called")
 
 	r, err := i.cli.Post(ctx, fmt.Sprintf("%s/%s", model.URLInsightBase+model.URLInsightHSUsers, customer), nil, nil)
 	if err != nil {
@@ -455,7 +457,7 @@ func (i *HoopsAI) CreateUser(ctx context.Context, customer string) (map[string]i
 }
 
 func (i *HoopsAI) DeleteUser(ctx context.Context, customer, userID string) (map[string]interface{}, error) {
-	log.Trace("HS DeleteUser called")
+	i.logger.Trace("HS DeleteUser called")
 
 	r, err := i.cli.Delete(ctx, fmt.Sprintf("%s/%s/%s", model.URLInsightBase+model.URLInsightHSUsers, customer, userID), nil, nil)
 	if err != nil {
@@ -472,7 +474,7 @@ func (i *HoopsAI) DeleteUser(ctx context.Context, customer, userID string) (map[
 }
 
 func (i *HoopsAI) CreateWatchlistByUser(ctx context.Context, customer, userID string) (map[string]interface{}, error) {
-	log.Trace("HS CreateWatchlistByUser called")
+	i.logger.Trace("HS CreateWatchlistByUser called")
 
 	r, err := i.cli.Post(ctx, fmt.Sprintf("%s/%s/%s/watchlists", model.URLInsightBase+model.URLInsightHSUsers, customer, userID), nil, nil)
 	if err != nil {
@@ -489,7 +491,7 @@ func (i *HoopsAI) CreateWatchlistByUser(ctx context.Context, customer, userID st
 }
 
 func (i *HoopsAI) GetWatchlistByUser(ctx context.Context, customer, userID, watchlistName string) (map[string]interface{}, error) {
-	log.Trace("HS GetWatchlistByUser called")
+	i.logger.Trace("HS GetWatchlistByUser called")
 
 	r, err := i.cli.Get(ctx, fmt.Sprintf("%s/%s/%s/watchlists/%s", model.URLInsightBase+model.URLInsightHSUsers, customer, userID, watchlistName), nil)
 	if err != nil {
@@ -506,7 +508,7 @@ func (i *HoopsAI) GetWatchlistByUser(ctx context.Context, customer, userID, watc
 }
 
 func (i *HoopsAI) AddSymbolToWatchlist(ctx context.Context, customer, userID, watchlistName, symbol string) (map[string]interface{}, error) {
-	log.Trace("HS AddSymbolToWatchlist called")
+	i.logger.Trace("HS AddSymbolToWatchlist called")
 
 	r, err := i.cli.Post(ctx, fmt.Sprintf("%s/%s/%s/watchlists/%s/%s", model.URLInsightBase+model.URLInsightHSUsers, customer, userID, watchlistName, symbol), nil, nil)
 	if err != nil {
@@ -523,7 +525,7 @@ func (i *HoopsAI) AddSymbolToWatchlist(ctx context.Context, customer, userID, wa
 }
 
 func (i *HoopsAI) DeleteSymbolFromWatchlist(ctx context.Context, customer, userID, watchlistName, symbol string) (map[string]interface{}, error) {
-	log.Trace("HS DeleteSymbolFromWatchlist called")
+	i.logger.Trace("HS DeleteSymbolFromWatchlist called")
 
 	r, err := i.cli.Delete(ctx, fmt.Sprintf("%s/%s/%s/watchlists/%s/%s", model.URLInsightBase+model.URLInsightHSUsers, customer, userID, watchlistName, symbol), nil, nil)
 	if err != nil {
@@ -540,7 +542,7 @@ func (i *HoopsAI) DeleteSymbolFromWatchlist(ctx context.Context, customer, userI
 }
 
 func (i *HoopsAI) AddSymbolsToWatchlist(ctx context.Context, customer, userID, watchlistName string, symbols []string) (map[string]interface{}, error) {
-	log.Trace("HS AddSymbolToWatchlist called")
+	i.logger.Trace("HS AddSymbolToWatchlist called")
 
 	body, err := json.Marshal(struct {
 		SymbolList string `json:"symbol_list"`
@@ -566,7 +568,7 @@ func (i *HoopsAI) AddSymbolsToWatchlist(ctx context.Context, customer, userID, w
 }
 
 func (i *HoopsAI) DeleteWatchlistByName(ctx context.Context, customer, userID, watchlistName string) (map[string]interface{}, error) {
-	log.Trace("HS DeleteWatchlistByName called")
+	i.logger.Trace("HS DeleteWatchlistByName called")
 
 	r, err := i.cli.Delete(ctx, fmt.Sprintf("%s/%s/%s/watchlists/%s", model.URLInsightBase+model.URLInsightHSUsers, customer, userID, watchlistName), nil, nil)
 	if err != nil {
@@ -583,7 +585,7 @@ func (i *HoopsAI) DeleteWatchlistByName(ctx context.Context, customer, userID, w
 }
 
 func (i *HoopsAI) RenameWatchlist(ctx context.Context, customer, userID, oldWatchlistName, newWatchlistName string) (map[string]interface{}, error) {
-	log.Trace("HS RenameWatchlist called")
+	i.logger.Trace("HS RenameWatchlist called")
 
 	r, err := i.cli.Put(ctx, fmt.Sprintf("%s/%s/%s/watchlists/%s/rename/%s", model.URLInsightBase+model.URLInsightHSUsers, customer, userID, oldWatchlistName, newWatchlistName), nil, nil)
 	if err != nil {

@@ -10,6 +10,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/mock/gomock"
 
@@ -18,7 +19,7 @@ import (
 )
 
 func TestNew(t *testing.T) {
-	assert.NotNil(t, New(nil))
+	assert.NotNil(t, New(nil, nil))
 }
 
 func TestQuotes_GetQuotesEquityData(t *testing.T) {
@@ -62,7 +63,8 @@ func TestQuotes_GetQuotesEquityData(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?symbols=%s&quote_type=%s", model.URLInsightBase+model.URLInsightQuotesEquity, symbols, quoteType), nil).Return(httpResponse, nil)
 
 				return &Quotes{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -84,7 +86,8 @@ func TestQuotes_GetQuotesEquityData(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?symbols=%s&quote_type=%s", model.URLInsightBase+model.URLInsightQuotesEquity, symbols, quoteType), nil).Return(httpResponse, nil)
 
 				return &Quotes{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -100,7 +103,8 @@ func TestQuotes_GetQuotesEquityData(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?symbols=%s&quote_type=%s", model.URLInsightBase+model.URLInsightQuotesEquity, symbols, quoteType), nil).Return(nil, testErr)
 
 				return &Quotes{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -186,7 +190,8 @@ func TestQuotes_GetQuoteHistory(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightQuoteHistory, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &Quotes{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -211,7 +216,8 @@ func TestQuotes_GetQuoteHistory(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightQuoteHistory, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &Quotes{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -230,7 +236,8 @@ func TestQuotes_GetQuoteHistory(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightQuoteHistory, bytes.NewBuffer(bb), nil).Return(nil, testErr)
 
 				return &Quotes{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -307,7 +314,8 @@ func TestQuotes_GetIntradayQuotes(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightIntradayQuotes, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &Quotes{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -332,7 +340,8 @@ func TestQuotes_GetIntradayQuotes(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightIntradayQuotes, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &Quotes{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -351,7 +360,8 @@ func TestQuotes_GetIntradayQuotes(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightIntradayQuotes, bytes.NewBuffer(bb), nil).Return(nil, testErr)
 
 				return &Quotes{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},

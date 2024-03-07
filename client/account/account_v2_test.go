@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/pkg/errors"
+	"github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/mock/gomock"
 
@@ -68,10 +69,10 @@ func TestAccount_GetB2BUsersV2(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLB2BGetUsersV2, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &Account{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 
-					watchTokenRefreshState: true,
-					refreshTicker:          time.NewTicker(time.Hour * 100),
+					refreshTicker: time.NewTicker(time.Hour * 100),
 				}
 			},
 		},
@@ -94,10 +95,10 @@ func TestAccount_GetB2BUsersV2(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLB2BGetUsersV2, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &Account{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 
-					watchTokenRefreshState: true,
-					refreshTicker:          time.NewTicker(time.Hour * 100),
+					refreshTicker: time.NewTicker(time.Hour * 100),
 				}
 			},
 		},
@@ -120,10 +121,10 @@ func TestAccount_GetB2BUsersV2(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLB2BGetUsersV2, bytes.NewBuffer(bb), nil).Return(httpResponse, testErr)
 
 				return &Account{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 
-					watchTokenRefreshState: true,
-					refreshTicker:          time.NewTicker(time.Hour * 100),
+					refreshTicker: time.NewTicker(time.Hour * 100),
 				}
 			},
 		},

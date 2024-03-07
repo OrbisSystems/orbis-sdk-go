@@ -10,6 +10,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/mock/gomock"
 
@@ -18,7 +19,7 @@ import (
 )
 
 func TestNew(t *testing.T) {
-	assert.NotNil(t, New(nil))
+	assert.NotNil(t, New(nil, nil))
 }
 
 func TestLogos_SymbolLogos(t *testing.T) {
@@ -62,7 +63,8 @@ func TestLogos_SymbolLogos(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?symbol=%s", model.URLInsightBase+model.URLInsightLogosSymbolLogos, symbol), nil).Return(httpResponse, nil)
 
 				return &Logos{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -83,7 +85,8 @@ func TestLogos_SymbolLogos(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?symbol=%s", model.URLInsightBase+model.URLInsightLogosSymbolLogos, symbol), nil).Return(httpResponse, nil)
 
 				return &Logos{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -98,7 +101,8 @@ func TestLogos_SymbolLogos(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?symbol=%s", model.URLInsightBase+model.URLInsightLogosSymbolLogos, symbol), nil).Return(nil, testErr)
 
 				return &Logos{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -169,7 +173,8 @@ func TestLogos_SocialSymbolLogos(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?symbol=%s", model.URLInsightBase+model.URLInsightLogosSocialSymbolLogos, symbol), nil).Return(httpResponse, nil)
 
 				return &Logos{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -190,7 +195,8 @@ func TestLogos_SocialSymbolLogos(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?symbol=%s", model.URLInsightBase+model.URLInsightLogosSocialSymbolLogos, symbol), nil).Return(httpResponse, nil)
 
 				return &Logos{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -205,7 +211,8 @@ func TestLogos_SocialSymbolLogos(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?symbol=%s", model.URLInsightBase+model.URLInsightLogosSocialSymbolLogos, symbol), nil).Return(nil, testErr)
 
 				return &Logos{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -259,7 +266,8 @@ func TestLogos_DirectSymbolLogo(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?symbol=%s", model.URLInsightBase+model.URLInsightLogosDirectSymbolLogos, symbol), nil).Return(httpResponse, nil)
 
 				return &Logos{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -274,7 +282,8 @@ func TestLogos_DirectSymbolLogo(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?symbol=%s", model.URLInsightBase+model.URLInsightLogosDirectSymbolLogos, symbol), nil).Return(nil, testErr)
 
 				return &Logos{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -339,7 +348,8 @@ func TestLogos_CryptoSymbolLogo(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?symbol=%s", model.URLInsightBase+model.URLInsightLogosCryptoSymbolLogo, symbol), nil).Return(httpResponse, nil)
 
 				return &Logos{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -360,7 +370,8 @@ func TestLogos_CryptoSymbolLogo(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?symbol=%s", model.URLInsightBase+model.URLInsightLogosCryptoSymbolLogo, symbol), nil).Return(httpResponse, nil)
 
 				return &Logos{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -375,7 +386,8 @@ func TestLogos_CryptoSymbolLogo(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?symbol=%s", model.URLInsightBase+model.URLInsightLogosCryptoSymbolLogo, symbol), nil).Return(nil, testErr)
 
 				return &Logos{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -429,7 +441,8 @@ func TestLogos_DirectCryptoSymbolLogo(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?symbol=%s", model.URLInsightBase+model.URLInsightLogosDirectCryptoSymbolLogos, symbol), nil).Return(httpResponse, nil)
 
 				return &Logos{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -444,7 +457,8 @@ func TestLogos_DirectCryptoSymbolLogo(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?symbol=%s", model.URLInsightBase+model.URLInsightLogosDirectCryptoSymbolLogos, symbol), nil).Return(nil, testErr)
 
 				return &Logos{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -515,7 +529,8 @@ func TestLogos_MultiSymbolLogos(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightLogosMultiSymbolLogos, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &Logos{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -538,7 +553,8 @@ func TestLogos_MultiSymbolLogos(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightLogosMultiSymbolLogos, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &Logos{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -555,7 +571,8 @@ func TestLogos_MultiSymbolLogos(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightLogosMultiSymbolLogos, bytes.NewBuffer(bb), nil).Return(nil, testErr)
 
 				return &Logos{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -613,7 +630,8 @@ func TestLogos_ConvertedSymbolLogo(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightLogosConvertedSymbolLogos, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &Logos{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -630,7 +648,8 @@ func TestLogos_ConvertedSymbolLogo(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightLogosConvertedSymbolLogos, bytes.NewBuffer(bb), nil).Return(nil, testErr)
 
 				return &Logos{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -701,7 +720,8 @@ func TestLogos_MultipleCryptoSymbolLogo(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightLogosMultipleCryptoSymbolLogo, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &Logos{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -724,7 +744,8 @@ func TestLogos_MultipleCryptoSymbolLogo(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightLogosMultipleCryptoSymbolLogo, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &Logos{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -741,7 +762,8 @@ func TestLogos_MultipleCryptoSymbolLogo(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightLogosMultipleCryptoSymbolLogo, bytes.NewBuffer(bb), nil).Return(nil, testErr)
 
 				return &Logos{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -799,7 +821,8 @@ func TestLogos_ConvertedCryptoSymbolLogo(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightLogosConvertedCryptoSymbolLogo, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &Logos{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -816,7 +839,8 @@ func TestLogos_ConvertedCryptoSymbolLogo(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightLogosConvertedCryptoSymbolLogo, bytes.NewBuffer(bb), nil).Return(nil, testErr)
 
 				return &Logos{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},

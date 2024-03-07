@@ -16,18 +16,20 @@ import (
 
 // News service provides API for getting news.
 type News struct {
-	cli sdk.HTTPClient
+	cli    sdk.HTTPClient
+	logger *log.Logger
 }
 
-func New(cli sdk.HTTPClient) *News {
+func New(cli sdk.HTTPClient, logger *log.Logger) *News {
 	return &News{
-		cli: cli,
+		cli:    cli,
+		logger: logger,
 	}
 }
 
 // GetByFilter returns news by filters.
 func (c *News) GetByFilter(ctx context.Context, req model.NewsFilterRequest) (model.NewsResponse, error) {
-	log.Trace("GetByFilter called")
+	c.logger.Trace("GetByFilter called")
 
 	body, err := json.Marshal(req)
 	if err != nil {
@@ -50,7 +52,7 @@ func (c *News) GetByFilter(ctx context.Context, req model.NewsFilterRequest) (mo
 
 // GetByID returns news by ID.
 func (c *News) GetByID(ctx context.Context, req model.NewsRequest) (model.News, error) {
-	log.Trace("GetByID called")
+	c.logger.Trace("GetByID called")
 
 	body, err := json.Marshal(req)
 	if err != nil {
@@ -73,7 +75,7 @@ func (c *News) GetByID(ctx context.Context, req model.NewsRequest) (model.News, 
 
 // GetAvailableSymbols returns all available symbols of news.
 func (c *News) GetAvailableSymbols(ctx context.Context) ([]string, error) {
-	log.Trace("GetAvailableSymbols called")
+	c.logger.Trace("GetAvailableSymbols called")
 
 	r, err := c.cli.Get(ctx, model.URLInsightBase+model.URLInsightNewsSymbols, nil)
 	if err != nil {
@@ -91,7 +93,7 @@ func (c *News) GetAvailableSymbols(ctx context.Context) ([]string, error) {
 
 // GetAvailableAuthors returns all available authors for news. You can use it for GetByFilter filter.
 func (c *News) GetAvailableAuthors(ctx context.Context, symbol *string) ([]string, error) {
-	log.Trace("GetAvailableAuthors called")
+	c.logger.Trace("GetAvailableAuthors called")
 
 	body, err := prepareBodyWithSymbol(symbol)
 	if err != nil {
@@ -114,7 +116,7 @@ func (c *News) GetAvailableAuthors(ctx context.Context, symbol *string) ([]strin
 
 // GetAvailableChannels returns all available news channels.
 func (c *News) GetAvailableChannels(ctx context.Context, symbol *string) ([]string, error) {
-	log.Trace("GetAvailableChannels called")
+	c.logger.Trace("GetAvailableChannels called")
 
 	body, err := prepareBodyWithSymbol(symbol)
 	if err != nil {
@@ -137,7 +139,7 @@ func (c *News) GetAvailableChannels(ctx context.Context, symbol *string) ([]stri
 
 // GetAvailableTags returns all available news tags.
 func (c *News) GetAvailableTags(ctx context.Context, symbol *string) ([]string, error) {
-	log.Trace("GetAvailableTags called")
+	c.logger.Trace("GetAvailableTags called")
 
 	body, err := prepareBodyWithSymbol(symbol)
 	if err != nil {

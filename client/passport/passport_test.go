@@ -9,6 +9,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/mock/gomock"
 
@@ -17,7 +18,7 @@ import (
 )
 
 func TestNew(t *testing.T) {
-	assert.NotNil(t, New(nil))
+	assert.NotNil(t, New(nil, nil))
 }
 
 func TestPassport_Articles(t *testing.T) {
@@ -62,7 +63,8 @@ func TestPassport_Articles(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightPassportArticles, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &Passport{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -85,7 +87,8 @@ func TestPassport_Articles(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightPassportArticles, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &Passport{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -102,7 +105,8 @@ func TestPassport_Articles(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightPassportArticles, bytes.NewBuffer(bb), nil).Return(nil, testErr)
 
 				return &Passport{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -168,7 +172,8 @@ func TestPassport_Newsfeed(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightPassportNewsFeed, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &Passport{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -191,7 +196,8 @@ func TestPassport_Newsfeed(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightPassportNewsFeed, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &Passport{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -208,7 +214,8 @@ func TestPassport_Newsfeed(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightPassportNewsFeed, bytes.NewBuffer(bb), nil).Return(nil, testErr)
 
 				return &Passport{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -272,7 +279,8 @@ func TestPassport_ArticleByID(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightPassportArticleByID, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &Passport{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -295,7 +303,8 @@ func TestPassport_ArticleByID(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightPassportArticleByID, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &Passport{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -312,7 +321,8 @@ func TestPassport_ArticleByID(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightPassportArticleByID, bytes.NewBuffer(bb), nil).Return(nil, testErr)
 
 				return &Passport{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -378,7 +388,8 @@ func TestPassport_SearchArticle(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightPassportSearchArticle, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &Passport{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -401,7 +412,8 @@ func TestPassport_SearchArticle(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightPassportSearchArticle, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &Passport{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -418,7 +430,8 @@ func TestPassport_SearchArticle(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightPassportSearchArticle, bytes.NewBuffer(bb), nil).Return(nil, testErr)
 
 				return &Passport{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -493,7 +506,8 @@ func TestPassport_AuthorProfile(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightPassportAuthorProfile, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &Passport{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -516,7 +530,8 @@ func TestPassport_AuthorProfile(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightPassportAuthorProfile, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &Passport{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -533,7 +548,8 @@ func TestPassport_AuthorProfile(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightPassportAuthorProfile, bytes.NewBuffer(bb), nil).Return(nil, testErr)
 
 				return &Passport{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -602,7 +618,8 @@ func TestPassport_MostPopularTags(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightPassportMostPopularTags, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &Passport{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -625,7 +642,8 @@ func TestPassport_MostPopularTags(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightPassportMostPopularTags, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &Passport{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -642,7 +660,8 @@ func TestPassport_MostPopularTags(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightPassportMostPopularTags, bytes.NewBuffer(bb), nil).Return(nil, testErr)
 
 				return &Passport{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},

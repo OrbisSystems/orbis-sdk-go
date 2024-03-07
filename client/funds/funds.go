@@ -16,17 +16,19 @@ import (
 
 // Funds service returns different funds info such as screener, top, etc.
 type Funds struct {
-	cli sdk.HTTPClient
+	cli    sdk.HTTPClient
+	logger *log.Logger
 }
 
-func New(cli sdk.HTTPClient) *Funds {
+func New(cli sdk.HTTPClient, logger *log.Logger) *Funds {
 	return &Funds{
-		cli: cli,
+		cli:    cli,
+		logger: logger,
 	}
 }
 
 func (f *Funds) GetFundDetails(ctx context.Context, symbol string) (model.GetFundDetailsResponse, error) {
-	log.Trace("GetFundDetails called")
+	f.logger.Trace("GetFundDetails called")
 
 	r, err := f.cli.Get(ctx, fmt.Sprintf("%s?symbol=%s", model.URLInsightBase+model.URLInsightFundsDetails, symbol), nil)
 	if err != nil {
@@ -43,7 +45,7 @@ func (f *Funds) GetFundDetails(ctx context.Context, symbol string) (model.GetFun
 }
 
 func (f *Funds) GetFundScreenerFilters(ctx context.Context) (model.GetFundScreenerFiltersResponse, error) {
-	log.Trace("GetFundScreenerFilters called")
+	f.logger.Trace("GetFundScreenerFilters called")
 
 	r, err := f.cli.Get(ctx, model.URLInsightBase+model.URLInsightFundsScreenerFilters, nil)
 	if err != nil {
@@ -60,7 +62,7 @@ func (f *Funds) GetFundScreenerFilters(ctx context.Context) (model.GetFundScreen
 }
 
 func (f *Funds) ScreenFunds(ctx context.Context, req model.FundScreenerRequest) (model.FundScreenerResponse, error) {
-	log.Trace("ScreenFunds called")
+	f.logger.Trace("ScreenFunds called")
 
 	body, err := json.Marshal(req)
 	if err != nil {
@@ -82,7 +84,7 @@ func (f *Funds) ScreenFunds(ctx context.Context, req model.FundScreenerRequest) 
 }
 
 func (f *Funds) ScreenSectorFunds(ctx context.Context, req model.FundSectorScreenerRequest) (model.FundScreenerResponse, error) {
-	log.Trace("ScreenSectorFunds called")
+	f.logger.Trace("ScreenSectorFunds called")
 
 	body, err := json.Marshal(req)
 	if err != nil {
@@ -104,7 +106,7 @@ func (f *Funds) ScreenSectorFunds(ctx context.Context, req model.FundSectorScree
 }
 
 func (f *Funds) GetTopFunds(ctx context.Context, req model.GetTopFundsRequest) ([]string, error) {
-	log.Trace("GetTopFunds called")
+	f.logger.Trace("GetTopFunds called")
 
 	body, err := json.Marshal(req)
 	if err != nil {
@@ -126,7 +128,7 @@ func (f *Funds) GetTopFunds(ctx context.Context, req model.GetTopFundsRequest) (
 }
 
 func (f *Funds) GetFundsForHolding(ctx context.Context, req model.GetFundsForHoldingRequest) (model.GetFundsForHoldingResponse, error) {
-	log.Trace("GetFundsForHolding called")
+	f.logger.Trace("GetFundsForHolding called")
 
 	body, err := json.Marshal(req)
 	if err != nil {

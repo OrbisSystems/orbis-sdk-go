@@ -14,17 +14,19 @@ import (
 )
 
 type Passport struct {
-	cli sdk.HTTPClient
+	cli    sdk.HTTPClient
+	logger *log.Logger
 }
 
-func New(cli sdk.HTTPClient) *Passport {
+func New(cli sdk.HTTPClient, logger *log.Logger) *Passport {
 	return &Passport{
-		cli: cli,
+		cli:    cli,
+		logger: logger,
 	}
 }
 
 func (p *Passport) Articles(ctx context.Context, req model.ArticlesRequest) ([]model.Article, error) {
-	log.Trace("Articles called")
+	p.logger.Trace("Articles called")
 
 	body, err := json.Marshal(req)
 	if err != nil {
@@ -46,7 +48,7 @@ func (p *Passport) Articles(ctx context.Context, req model.ArticlesRequest) ([]m
 }
 
 func (p *Passport) Newsfeed(ctx context.Context, req model.NewsfeedRequest) ([]model.Newsfeed, error) {
-	log.Trace("Newsfeed called")
+	p.logger.Trace("Newsfeed called")
 
 	body, err := json.Marshal(req)
 	if err != nil {
@@ -68,7 +70,7 @@ func (p *Passport) Newsfeed(ctx context.Context, req model.NewsfeedRequest) ([]m
 }
 
 func (p *Passport) ArticleByID(ctx context.Context, req model.ArticleByIDRequest) (model.Article, error) {
-	log.Trace("ArticleByID called")
+	p.logger.Trace("ArticleByID called")
 
 	body, err := json.Marshal(req)
 	if err != nil {
@@ -90,7 +92,7 @@ func (p *Passport) ArticleByID(ctx context.Context, req model.ArticleByIDRequest
 }
 
 func (p *Passport) SearchArticle(ctx context.Context, req model.SearchArticleRequest) ([]model.Article, error) {
-	log.Trace("SearchArticle called")
+	p.logger.Trace("SearchArticle called")
 
 	body, err := json.Marshal(req)
 	if err != nil {
@@ -112,7 +114,7 @@ func (p *Passport) SearchArticle(ctx context.Context, req model.SearchArticleReq
 }
 
 func (p *Passport) AuthorProfile(ctx context.Context, req model.AuthorProfileRequest) ([]model.AuthorProfileResponse, error) {
-	log.Trace("AuthorProfile called")
+	p.logger.Trace("AuthorProfile called")
 
 	body, err := json.Marshal(req)
 	if err != nil {
@@ -134,7 +136,7 @@ func (p *Passport) AuthorProfile(ctx context.Context, req model.AuthorProfileReq
 }
 
 func (p *Passport) MostPopularTags(ctx context.Context, req model.MostPopularTagsRequest) ([]model.TagShortInfo, error) {
-	log.Trace("MostPopularTags called")
+	p.logger.Trace("MostPopularTags called")
 
 	body, err := json.Marshal(req)
 	if err != nil {

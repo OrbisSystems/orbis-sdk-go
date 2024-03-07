@@ -10,6 +10,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/mock/gomock"
 
@@ -18,7 +19,7 @@ import (
 )
 
 func TestNew(t *testing.T) {
-	assert.NotNil(t, New(nil))
+	assert.NotNil(t, New(nil, nil))
 }
 
 func TestTipRank_AnalystConsensus(t *testing.T) {
@@ -74,7 +75,8 @@ func TestTipRank_AnalystConsensus(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightTipRankAnalystConsensus, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &TipRank{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -99,7 +101,8 @@ func TestTipRank_AnalystConsensus(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightTipRankAnalystConsensus, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &TipRank{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -118,7 +121,8 @@ func TestTipRank_AnalystConsensus(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightTipRankAnalystConsensus, bytes.NewBuffer(bb), nil).Return(nil, testErr)
 
 				return &TipRank{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -190,7 +194,8 @@ func TestTipRank_LatestAnalystRatingsOnStock(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightTipRankAnalystMulti, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &TipRank{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -215,7 +220,8 @@ func TestTipRank_LatestAnalystRatingsOnStock(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightTipRankAnalystMulti, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &TipRank{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -234,7 +240,8 @@ func TestTipRank_LatestAnalystRatingsOnStock(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightTipRankAnalystMulti, bytes.NewBuffer(bb), nil).Return(nil, testErr)
 
 				return &TipRank{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -305,7 +312,8 @@ func TestTipRank_LiveFeed(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightTipRankLiveFeed, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &TipRank{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -330,7 +338,8 @@ func TestTipRank_LiveFeed(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightTipRankLiveFeed, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &TipRank{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -349,7 +358,8 @@ func TestTipRank_LiveFeed(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightTipRankLiveFeed, bytes.NewBuffer(bb), nil).Return(nil, testErr)
 
 				return &TipRank{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -418,7 +428,8 @@ func TestTipRank_TrendingStocks(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightTipRankTrendingStocks, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &TipRank{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -443,7 +454,8 @@ func TestTipRank_TrendingStocks(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightTipRankTrendingStocks, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &TipRank{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -462,7 +474,8 @@ func TestTipRank_TrendingStocks(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightTipRankTrendingStocks, bytes.NewBuffer(bb), nil).Return(nil, testErr)
 
 				return &TipRank{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -530,7 +543,8 @@ func TestTipRank_AnalystPortfolios(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightTipRankAnalystPortfolio, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &TipRank{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -555,7 +569,8 @@ func TestTipRank_AnalystPortfolios(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightTipRankAnalystPortfolio, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &TipRank{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -574,7 +589,8 @@ func TestTipRank_AnalystPortfolios(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightTipRankAnalystPortfolio, bytes.NewBuffer(bb), nil).Return(nil, testErr)
 
 				return &TipRank{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -637,7 +653,8 @@ func TestTipRank_AnalystProfile(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?id=%s", model.URLInsightBase+model.URLInsightTipRankAnalystProfile, id), nil).Return(httpResponse, nil)
 
 				return &TipRank{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -658,7 +675,8 @@ func TestTipRank_AnalystProfile(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?id=%s", model.URLInsightBase+model.URLInsightTipRankAnalystProfile, id), nil).Return(httpResponse, nil)
 
 				return &TipRank{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -673,7 +691,8 @@ func TestTipRank_AnalystProfile(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?id=%s", model.URLInsightBase+model.URLInsightTipRankAnalystProfile, id), nil).Return(nil, testErr)
 
 				return &TipRank{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -748,7 +767,8 @@ func TestTipRank_SectorConsensus(t *testing.T) {
 				cli.EXPECT().Get(ctx, model.URLInsightBase+model.URLInsightTipRankSectorConsensus, nil).Return(httpResponse, nil)
 
 				return &TipRank{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -768,7 +788,8 @@ func TestTipRank_SectorConsensus(t *testing.T) {
 				cli.EXPECT().Get(ctx, model.URLInsightBase+model.URLInsightTipRankSectorConsensus, nil).Return(httpResponse, nil)
 
 				return &TipRank{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -782,7 +803,8 @@ func TestTipRank_SectorConsensus(t *testing.T) {
 				cli.EXPECT().Get(ctx, model.URLInsightBase+model.URLInsightTipRankSectorConsensus, nil).Return(nil, testErr)
 
 				return &TipRank{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -847,7 +869,8 @@ func TestTipRank_BestPerformingExperts(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?num=%d", model.URLInsightBase+model.URLInsightTipRankBestPerformingExperts, num), nil).Return(httpResponse, nil)
 
 				return &TipRank{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -868,7 +891,8 @@ func TestTipRank_BestPerformingExperts(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?num=%d", model.URLInsightBase+model.URLInsightTipRankBestPerformingExperts, num), nil).Return(httpResponse, nil)
 
 				return &TipRank{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -883,7 +907,8 @@ func TestTipRank_BestPerformingExperts(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?num=%d", model.URLInsightBase+model.URLInsightTipRankBestPerformingExperts, num), nil).Return(nil, testErr)
 
 				return &TipRank{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -939,7 +964,8 @@ func TestTipRank_StocksSimilarStocks(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?ticker=%s", model.URLInsightBase+model.URLInsightTipRankStocksSimilarStocks, ticker), nil).Return(httpResponse, nil)
 
 				return &TipRank{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -960,7 +986,8 @@ func TestTipRank_StocksSimilarStocks(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?ticker=%s", model.URLInsightBase+model.URLInsightTipRankStocksSimilarStocks, ticker), nil).Return(httpResponse, nil)
 
 				return &TipRank{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -975,7 +1002,8 @@ func TestTipRank_StocksSimilarStocks(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?ticker=%s", model.URLInsightBase+model.URLInsightTipRankStocksSimilarStocks, ticker), nil).Return(nil, testErr)
 
 				return &TipRank{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -1031,7 +1059,8 @@ func TestTipRank_AnalystsExpertPictureStore(t *testing.T) {
 				cli.EXPECT().Get(ctx, model.URLInsightBase+model.URLInsightTipRankAnalystsExpertPictureStore, nil).Return(httpResponse, nil)
 
 				return &TipRank{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -1051,7 +1080,8 @@ func TestTipRank_AnalystsExpertPictureStore(t *testing.T) {
 				cli.EXPECT().Get(ctx, model.URLInsightBase+model.URLInsightTipRankAnalystsExpertPictureStore, nil).Return(httpResponse, nil)
 
 				return &TipRank{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -1065,7 +1095,8 @@ func TestTipRank_AnalystsExpertPictureStore(t *testing.T) {
 				cli.EXPECT().Get(ctx, model.URLInsightBase+model.URLInsightTipRankAnalystsExpertPictureStore, nil).Return(nil, testErr)
 
 				return &TipRank{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -1121,7 +1152,8 @@ func TestTipRank_SupportedTickers(t *testing.T) {
 				cli.EXPECT().Get(ctx, model.URLInsightBase+model.URLInsightTipRankSupportedTickers, nil).Return(httpResponse, nil)
 
 				return &TipRank{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -1141,7 +1173,8 @@ func TestTipRank_SupportedTickers(t *testing.T) {
 				cli.EXPECT().Get(ctx, model.URLInsightBase+model.URLInsightTipRankSupportedTickers, nil).Return(httpResponse, nil)
 
 				return &TipRank{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -1155,7 +1188,8 @@ func TestTipRank_SupportedTickers(t *testing.T) {
 				cli.EXPECT().Get(ctx, model.URLInsightBase+model.URLInsightTipRankSupportedTickers, nil).Return(nil, testErr)
 
 				return &TipRank{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -1214,7 +1248,8 @@ func TestTipRank_GeneralStockUpdates(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?utc_time=%s&details=%s", model.URLInsightBase+model.URLInsightTipRankGeneralStockUpdates, utcTime, details), nil).Return(httpResponse, nil)
 
 				return &TipRank{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -1236,7 +1271,8 @@ func TestTipRank_GeneralStockUpdates(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?utc_time=%s&details=%s", model.URLInsightBase+model.URLInsightTipRankGeneralStockUpdates, utcTime, details), nil).Return(httpResponse, nil)
 
 				return &TipRank{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -1252,7 +1288,8 @@ func TestTipRank_GeneralStockUpdates(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?utc_time=%s&details=%s", model.URLInsightBase+model.URLInsightTipRankGeneralStockUpdates, utcTime, details), nil).Return(nil, testErr)
 
 				return &TipRank{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -1311,7 +1348,8 @@ func TestTipRank_InsidersOverview(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?expert_uid=%s", model.URLInsightBase+model.URLInsightTipRankInsidersOverview, expertUID), nil).Return(httpResponse, nil)
 
 				return &TipRank{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -1332,7 +1370,8 @@ func TestTipRank_InsidersOverview(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?expert_uid=%s", model.URLInsightBase+model.URLInsightTipRankInsidersOverview, expertUID), nil).Return(httpResponse, nil)
 
 				return &TipRank{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -1347,7 +1386,8 @@ func TestTipRank_InsidersOverview(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?expert_uid=%s", model.URLInsightBase+model.URLInsightTipRankInsidersOverview, expertUID), nil).Return(nil, testErr)
 
 				return &TipRank{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -1411,7 +1451,8 @@ func TestTipRank_InsidersBestPerformingExperts(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?num=%d", model.URLInsightBase+model.URLInsightTipRankInsidersBestPerformingExperts, num), nil).Return(httpResponse, nil)
 
 				return &TipRank{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -1432,7 +1473,8 @@ func TestTipRank_InsidersBestPerformingExperts(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?num=%d", model.URLInsightBase+model.URLInsightTipRankInsidersBestPerformingExperts, num), nil).Return(httpResponse, nil)
 
 				return &TipRank{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -1447,7 +1489,8 @@ func TestTipRank_InsidersBestPerformingExperts(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?num=%d", model.URLInsightBase+model.URLInsightTipRankInsidersBestPerformingExperts, num), nil).Return(nil, testErr)
 
 				return &TipRank{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -1512,7 +1555,8 @@ func TestTipRank_InsidersLiveFeed(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?num=%d&sort=%s", model.URLInsightBase+model.URLInsightTipRankInsidersLiveFeed, num, sort), nil).Return(httpResponse, nil)
 
 				return &TipRank{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -1534,7 +1578,8 @@ func TestTipRank_InsidersLiveFeed(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?num=%d&sort=%s", model.URLInsightBase+model.URLInsightTipRankInsidersLiveFeed, num, sort), nil).Return(httpResponse, nil)
 
 				return &TipRank{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -1550,7 +1595,8 @@ func TestTipRank_InsidersLiveFeed(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?num=%d&sort=%s", model.URLInsightBase+model.URLInsightTipRankInsidersLiveFeed, num, sort), nil).Return(nil, testErr)
 
 				return &TipRank{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -1613,7 +1659,8 @@ func TestTipRank_HedgeFundsBestPerformingExperts(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?num=%d", model.URLInsightBase+model.URLInsightTipRankHedgefundsBestPerformingExperts, num), nil).Return(httpResponse, nil)
 
 				return &TipRank{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -1634,7 +1681,8 @@ func TestTipRank_HedgeFundsBestPerformingExperts(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?num=%d", model.URLInsightBase+model.URLInsightTipRankHedgefundsBestPerformingExperts, num), nil).Return(httpResponse, nil)
 
 				return &TipRank{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -1649,7 +1697,8 @@ func TestTipRank_HedgeFundsBestPerformingExperts(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?num=%d", model.URLInsightBase+model.URLInsightTipRankHedgefundsBestPerformingExperts, num), nil).Return(nil, testErr)
 
 				return &TipRank{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},

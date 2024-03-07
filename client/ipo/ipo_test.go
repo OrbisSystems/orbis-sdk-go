@@ -10,6 +10,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/mock/gomock"
 
@@ -18,7 +19,7 @@ import (
 )
 
 func TestNew(t *testing.T) {
-	assert.NotNil(t, New(nil))
+	assert.NotNil(t, New(nil, nil))
 }
 
 func TestIPO_GetUpcomingIPOs(t *testing.T) {
@@ -62,7 +63,8 @@ func TestIPO_GetUpcomingIPOs(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?limit=%d&offset=%d", model.URLInsightBase+model.URLInsightIPOsUpcoming, limit, offset), nil).Return(httpResponse, nil)
 
 				return &IPO{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -84,7 +86,8 @@ func TestIPO_GetUpcomingIPOs(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?limit=%d&offset=%d", model.URLInsightBase+model.URLInsightIPOsUpcoming, limit, offset), nil).Return(httpResponse, nil)
 
 				return &IPO{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -100,7 +103,8 @@ func TestIPO_GetUpcomingIPOs(t *testing.T) {
 				cli.EXPECT().Get(ctx, fmt.Sprintf("%s?limit=%d&offset=%d", model.URLInsightBase+model.URLInsightIPOsUpcoming, limit, offset), nil).Return(nil, testErr)
 
 				return &IPO{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -170,7 +174,8 @@ func TestIPO_GetRecentIPOs(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightIPOsRecent, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &IPO{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -195,7 +200,8 @@ func TestIPO_GetRecentIPOs(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightIPOsRecent, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
 
 				return &IPO{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},
@@ -214,7 +220,8 @@ func TestIPO_GetRecentIPOs(t *testing.T) {
 				cli.EXPECT().Post(ctx, model.URLInsightBase+model.URLInsightIPOsRecent, bytes.NewBuffer(bb), nil).Return(nil, testErr)
 
 				return &IPO{
-					cli: cli,
+					cli:    cli,
+					logger: logrus.New(),
 				}
 			},
 		},

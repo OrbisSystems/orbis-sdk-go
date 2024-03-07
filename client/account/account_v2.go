@@ -8,11 +8,10 @@ import (
 	"github.com/OrbisSystems/orbis-sdk-go/model"
 	"github.com/OrbisSystems/orbis-sdk-go/utils"
 	"github.com/pkg/errors"
-	log "github.com/sirupsen/logrus"
 )
 
 func (a *Account) GetB2BUsersV2(ctx context.Context, req model.GetB2BUsersV2Request) (model.GetB2BUsersV2Response, error) {
-	log.Trace("GetB2BUsersV2 called")
+	a.logger.Trace("GetB2BUsersV2 called")
 
 	body, err := json.Marshal(req)
 	if err != nil {
