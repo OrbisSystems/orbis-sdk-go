@@ -27,8 +27,6 @@ type Account struct {
 
 	cli sdk.HTTPClient
 
-	watchTokenRefreshState bool
-
 	refreshTicker      *time.Ticker
 	monitorTokenTicker *time.Ticker
 }

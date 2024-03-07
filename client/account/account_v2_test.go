@@ -70,8 +70,7 @@ func TestAccount_GetB2BUsersV2(t *testing.T) {
 				return &Account{
 					cli: cli,
 
-					watchTokenRefreshState: true,
-					refreshTicker:          time.NewTicker(time.Hour * 100),
+					refreshTicker: time.NewTicker(time.Hour * 100),
 				}
 			},
 		},
@@ -96,8 +95,7 @@ func TestAccount_GetB2BUsersV2(t *testing.T) {
 				return &Account{
 					cli: cli,
 
-					watchTokenRefreshState: true,
-					refreshTicker:          time.NewTicker(time.Hour * 100),
+					refreshTicker: time.NewTicker(time.Hour * 100),
 				}
 			},
 		},
@@ -122,8 +120,7 @@ func TestAccount_GetB2BUsersV2(t *testing.T) {
 				return &Account{
 					cli: cli,
 
-					watchTokenRefreshState: true,
-					refreshTicker:          time.NewTicker(time.Hour * 100),
+					refreshTicker: time.NewTicker(time.Hour * 100),
 				}
 			},
 		},
