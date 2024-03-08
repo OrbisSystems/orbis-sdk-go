@@ -185,8 +185,6 @@ func TestAccount_LoginByEmail(t *testing.T) {
 					Auth:   auth,
 					cli:    cli,
 					logger: logrus.New(),
-
-					refreshTicker: time.NewTicker(time.Hour * 100),
 				}
 			},
 		},
@@ -215,8 +213,6 @@ func TestAccount_LoginByEmail(t *testing.T) {
 					Auth:   auth,
 					cli:    cli,
 					logger: logrus.New(),
-
-					refreshTicker: time.NewTicker(time.Hour * 100),
 				}
 			},
 		},
@@ -242,8 +238,6 @@ func TestAccount_LoginByEmail(t *testing.T) {
 				return &Account{
 					cli:    cli,
 					logger: logrus.New(),
-
-					refreshTicker: time.NewTicker(time.Hour * 100),
 				}
 			},
 		},
@@ -262,8 +256,6 @@ func TestAccount_LoginByEmail(t *testing.T) {
 				return &Account{
 					cli:    cli,
 					logger: logrus.New(),
-
-					refreshTicker: time.NewTicker(time.Hour * 100),
 				}
 			},
 		},
@@ -343,8 +335,6 @@ func TestAccount_LoginByAPIKey(t *testing.T) {
 					Auth:   auth,
 					cli:    cli,
 					logger: logrus.New(),
-
-					refreshTicker: time.NewTicker(time.Hour * 100),
 				}
 			},
 		},
@@ -373,8 +363,6 @@ func TestAccount_LoginByAPIKey(t *testing.T) {
 					Auth:   auth,
 					cli:    cli,
 					logger: logrus.New(),
-
-					refreshTicker: time.NewTicker(time.Hour * 100),
 				}
 			},
 		},
@@ -400,8 +388,6 @@ func TestAccount_LoginByAPIKey(t *testing.T) {
 				return &Account{
 					cli:    cli,
 					logger: logrus.New(),
-
-					refreshTicker: time.NewTicker(time.Hour * 100),
 				}
 			},
 		},
@@ -420,8 +406,6 @@ func TestAccount_LoginByAPIKey(t *testing.T) {
 				return &Account{
 					cli:    cli,
 					logger: logrus.New(),
-
-					refreshTicker: time.NewTicker(time.Hour * 100),
 				}
 			},
 		},
@@ -489,8 +473,6 @@ func TestAccount_CreateAPIKey(t *testing.T) {
 				return &Account{
 					cli:    cli,
 					logger: logrus.New(),
-
-					refreshTicker: time.NewTicker(time.Hour * 100),
 				}
 			},
 		},
@@ -516,8 +498,6 @@ func TestAccount_CreateAPIKey(t *testing.T) {
 				return &Account{
 					cli:    cli,
 					logger: logrus.New(),
-
-					refreshTicker: time.NewTicker(time.Hour * 100),
 				}
 			},
 		},
@@ -536,8 +516,6 @@ func TestAccount_CreateAPIKey(t *testing.T) {
 				return &Account{
 					cli:    cli,
 					logger: logrus.New(),
-
-					refreshTicker: time.NewTicker(time.Hour * 100),
 				}
 			},
 		},
@@ -615,8 +593,6 @@ func TestAccount_RefreshToken(t *testing.T) {
 					Auth:   auth,
 					cli:    cli,
 					logger: logrus.New(),
-
-					refreshTicker: time.NewTicker(time.Hour * 100),
 				}
 			},
 		},
@@ -646,8 +622,6 @@ func TestAccount_RefreshToken(t *testing.T) {
 					Auth:   auth,
 					cli:    cli,
 					logger: logrus.New(),
-
-					refreshTicker: time.NewTicker(time.Hour * 100),
 				}
 			},
 		},
@@ -676,8 +650,6 @@ func TestAccount_RefreshToken(t *testing.T) {
 					Auth:   auth,
 					cli:    cli,
 					logger: logrus.New(),
-
-					refreshTicker: time.NewTicker(time.Hour * 100),
 				}
 			},
 		},
@@ -699,8 +671,6 @@ func TestAccount_RefreshToken(t *testing.T) {
 					Auth:   auth,
 					cli:    cli,
 					logger: logrus.New(),
-
-					refreshTicker: time.NewTicker(time.Hour * 100),
 				}
 			},
 		},
@@ -716,8 +686,6 @@ func TestAccount_RefreshToken(t *testing.T) {
 				return &Account{
 					Auth:   auth,
 					logger: logrus.New(),
-
-					refreshTicker: time.NewTicker(time.Hour * 100),
 				}
 			},
 		},
@@ -733,8 +701,6 @@ func TestAccount_RefreshToken(t *testing.T) {
 				return &Account{
 					Auth:   auth,
 					logger: logrus.New(),
-
-					refreshTicker: time.NewTicker(time.Hour * 100),
 				}
 			},
 		},
@@ -795,8 +761,6 @@ func TestAccount_GetUserByID(t *testing.T) {
 				return &Account{
 					cli:    cli,
 					logger: logrus.New(),
-
-					refreshTicker: time.NewTicker(time.Hour * 100),
 				}
 			},
 		},
@@ -820,8 +784,6 @@ func TestAccount_GetUserByID(t *testing.T) {
 				return &Account{
 					cli:    cli,
 					logger: logrus.New(),
-
-					refreshTicker: time.NewTicker(time.Hour * 100),
 				}
 			},
 		},
@@ -838,8 +800,6 @@ func TestAccount_GetUserByID(t *testing.T) {
 				return &Account{
 					cli:    cli,
 					logger: logrus.New(),
-
-					refreshTicker: time.NewTicker(time.Hour * 100),
 				}
 			},
 		},
