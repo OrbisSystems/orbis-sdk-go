@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"math/rand"
 	"time"
 
 	"github.com/google/uuid"
@@ -27,9 +28,6 @@ type Account struct {
 
 	cli    sdk.HTTPClient
 	logger *log.Logger
-
-	refreshTicker      *time.Ticker
-	monitorTokenTicker *time.Ticker
 }
 
 func New(auth sdk.Auth, cli sdk.HTTPClient, logger *log.Logger) *Account {
@@ -37,9 +35,6 @@ func New(auth sdk.Auth, cli sdk.HTTPClient, logger *log.Logger) *Account {
 		Auth:   auth,
 		cli:    cli,
 		logger: logger,
-
-		refreshTicker:      time.NewTicker(time.Hour * 100), // default
-		monitorTokenTicker: time.NewTicker(time.Minute),     // default
 	}
 
 	a.watchTokenRefresh()
@@ -49,46 +44,65 @@ func New(auth sdk.Auth, cli sdk.HTTPClient, logger *log.Logger) *Account {
 
 func (a *Account) watchTokenRefresh() {
 	go func() {
-		for {
-			select {
-			case <-a.refreshTicker.C:
-				err := a.RefreshToken(context.Background())
-				if err != nil {
-					a.logger.Errorf("error while updating token by refresh token: %v", err)
-				}
-				a.updateRefreshTicker()
-			case <-a.monitorTokenTicker.C:
-				a.updateRefreshTicker()
+		var (
+			// pick random offset to avoid 425 response code - Duplicate request when using multiple instances
+			// it is still possible to encounter 425 code provided one runs a large number of SDK instances using the same credentials
+			refreshOffset = 5*time.Second + randomOffsetInMilliseconds()
+			refreshTicker = time.NewTicker(5*time.Second + refreshOffset)
+			retryNumber   = 0
+		)
+
+		for range refreshTicker.C {
+			err := a.RefreshToken(context.Background())
+			if err != nil && retryNumber <= 3 {
+				retryNumber++
+				refreshTicker.Reset(exponentialBackoffDuration(retryNumber))
+
+				continue
+			} else if retryNumber >= 4 {
+				a.logger.Errorf("failed to update refresh token 3 times: %v", err)
+
+				// NOTE: As of now, there is no way to recover from a situation where token can't be updated
+				// this will be addressed in the future
+				return
 			}
+
+			retryNumber = 0
+			refreshTicker.Reset(a.getRefreshDurationFromToken())
 		}
 	}()
 }
 
-func (a *Account) updateRefreshTicker() {
-	a.logger.Trace("updating refresh ticker...")
+func (a *Account) getRefreshDurationFromToken() time.Duration {
+	var (
+		ctx, cancel            = context.WithTimeout(context.Background(), time.Minute)
+		defaultRefreshDuration = 5*time.Second + randomOffsetInMilliseconds()
+	)
 
-	ctx, _ := context.WithTimeout(context.Background(), time.Minute)
+	defer cancel()
+
 	tkn, err := a.GetToken(ctx)
 	if err != nil {
-		a.logger.Errorf("watchTokenRefresh -> error while getting token from auth: %v", err)
-		return
+		a.logger.Errorf("getRefreshDurationFromToken -> error while getting token from auth: %v", err)
+
+		return defaultRefreshDuration
 	}
 
 	if tkn.RefreshToken == "" {
-		a.logger.Errorf("watchTokenRefresh -> %v", ErrEmptyRefreshToken)
-		return
+		a.logger.Errorf("getRefreshDurationFromToken -> %v", ErrEmptyRefreshToken)
+
+		return defaultRefreshDuration
 	}
 
-	var refreshDuration time.Duration
-	// if no error from storage
-	// and token is presented in storage
-	// and access token is not expired
-	// -> make a ticker
-	if tkn.AccessExpiresAt != 0 && tkn.AccessExpiresAt > time.Now().Unix() {
-		refreshDuration = getRefreshDuration(tkn.AccessExpiresAt)
-		a.monitorTokenTicker.Stop()
-		a.refreshTicker = time.NewTicker(refreshDuration)
+	var (
+		expTime         = time.Unix(tkn.AccessExpiresAt, 0).Add(-time.Hour * 1) // make trigger little-bit earlier than exp time
+		refreshDuration = time.Until(expTime.UTC())
+	)
+	if refreshDuration.Milliseconds() <= 0 {
+		refreshDuration = defaultRefreshDuration
 	}
+
+	return refreshDuration
 }
 
 // NeedToLogin tells you do you need to call login API or there is still actual token you can use.
@@ -225,12 +239,19 @@ func (a *Account) GetUserByID(ctx context.Context, id int) (model.GetB2BUserByID
 	return resp, err
 }
 
-func getRefreshDuration(v int64) time.Duration {
-	expTime := time.Unix(v, 0).Add(-time.Hour * 1) // make trigger little-bit earlier than exp time
-	refreshDuration := expTime.UTC().Sub(time.Now())
-	if refreshDuration.Milliseconds() <= 0 { // in case something went wrong -  make refresh in 10 sec
-		refreshDuration = time.Second * 10
+func exponentialBackoffDuration(retryNumber int) time.Duration {
+	switch retryNumber {
+	case 2:
+		return 10*time.Second + randomOffsetInMilliseconds()
+	case 3:
+		return 20*time.Second + randomOffsetInMilliseconds()
+	default:
+		return 5*time.Second + randomOffsetInMilliseconds()
 	}
+}
 
-	return refreshDuration
+// randomOffsetInMilliseconds() returns random duration in range [100ms:2000ms] with 100ms step
+// nolint:gosec // No need to use a strong random generator for a random time offset
+func randomOffsetInMilliseconds() time.Duration {
+	return time.Duration(((rand.Intn(19) * 100) + 100)) * time.Millisecond
 }

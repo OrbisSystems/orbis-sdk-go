@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"strings"
 	"testing"
-	"time"
 
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
@@ -71,8 +70,6 @@ func TestAccount_GetB2BUsersV2(t *testing.T) {
 				return &Account{
 					cli:    cli,
 					logger: logrus.New(),
-
-					refreshTicker: time.NewTicker(time.Hour * 100),
 				}
 			},
 		},
@@ -97,8 +94,6 @@ func TestAccount_GetB2BUsersV2(t *testing.T) {
 				return &Account{
 					cli:    cli,
 					logger: logrus.New(),
-
-					refreshTicker: time.NewTicker(time.Hour * 100),
 				}
 			},
 		},
@@ -123,8 +118,6 @@ func TestAccount_GetB2BUsersV2(t *testing.T) {
 				return &Account{
 					cli:    cli,
 					logger: logrus.New(),
-
-					refreshTicker: time.NewTicker(time.Hour * 100),
 				}
 			},
 		},
