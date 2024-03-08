@@ -64,7 +64,7 @@ func (a *Account) watchTokenRefresh() {
 
 				// NOTE: As of now, there is no way to recover from a situation where token can't be updated
 				// this will be addressed in the future
-				return
+				refreshTicker.Reset(5 * time.Minute)
 			}
 
 			retryNumber = 0
