@@ -73,6 +73,36 @@ cli.Account.LoginByEmail(ctx, model.LoginByEmailRequest{
 ```
 Also, you can use API Keys for loging using `LoginByAPIKey` method.
 
+### Manual token refresh flow
+By default, token refreshes happen automatically. You can disable automatic token refresh using config:
+```
+cfg := config.Config{
+		Host:               "user-auth-gateway-staging.orbisfn.io",
+		LogLevel:           config.TraceLogLevel,
+		ManualTokenRefresh: true,
+	}
+
+cli.Account.LoginByEmail(ctx, model.LoginByEmailRequest{
+    Email:      "test@test.com",
+    Password:   "passpass",
+    DeviceID:   "devideID",
+    RememberMe: true,
+})
+
+// needToLogin means either there is no token in store or the token is expired
+needToLogin, err := cli.Account.NeedToLogin(ctx)
+if err != nil {
+	fmt.Println(err)
+}
+
+if needToLogin {
+	if err := cli.Account.RefreshToken(ctx); err != nil {
+		fmt.Println("refresh token error")
+	}
+}
+
+```
+
 ### Client using
 After login, you can use one of the many APIs we provide you via this client. 
 Here are some examples:

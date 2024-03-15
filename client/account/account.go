@@ -30,14 +30,16 @@ type Account struct {
 	logger *log.Logger
 }
 
-func New(auth sdk.Auth, cli sdk.HTTPClient, logger *log.Logger) *Account {
+func New(auth sdk.Auth, cli sdk.HTTPClient, logger *log.Logger, disableTokenRefresh bool) *Account {
 	a := &Account{
 		Auth:   auth,
 		cli:    cli,
 		logger: logger,
 	}
 
-	a.watchTokenRefresh()
+	if !disableTokenRefresh {
+		a.watchTokenRefresh()
+	}
 
 	return a
 }

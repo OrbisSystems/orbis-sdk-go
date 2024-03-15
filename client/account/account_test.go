@@ -26,7 +26,7 @@ func TestNew(t *testing.T) {
 
 	auth.EXPECT().GetToken(gomock.Any()).Return(model.Token{}, nil).AnyTimes()
 
-	assert.NotNil(t, New(auth, cli, logrus.New()))
+	assert.NotNil(t, New(auth, cli, logrus.New(), false))
 }
 
 func TestAccount_NeedToLogin(t *testing.T) {
@@ -51,7 +51,7 @@ func TestAccount_NeedToLogin(t *testing.T) {
 					PairId:           "123123123",
 				}, nil).MaxTimes(2)
 
-				return New(auth, nil, logrus.New())
+				return New(auth, nil, logrus.New(), false)
 			},
 		},
 		{
@@ -70,7 +70,7 @@ func TestAccount_NeedToLogin(t *testing.T) {
 					PairId:           "123123123",
 				}, nil).MaxTimes(2)
 
-				return New(auth, nil, logrus.New())
+				return New(auth, nil, logrus.New(), false)
 			},
 		},
 		{
@@ -89,7 +89,7 @@ func TestAccount_NeedToLogin(t *testing.T) {
 					PairId:           "123123123",
 				}, nil).MaxTimes(2)
 
-				return New(auth, nil, logrus.New())
+				return New(auth, nil, logrus.New(), false)
 			},
 		},
 		{
@@ -102,7 +102,7 @@ func TestAccount_NeedToLogin(t *testing.T) {
 
 				auth.EXPECT().GetToken(ctx).Return(model.Token{}, errors.New("error")).MaxTimes(2)
 
-				return New(auth, nil, logrus.New())
+				return New(auth, nil, logrus.New(), false)
 			},
 		},
 	}

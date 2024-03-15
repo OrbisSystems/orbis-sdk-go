@@ -69,7 +69,7 @@ func newCli(cfg config.Config, auth sdk.Auth, httpClient sdk.HTTPClient) *Client
 	logger.SetLevel(getLogLevel(cfg.LogLevel))
 
 	return &Client{
-		Account:      account.New(auth, httpClient, logger),
+		Account:      account.New(auth, httpClient, logger, cfg.ManualTokenRefresh),
 		News:         news.New(httpClient, logger),
 		Logos:        logos.New(httpClient, logger),
 		Passport:     passport.New(httpClient, logger),
