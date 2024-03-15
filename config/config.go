@@ -13,6 +13,7 @@ const (
 )
 
 type Config struct {
-	LogLevel Level
-	Host     string // JUST hostname, without setting schema. Example: localhost, NOT https://localhost
+	LogLevel           Level
+	Host               string // JUST hostname, without setting schema. Example: localhost, NOT https://localhost
+	ManualTokenRefresh bool
 }
