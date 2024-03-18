@@ -28,6 +28,8 @@ type Account struct {
 
 	cli    sdk.HTTPClient
 	logger *log.Logger
+
+	loginCallback func(ctx context.Context) error
 }
 
 func New(auth sdk.Auth, cli sdk.HTTPClient, logger *log.Logger, disableTokenRefresh bool) *Account {
@@ -49,30 +51,47 @@ func (a *Account) watchTokenRefresh() {
 		var (
 			// pick random offset to avoid 425 response code - Duplicate request when using multiple instances
 			// it is still possible to encounter 425 code provided one runs a large number of SDK instances using the same credentials
-			refreshOffset = 5*time.Second + randomOffsetInMilliseconds()
-			refreshTicker = time.NewTicker(5*time.Second + refreshOffset)
-			retryNumber   = 0
+			refreshTicker = time.NewTicker(5*time.Second + randomOffsetInMilliseconds())
+			lastRefresh   = time.Now()
 		)
 
 		for range refreshTicker.C {
-			err := a.RefreshToken(context.Background())
-			if err != nil && retryNumber <= 3 {
-				retryNumber++
-				refreshTicker.Reset(exponentialBackoffDuration(retryNumber))
-
+			// for the case where the time to refresh takes longer than the ticker duration and new refresh starts immediately
+			if time.Since(lastRefresh) < time.Second {
 				continue
-			} else if retryNumber >= 4 {
-				a.logger.Errorf("failed to update refresh token 3 times: %v", err)
-
-				// NOTE: As of now, there is no way to recover from a situation where token can't be updated
-				// this will be addressed in the future
-				refreshTicker.Reset(5 * time.Minute)
 			}
 
-			retryNumber = 0
+			if err := withRetries(a.RefreshToken); err != nil {
+				a.logger.Errorf("failed to update refresh token 3 times: %v", err)
+
+				if a.loginCallback == nil {
+					a.logger.Error("unable to complete authentication: no login callback provided")
+
+					lastRefresh = time.Now()
+					refreshTicker.Reset(5 * time.Minute)
+
+					continue
+				}
+
+				if err = withRetries(a.loginCallback); err != nil {
+					a.logger.Errorf("failed to complete authentication: %v", err)
+
+					lastRefresh = time.Now()
+					refreshTicker.Reset(5 * time.Minute)
+
+					continue
+				}
+			}
+
+			lastRefresh = time.Now()
 			refreshTicker.Reset(a.getRefreshDurationFromToken())
 		}
 	}()
+}
+
+// SetLoginCallback accepts a function that will be called in case token refresh is failed multiple times
+func (a *Account) SetLoginCallback(callback func(ctx context.Context) error) {
+	a.loginCallback = callback
 }
 
 func (a *Account) getRefreshDurationFromToken() time.Duration {
@@ -241,14 +260,33 @@ func (a *Account) GetUserByID(ctx context.Context, id int) (model.GetB2BUserByID
 	return resp, err
 }
 
+func withRetries(f func(ctx context.Context) error) error {
+	var err error
+	for retryNumber := 0; retryNumber < 3; retryNumber++ {
+		time.Sleep(exponentialBackoffDuration(retryNumber))
+
+		ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
+		defer cancel()
+
+		err = f(ctx)
+		if err == nil {
+			return nil
+		}
+	}
+
+	return err
+}
+
 func exponentialBackoffDuration(retryNumber int) time.Duration {
 	switch retryNumber {
+	case 1:
+		return 5*time.Second + randomOffsetInMilliseconds()
 	case 2:
 		return 10*time.Second + randomOffsetInMilliseconds()
 	case 3:
 		return 20*time.Second + randomOffsetInMilliseconds()
 	default:
-		return 5*time.Second + randomOffsetInMilliseconds()
+		return time.Duration(0)
 	}
 }
 
