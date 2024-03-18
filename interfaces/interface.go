@@ -45,6 +45,7 @@ type AccountService interface {
 	RefreshToken(ctx context.Context) error
 	GetUserByID(ctx context.Context, id int) (model.GetB2BUserByIDResponse, error)
 	GetB2BUsersV2(ctx context.Context, req model.GetB2BUsersV2Request) (model.GetB2BUsersV2Response, error)
+	SetLoginCallback(callback func(ctx context.Context) error)
 }
 
 type NewsService interface {

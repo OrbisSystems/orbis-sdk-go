@@ -70,6 +70,17 @@ cli.Account.LoginByEmail(ctx, model.LoginByEmailRequest{
     DeviceID:   "devideID",
     RememberMe: true,
 })
+
+// set login function that will be called in case token refresh is failed multiple times
+cli.Account.SetLoginCallback(func(ctx context.Context) error {
+	return cli.Account.LoginByEmail(ctx, model.LoginByEmailRequest{
+    	Email:      "test@test.com",
+    	Password:   "passpass",
+    	DeviceID:   "devideID",
+    	RememberMe: true,
+    })
+})
+
 ```
 Also, you can use API Keys for loging using `LoginByAPIKey` method.
 
