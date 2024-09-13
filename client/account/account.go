@@ -115,11 +115,8 @@ func (a *Account) getRefreshDurationFromToken() time.Duration {
 		return defaultRefreshDuration
 	}
 
-	var (
-		expTime         = time.Unix(tkn.AccessExpiresAt, 0).Add(-time.Hour * 1) // make trigger little-bit earlier than exp time
-		refreshDuration = time.Until(expTime.UTC())
-	)
-	if refreshDuration.Milliseconds() <= 0 {
+	refreshDuration := (time.Until(time.Unix(tkn.AccessExpiresAt, 0)) / 3) * 2 // refresh token two-thirds into lifetime
+	if refreshDuration.Milliseconds() <= 1000 {
 		refreshDuration = defaultRefreshDuration
 	}
 
@@ -265,13 +262,15 @@ func withRetries(f func(ctx context.Context) error) error {
 	for retryNumber := 0; retryNumber < 3; retryNumber++ {
 		time.Sleep(exponentialBackoffDuration(retryNumber))
 
-		ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
-		defer cancel()
-
+		ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 		err = f(ctx)
 		if err == nil {
+			cancel()
+
 			return nil
 		}
+
+		cancel()
 	}
 
 	return err
