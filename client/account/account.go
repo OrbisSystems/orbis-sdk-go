@@ -115,7 +115,7 @@ func (a *Account) getRefreshDurationFromToken() time.Duration {
 		return defaultRefreshDuration
 	}
 
-	refreshDuration := (time.Until(time.Unix(tkn.AccessExpiresAt, 0)) / 3) * 2 // refresh token two third into lifetime
+	refreshDuration := (time.Until(time.Unix(tkn.AccessExpiresAt, 0)) / 3) * 2 // refresh token two-thirds into lifetime
 	if refreshDuration.Milliseconds() <= 1000 {
 		refreshDuration = defaultRefreshDuration
 	}
