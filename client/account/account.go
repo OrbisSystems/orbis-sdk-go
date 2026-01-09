@@ -148,6 +148,11 @@ func (a *Account) LoginByEmail(ctx context.Context, req model.LoginByEmailReques
 		req.DeviceID = uuid.New().String()
 	}
 
+	err := validateTokenGenerationMode(req.TokenGenerationMode)
+	if err != nil {
+		return err
+	}
+
 	body, err := json.Marshal(req)
 	if err != nil {
 		return errors.Wrap(err, "couldn't marshal input parameters")
@@ -171,6 +176,11 @@ func (a *Account) LoginByEmail(ctx context.Context, req model.LoginByEmailReques
 // See LoginByEmail and CreateAPIKey for more information.
 func (a *Account) LoginByAPIKey(ctx context.Context, req model.LoginByAPIKeyRequest) error {
 	a.logger.Trace("LoginByAPIKey called")
+
+	err := validateTokenGenerationMode(req.TokenGenerationMode)
+	if err != nil {
+		return err
+	}
 
 	body, err := json.Marshal(req)
 	if err != nil {
@@ -293,4 +303,13 @@ func exponentialBackoffDuration(retryNumber int) time.Duration {
 // nolint:gosec // No need to use a strong random generator for a random time offset
 func randomOffsetInMilliseconds() time.Duration {
 	return time.Duration(((rand.Intn(19) * 100) + 100)) * time.Millisecond
+}
+
+func validateTokenGenerationMode(mode model.TokenGenerationMode) error {
+	switch mode {
+	case model.StandardTokenGenerationMode, model.MinifiedTokenGenerationMode, "":
+		return nil
+	default:
+		return model.ErrInvalidTokenGenerationMode
+	}
 }

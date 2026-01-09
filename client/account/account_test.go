@@ -148,8 +148,28 @@ func TestAccount_LoginByEmail(t *testing.T) {
 			Password: "pass",
 			DeviceID: "123",
 		}
-		rawToken = fmt.Sprintf(`{"status":201,"login_basic":{"tokens":{"access_token":"assda","refresh_token":"fewfsdf","access_expires_at":%d,"refresh_expires_at":%d,"pair_id":"111"}}}`, unixTime, unixTime)
-		rawReq   = `{"email":"local@local.com","password":"pass","device_id":"123","remember_me":false}`
+		reqStandardToken = model.LoginByEmailRequest{
+			Email:               "local@local.com",
+			Password:            "pass",
+			DeviceID:            "123",
+			TokenGenerationMode: model.StandardTokenGenerationMode,
+		}
+		reqMinifiedToken = model.LoginByEmailRequest{
+			Email:               "local@local.com",
+			Password:            "pass",
+			DeviceID:            "123",
+			TokenGenerationMode: model.MinifiedTokenGenerationMode,
+		}
+		reqInvalidTokenGenerationMode = model.LoginByEmailRequest{
+			Email:               "local@local.com",
+			Password:            "pass",
+			DeviceID:            "123",
+			TokenGenerationMode: "invalid_mode",
+		}
+		rawToken       = fmt.Sprintf(`{"status":201,"login_basic":{"tokens":{"access_token":"assda","refresh_token":"fewfsdf","access_expires_at":%d,"refresh_expires_at":%d,"pair_id":"111"}}}`, unixTime, unixTime)
+		rawReq         = `{"email":"local@local.com","password":"pass","device_id":"123","remember_me":false}`
+		rawReqStandard = `{"email":"local@local.com","password":"pass","device_id":"123","remember_me":false,"token_generation_mode":"standard"}`
+		rawReqMinified = `{"email":"local@local.com","password":"pass","device_id":"123","remember_me":false,"token_generation_mode":"minified"}`
 
 		testErr = errors.New("process error")
 	)
@@ -184,6 +204,74 @@ func TestAccount_LoginByEmail(t *testing.T) {
 				return &Account{
 					Auth:   auth,
 					cli:    cli,
+					logger: logrus.New(),
+				}
+			},
+		},
+		{
+			name:   "success/standard_token",
+			input:  reqStandardToken,
+			hasErr: false,
+			fn: func(ctx context.Context, req model.LoginByEmailRequest) *Account {
+				ctrl := gomock.NewController(t)
+				cli := mock.NewMockHTTPClient(ctrl)
+				auth := mock.NewMockAuth(ctrl)
+
+				r := io.NopCloser(strings.NewReader(rawToken))
+
+				httpResponse := &http.Response{
+					StatusCode: http.StatusOK,
+					Body:       r,
+				}
+
+				bb := []byte(rawReqStandard)
+
+				cli.EXPECT().Post(ctx, model.URLB2BLoginByEmail, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
+				auth.EXPECT().SetToken(ctx, token.LoginBasic.Tokens).Return(nil)
+
+				return &Account{
+					Auth:   auth,
+					cli:    cli,
+					logger: logrus.New(),
+				}
+			},
+		},
+		{
+			name:   "success/minified_token",
+			input:  reqMinifiedToken,
+			hasErr: false,
+			fn: func(ctx context.Context, req model.LoginByEmailRequest) *Account {
+				ctrl := gomock.NewController(t)
+				cli := mock.NewMockHTTPClient(ctrl)
+				auth := mock.NewMockAuth(ctrl)
+
+				r := io.NopCloser(strings.NewReader(rawToken))
+
+				httpResponse := &http.Response{
+					StatusCode: http.StatusOK,
+					Body:       r,
+				}
+
+				bb := []byte(rawReqMinified)
+
+				cli.EXPECT().Post(ctx, model.URLB2BLoginByEmail, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
+				auth.EXPECT().SetToken(ctx, token.LoginBasic.Tokens).Return(nil)
+
+				return &Account{
+					Auth:   auth,
+					cli:    cli,
+					logger: logrus.New(),
+				}
+			},
+		},
+		{
+			name:   "err/invalid_token_mode",
+			input:  reqInvalidTokenGenerationMode,
+			hasErr: true,
+			fn: func(ctx context.Context, req model.LoginByEmailRequest) *Account {
+				return &Account{
+					Auth:   nil,
+					cli:    nil,
 					logger: logrus.New(),
 				}
 			},
@@ -298,8 +386,25 @@ func TestAccount_LoginByAPIKey(t *testing.T) {
 			APIKey:    "11111111",
 			APISecret: "22222222",
 		}
-		rawToken = fmt.Sprintf(`{"status":201,"api_keys_login":{"tokens":{"access_token":"assda","refresh_token":"fewfsdf","access_expires_at":%d,"refresh_expires_at":%d,"pair_id":"111"}}}`, unixTime, unixTime)
-		rawReq   = `{"api_key":"11111111","api_secret":"22222222"}`
+		reqStandardToken = model.LoginByAPIKeyRequest{
+			APIKey:              "11111111",
+			APISecret:           "22222222",
+			TokenGenerationMode: model.StandardTokenGenerationMode,
+		}
+		reqMinifiedToken = model.LoginByAPIKeyRequest{
+			APIKey:              "11111111",
+			APISecret:           "22222222",
+			TokenGenerationMode: model.MinifiedTokenGenerationMode,
+		}
+		reqInvalidTokenGenerationMode = model.LoginByAPIKeyRequest{
+			APIKey:              "11111111",
+			APISecret:           "22222222",
+			TokenGenerationMode: "invalid_mode",
+		}
+		rawToken       = fmt.Sprintf(`{"status":201,"api_keys_login":{"tokens":{"access_token":"assda","refresh_token":"fewfsdf","access_expires_at":%d,"refresh_expires_at":%d,"pair_id":"111"}}}`, unixTime, unixTime)
+		rawReq         = `{"api_key":"11111111","api_secret":"22222222"}`
+		rawReqStandard = `{"api_key":"11111111","api_secret":"22222222","token_generation_mode":"standard"}`
+		rawReqMinified = `{"api_key":"11111111","api_secret":"22222222","token_generation_mode":"minified"}`
 
 		testErr = errors.New("process error")
 	)
@@ -334,6 +439,74 @@ func TestAccount_LoginByAPIKey(t *testing.T) {
 				return &Account{
 					Auth:   auth,
 					cli:    cli,
+					logger: logrus.New(),
+				}
+			},
+		},
+		{
+			name:   "success/standard_token",
+			input:  reqStandardToken,
+			hasErr: false,
+			fn: func(ctx context.Context, req model.LoginByAPIKeyRequest) *Account {
+				ctrl := gomock.NewController(t)
+				cli := mock.NewMockHTTPClient(ctrl)
+				auth := mock.NewMockAuth(ctrl)
+
+				r := io.NopCloser(strings.NewReader(rawToken))
+
+				httpResponse := &http.Response{
+					StatusCode: http.StatusOK,
+					Body:       r,
+				}
+
+				bb := []byte(rawReqStandard)
+
+				cli.EXPECT().Post(ctx, model.URLB2BLoginByAPIKey, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
+				auth.EXPECT().SetToken(ctx, token.ApiKeysLogin.Tokens).Return(nil)
+
+				return &Account{
+					Auth:   auth,
+					cli:    cli,
+					logger: logrus.New(),
+				}
+			},
+		},
+		{
+			name:   "success/minified_token",
+			input:  reqMinifiedToken,
+			hasErr: false,
+			fn: func(ctx context.Context, req model.LoginByAPIKeyRequest) *Account {
+				ctrl := gomock.NewController(t)
+				cli := mock.NewMockHTTPClient(ctrl)
+				auth := mock.NewMockAuth(ctrl)
+
+				r := io.NopCloser(strings.NewReader(rawToken))
+
+				httpResponse := &http.Response{
+					StatusCode: http.StatusOK,
+					Body:       r,
+				}
+
+				bb := []byte(rawReqMinified)
+
+				cli.EXPECT().Post(ctx, model.URLB2BLoginByAPIKey, bytes.NewBuffer(bb), nil).Return(httpResponse, nil)
+				auth.EXPECT().SetToken(ctx, token.ApiKeysLogin.Tokens).Return(nil)
+
+				return &Account{
+					Auth:   auth,
+					cli:    cli,
+					logger: logrus.New(),
+				}
+			},
+		},
+		{
+			name:   "err/invalid_token_mode",
+			input:  reqInvalidTokenGenerationMode,
+			hasErr: true,
+			fn: func(ctx context.Context, req model.LoginByAPIKeyRequest) *Account {
+				return &Account{
+					Auth:   nil,
+					cli:    nil,
 					logger: logrus.New(),
 				}
 			},
