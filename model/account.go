@@ -1,10 +1,22 @@
 package model
 
+import "fmt"
+
+type TokenGenerationMode string
+
+const (
+	StandardTokenGenerationMode TokenGenerationMode = "standard"
+	MinifiedTokenGenerationMode TokenGenerationMode = "minified"
+)
+
+var ErrInvalidTokenGenerationMode = fmt.Errorf("invalid token generation mode: must be '%s' or '%s'", StandardTokenGenerationMode, MinifiedTokenGenerationMode)
+
 type LoginByEmailRequest struct {
-	Email      string `json:"email"`
-	Password   string `json:"password"`
-	DeviceID   string `json:"device_id"`
-	RememberMe bool   `json:"remember_me"`
+	Email               string              `json:"email"`
+	Password            string              `json:"password"`
+	DeviceID            string              `json:"device_id"`
+	RememberMe          bool                `json:"remember_me"`
+	TokenGenerationMode TokenGenerationMode `json:"token_generation_mode,omitempty"`
 }
 
 type LoginByEmailResponse struct {
@@ -15,8 +27,9 @@ type LoginByEmailResponse struct {
 }
 
 type LoginByAPIKeyRequest struct {
-	APIKey    string `json:"api_key"`
-	APISecret string `json:"api_secret"`
+	APIKey              string              `json:"api_key"`
+	APISecret           string              `json:"api_secret"`
+	TokenGenerationMode TokenGenerationMode `json:"token_generation_mode,omitempty"`
 }
 
 type LoginByAPIKeyResponse struct {
