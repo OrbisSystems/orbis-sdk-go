@@ -57,9 +57,7 @@ type Client struct {
 }
 
 func NewSDK(cfg config.Config, auth sdk.Auth) *Client {
-	httpClient := http.New(wrapHTTPS(cfg.Host), auth)
-
-	return newCli(cfg, auth, httpClient)
+	return newCli(cfg, auth, http.New(getBaseURL(cfg), auth))
 }
 
 func newCli(cfg config.Config, auth sdk.Auth, httpClient sdk.HTTPClient) *Client {
@@ -89,6 +87,15 @@ func newCli(cfg config.Config, auth sdk.Auth, httpClient sdk.HTTPClient) *Client
 
 func (c *Client) Close() error {
 	return c.WS.Close()
+}
+
+func getBaseURL(cfg config.Config) string {
+	switch cfg.Protocol {
+	case "http", "https":
+		return fmt.Sprintf("%s://%s", cfg.Protocol, cfg.Host)
+	default:
+		return wrapHTTPS(cfg.Host)
+	}
 }
 
 func wrapHTTPS(hostname string) string {

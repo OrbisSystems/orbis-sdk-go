@@ -14,6 +14,7 @@ const (
 
 type Config struct {
 	LogLevel           Level
-	Host               string // JUST hostname, without setting schema. Example: localhost, NOT https://localhost
+	Protocol           string // Optional protocol to use for requests. https is used by default. Example: http, https
+	Host               string // JUST hostname, without setting schema. Example: localhost, NOT http://localhost
 	ManualTokenRefresh bool
 }
