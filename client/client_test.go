@@ -7,6 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/mock/gomock"
 
+	"github.com/OrbisSystems/orbis-sdk-go/config"
 	"github.com/OrbisSystems/orbis-sdk-go/interfaces/mock"
 )
 
@@ -34,5 +35,39 @@ func TestClient_Close(t *testing.T) {
 
 		assert.Error(t, err)
 		assert.EqualError(t, err, "error")
+	})
+}
+
+func TestClient_getBaseURL(t *testing.T) {
+	t.Run("with protocol", func(t *testing.T) {
+		cfg := config.Config{
+			Host:     "example.com",
+			Protocol: "http",
+		}
+
+		result := getBaseURL(cfg)
+
+		assert.Equal(t, "http://example.com", result)
+	})
+
+	t.Run("without protocol", func(t *testing.T) {
+		cfg := config.Config{
+			Host: "example.com",
+		}
+
+		result := getBaseURL(cfg)
+
+		assert.Equal(t, "https://example.com", result)
+	})
+
+	t.Run("custom protocol is not acceptable", func(t *testing.T) {
+		cfg := config.Config{
+			Host:     "api.test.io",
+			Protocol: "wss",
+		}
+
+		result := getBaseURL(cfg)
+
+		assert.Equal(t, "https://api.test.io", result)
 	})
 }
